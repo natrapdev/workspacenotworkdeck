@@ -1,0 +1,32 @@
+{
+	"weapons" : {
+		
+		"armingSword" : {
+			"name" : "Arming Sword",
+			"sharpness" : 1,
+			"weight" : 1.2,
+			"damage" : 100,
+			"price" : 240,
+			"rarity" : 0.8
+		}
+
+	},
+	
+	"enemyWeapons" : {
+		
+	},
+
+	"friendWeapons" : {
+
+	},
+
+	"dropStats" : {
+
+		"enemyDropQuality" : {
+			"fresh" : 0.05,
+			"used" : 0.1,
+			"worn" : 0.3,
+			"damaged" : 0.9
+		}
+	}
+}

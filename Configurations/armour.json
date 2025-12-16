@@ -1,0 +1,16 @@
+{
+	"material" : {
+		"gambeson" : {
+			"density" : 950,
+			"hardness" : 30
+		},
+		"chainmail" : {
+			"density" : 7874,
+			"hardness" : 75
+		},
+		"plate" : {
+			"density" : 7874,
+			"hardness" : 100
+		}
+	}
+}

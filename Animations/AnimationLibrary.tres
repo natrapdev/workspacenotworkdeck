@@ -1,0 +1,32 @@
+[gd_resource type="AnimationLibrary" load_steps=14 format=3 uid="uid://kxngjioxjj28"]
+
+[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://Animations/Idle.res" id="1_ta2mo"]
+[ext_resource type="Animation" uid="uid://vorjeo70311q" path="res://Animations/Run.res" id="2_0ak6w"]
+[ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://Animations/RunBackwards.res" id="3_jp3xj"]
+[ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://Animations/RunLeft.res" id="4_4mell"]
+[ext_resource type="Animation" uid="uid://clyofosrc7ih5" path="res://Animations/RunRight.res" id="5_rs1vw"]
+[ext_resource type="Animation" uid="uid://bwos43eed5cqm" path="res://Animations/WalkBackward.res" id="6_j4wk6"]
+[ext_resource type="Animation" uid="uid://bflpurxdybbja" path="res://Animations/Walking.res" id="7_nxt3g"]
+[ext_resource type="Animation" uid="uid://dfvfjflql58s2" path="res://Animations/WalkLeft.res" id="8_dbqnd"]
+[ext_resource type="Animation" uid="uid://o0s1ny42dcy0" path="res://Animations/WalkStrafeRight.res" id="9_moajs"]
+[ext_resource type="Animation" uid="uid://brh3oey2mcfvt" path="res://Animations/OneHandedIdle.res" id="10_rs1vw"]
+[ext_resource type="Animation" uid="uid://dx17rytgucity" path="res://Animations/OneHandedMiddleSwing.res" id="11_j4wk6"]
+[ext_resource type="Animation" uid="uid://d3x7dwo60ii4s" path="res://Animations/OneHandedThrust.res" id="12_nxt3g"]
+[ext_resource type="Animation" uid="uid://cgjsqcqvdsws0" path="res://Animations/OneHandedUpperSwing.res" id="13_dbqnd"]
+
+[resource]
+_data = {
+&"Idle": ExtResource("1_ta2mo"),
+&"OneHandedIdle": ExtResource("10_rs1vw"),
+&"OneHandedMiddleSwing": ExtResource("11_j4wk6"),
+&"OneHandedThrust": ExtResource("12_nxt3g"),
+&"OneHandedUpperSwing": ExtResource("13_dbqnd"),
+&"Run": ExtResource("2_0ak6w"),
+&"RunBackwards": ExtResource("3_jp3xj"),
+&"RunLeft": ExtResource("4_4mell"),
+&"RunRight": ExtResource("5_rs1vw"),
+&"WalkBackward": ExtResource("6_j4wk6"),
+&"WalkLeft": ExtResource("8_dbqnd"),
+&"WalkStrafeRight": ExtResource("9_moajs"),
+&"Walking": ExtResource("7_nxt3g")
+}

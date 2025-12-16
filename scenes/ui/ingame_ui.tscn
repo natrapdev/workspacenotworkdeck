@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmroesv83848a"]
+
+[ext_resource type="Script" uid="uid://40sdy0cfcgy0" path="res://scenes/ui/GameInterface.cs" id="1_vs8bb"]
+
+[node name="GameInterface" type="CanvasLayer" node_paths=PackedStringArray("StaminaBar")]
+follow_viewport_enabled = true
+script = ExtResource("1_vs8bb")
+StaminaBar = NodePath("StaminaBar")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StaminaBar" type="ProgressBar" parent="."]
+anchors_preset = -1
+offset_right = 4.0
+offset_bottom = 27.0
+pivot_offset = Vector2(15, 608)
+value = 100.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 8.0
+offset_right = 9.0
+offset_bottom = 161.0
+pivot_offset = Vector2(16, 580)
+text = "Stamina"
+fit_content = true

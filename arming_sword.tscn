@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b11hvvl7kaefi"]
+
+[ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_ale58"]
+[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://Weapon.cs" id="2_mpwrs"]
+
+[node name="ArmingSword" instance=ExtResource("1_ale58")]
+script = ExtResource("2_mpwrs")
+
+[node name="armingSword" parent="." index="0"]
+layers = 2
+
+[node name="BladeStart" type="Marker3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08916774, 0)
+
+[node name="BladeEnd" type="Marker3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8168747, 0)

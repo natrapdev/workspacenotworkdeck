@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Godot.Collections;
 
@@ -10,23 +11,18 @@ public partial class PlayerCombatController : Node3D
     [Export] public string UpperBodyBlendPlaybackPath { get; set; }
     [Export] public Node3D HeldWeapon { get; set; }
     [Export] public AnimationTree animationTree { get; set; }
-    [Export] public int MiddleSwingAttackType { get; set; }
-    [Export] public int UpperSwingAttackType { get; set; }
-    [Export] public int ThrustAttackType { get; set; }
+    [Export] public int MiddleSwingAttackType { get; set; } = 1;
+    [Export] public int UpperSwingAttackType { get; set; } = 2;
+    [Export] public int ThrustAttackType { get; set; } = 3;
     [Export] public int WeaponRaycastAmount { get; set; } = 7;
-    [Export] public float WeaponRaycastLength { get; set; } = -.2f;
+    [Export] public float WeaponRaycastLength { get; set; } = -.3f;
+    [Export] public float SwingSpeed { get; set; } = 25f; // metres per second
+    [Export] public float WeaponBluntForceCoefficient { get; set; } = 1.1f;
 
-    public Skeleton3D Skeleton;
-    public Node3D RightHandContainer;
-    public Node3D HipContainer;
-    public Node3D ItemContainer;
-
-    public Skeleton3D ViewportSkeleton;
-    public Node3D ViewportRightHandContainer;
+    public Skeleton3D Skeleton, ViewportSkeleton;
+    public Node3D RightHandContainer, HipContainer, ItemContainer, ViewportRightHandContainer;
 
     private bool holdingWeapon = false;
-    private bool usingTwoHands;
-
     private bool executeAttack = false;
     private float lastClickTime = 0f;
     private int clickCount = 0;
@@ -42,6 +38,10 @@ public partial class PlayerCombatController : Node3D
 
     private PhysicsDirectSpaceState3D _spaceState;
 
+    private string _configsPath = "res://configs/";
+
+    private float _weaponMass, _weaponBaseDamage, _weaponSharpness, _weapon;
+
     public override void _Ready()
     {
         var character = GetNode<Node3D>("../CharacterModel");
@@ -49,8 +49,7 @@ public partial class PlayerCombatController : Node3D
         RightHandContainer = Skeleton.GetNode<Node3D>("RightHandAttachment/RightHandContainer");
         HipContainer = Skeleton.GetNode<Node3D>("HipAttachment/HipContainer");
 
-		HeldWeapon = ViewportArms.GetNode<Node3D>("ItemContainer/ArmingSword");
-
+		PickUpWeapon(ViewportArms.GetNode<Node3D>("ItemContainer/ArmingSword"));
 
         ViewportSkeleton = ViewportArms.GetNode<Skeleton3D>("Armature/Skeleton3D");
         ViewportRightHandContainer = ViewportSkeleton.GetNode<Node3D>("RightHandAttachment/RightHandContainer");
@@ -188,23 +187,27 @@ public partial class PlayerCombatController : Node3D
         string colliderMaterial = (string)collider.GetMeta("MaterialName");
         float colliderThickness = (float)collider.GetMeta("Thickness");
         float colliderDensity = (float)((Dictionary)materialData[colliderMaterial])["density"];
+        float colliderEnergyAbsorption = (float)((Dictionary)materialData[colliderMaterial])["absorption"];
         
         if (colliderMaterial == "gambeson") colliderDensity *= colliderThickness;
 
-        float colliderThicknessInLineOfSight = Mathf.Abs(colliderThickness / Mathf.Cos(impactAngle));
-
+        float colliderThicknessInLineOfSight = Mathf.Abs(colliderThickness / Mathf.Cos(impactAngle)); 
+        
         float weaponThickness = isThrust ? .5f : .175f;
         
         // PLACEHOLDER -- STEEL MATERIAL FOR SWORD -- CHANGE SOON PLEASE (2025-12-15)
         float weaponDensity = (float)((Dictionary)materialData["steel"])["density"];
 
-        GD.Print($"\nHit {collider.GetChild(0).Name} at an angle of {impactAngle} degrees.");
+        float impactDepth = weaponThickness * (weaponDensity / colliderDensity);
 
-        float impactDepth = weaponThickness*(weaponDensity/colliderDensity);
-        GD.Print($"Impact depth with steel {HeldWeapon.Name}: {impactDepth}");
-        GD.Print($"Thickness of armour at angle: {colliderThicknessInLineOfSight}");
-
-        bool weaponStopped = impactDepth < colliderThicknessInLineOfSight;
+        float weaponVelocityAtImpactAngle = Mathf.Abs(SwingSpeed * Mathf.Cos(impactAngle));
+        float weaponSharpnessDivisor = Mathf.Pow(_weaponSharpness, WeaponBluntForceCoefficient) + 1;
+        float baseImpactEnergy = _weaponMass / 2 * Mathf.Pow(weaponVelocityAtImpactAngle / weaponSharpnessDivisor, 2);
+        float effectiveEnergyAbsorption = colliderEnergyAbsorption - (impactDepth / colliderThicknessInLineOfSight);
+        
+        float inflictedKineticEnergy = baseImpactEnergy * (1 - effectiveEnergyAbsorption);
+        
+        GD.Print($"Energy transfer through armour: {inflictedKineticEnergy} Joules");
     }
 
     private static void CalculateImpactDepth()
@@ -256,9 +259,41 @@ public partial class PlayerCombatController : Node3D
 
     }
 
-    public void PickUpWeapon()
+    private void PickUpWeapon(Node3D weapon)
     {
+        HeldWeapon = weapon;
 
+        string weaponConfigPath = _configsPath + "weapons.json";
+
+        // Getting config info from JSON file
+		if (!FileAccess.FileExists(weaponConfigPath))
+        {
+            GD.PrintErr($"Could not find weapon config file. {weaponConfigPath}");
+			return;
+        }
+
+		using var file = FileAccess.Open(weaponConfigPath, FileAccess.ModeFlags.Read);
+
+		string jsonString = file.GetAsText();
+		file.Close();
+
+		var json = new Json();
+		var error = json.Parse(jsonString);
+
+		string nameString = weapon.Name.ToString();
+		string weaponName = char.ToLower(nameString[0]) + nameString[1..];
+
+		if (error == Error.Ok)
+        {
+			var jsonData = (Godot.Collections.Dictionary)json.Data;
+			var weapons = (Godot.Collections.Dictionary)jsonData["weapons"];
+			var weaponData = (Godot.Collections.Dictionary)weapons[weaponName];
+			
+			_weaponBaseDamage = (float)weaponData["damage"];
+			_weaponMass = (float)weaponData["mass"];
+            _weaponSharpness = (float)weaponData["sharpness"];
+            weaponStyleName = (bool)weaponData["oneHanded"] ? "TwoHanded" : "OneHanded";
+        }
     }
 
     public void EquipWeapon()

@@ -3,8 +3,9 @@
 		
 		"armingSword" : {
 			"name" : "Arming Sword",
+			"oneHanded": false,
 			"sharpness" : 1,
-			"weight" : 1.2,
+			"mass" : 1.2,
 			"damage" : 100,
 			"price" : 240,
 			"rarity" : 0.8

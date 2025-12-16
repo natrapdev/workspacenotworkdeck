@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://b11hvvl7kaefi"]
 
-[ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_ale58"]
-[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://Weapon.cs" id="2_mpwrs"]
+[ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_0mgtg"]
+[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/weapons/Weapon.cs" id="2_gchif"]
 
-[node name="ArmingSword" instance=ExtResource("1_ale58")]
-script = ExtResource("2_mpwrs")
+[node name="ArmingSword" instance=ExtResource("1_0mgtg")]
+script = ExtResource("2_gchif")
 
 [node name="armingSword" parent="." index="0"]
 layers = 2

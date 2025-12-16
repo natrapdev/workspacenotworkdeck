@@ -1,20 +1,20 @@
 [gd_scene load_steps=46 format=3 uid="uid://bb0o5uxfy03gd"]
 
-[ext_resource type="Script" uid="uid://0mcwcs3opf6" path="res://scenes/CharacterController.cs" id="1_urp6f"]
-[ext_resource type="Script" uid="uid://dre36iv3yjal5" path="res://scenes/CharacterAttributes.cs" id="2_606se"]
+[ext_resource type="Script" uid="uid://0mcwcs3opf6" path="res://scenes/characters/CharacterController.cs" id="1_urp6f"]
+[ext_resource type="Script" uid="uid://dre36iv3yjal5" path="res://scenes/characters/CharacterAttributes.cs" id="2_606se"]
 [ext_resource type="PackedScene" uid="uid://da71ni5k8rai4" path="res://scenes/characters/man.tscn" id="2_nvl01"]
-[ext_resource type="Script" uid="uid://b582aa1vhaevg" path="res://scenes/CameraController.cs" id="3_i3pqv"]
-[ext_resource type="PackedScene" uid="uid://dtmfsufgue62r" path="res://viewport_arms.tscn" id="5_bwjto"]
-[ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://Animations/RunBackwards.res" id="6_u1c27"]
-[ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://Animations/RunLeft.res" id="7_op7ga"]
-[ext_resource type="Animation" uid="uid://clyofosrc7ih5" path="res://Animations/RunRight.res" id="8_q13i1"]
-[ext_resource type="Animation" uid="uid://bwos43eed5cqm" path="res://Animations/WalkBackward.res" id="9_pylmc"]
-[ext_resource type="Animation" uid="uid://dfvfjflql58s2" path="res://Animations/WalkLeft.res" id="10_pbfsw"]
-[ext_resource type="Animation" uid="uid://o0s1ny42dcy0" path="res://Animations/WalkStrafeRight.res" id="11_5tmop"]
-[ext_resource type="Animation" uid="uid://bflpurxdybbja" path="res://Animations/Walking.res" id="12_7ahtn"]
-[ext_resource type="AnimationLibrary" uid="uid://kxngjioxjj28" path="res://Animations/AnimationLibrary.tres" id="13_7lmhl"]
-[ext_resource type="Script" uid="uid://c2bc7gwqn5oek" path="res://ViewportCameraController.cs" id="14_bwjto"]
-[ext_resource type="Script" uid="uid://bxaabshubdxrx" path="res://scenes/PlayerCombatController.cs" id="16_op7ga"]
+[ext_resource type="Script" uid="uid://b582aa1vhaevg" path="res://scenes/player/CameraController.cs" id="3_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://dtmfsufgue62r" path="res://scenes/player/viewport_arms.tscn" id="5_bwjto"]
+[ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://assets/animations/RunBackwards.res" id="6_u1c27"]
+[ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://assets/animations/RunLeft.res" id="7_op7ga"]
+[ext_resource type="Animation" uid="uid://clyofosrc7ih5" path="res://assets/animations/RunRight.res" id="8_q13i1"]
+[ext_resource type="Animation" uid="uid://bwos43eed5cqm" path="res://assets/animations/WalkBackward.res" id="9_pylmc"]
+[ext_resource type="Animation" uid="uid://dfvfjflql58s2" path="res://assets/animations/WalkLeft.res" id="10_pbfsw"]
+[ext_resource type="Animation" uid="uid://o0s1ny42dcy0" path="res://assets/animations/WalkStrafeRight.res" id="11_5tmop"]
+[ext_resource type="Animation" uid="uid://bflpurxdybbja" path="res://assets/animations/Walking.res" id="12_7ahtn"]
+[ext_resource type="AnimationLibrary" uid="uid://kxngjioxjj28" path="res://assets/animations/AnimationLibrary.tres" id="13_7lmhl"]
+[ext_resource type="Script" uid="uid://c2bc7gwqn5oek" path="res://scenes/player/ViewportCameraController.cs" id="14_bwjto"]
+[ext_resource type="Script" uid="uid://bxaabshubdxrx" path="res://scenes/player/PlayerCombatController.cs" id="16_op7ga"]
 [ext_resource type="Script" uid="uid://40sdy0cfcgy0" path="res://scenes/ui/GameInterface.cs" id="16_u1c27"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i3pqv"]
@@ -176,9 +176,6 @@ ViewportArms = NodePath("../CameraPivot/Camera3D/Viewport/Arms")
 UpperBodyStatePlaybackPath = "parameters/UpperBodyStateMachine/playback"
 UpperBodyBlendPlaybackPath = "parameters/Blend2/blend_amount"
 animationTree = NodePath("../AnimationTree")
-MiddleSwingAttackType = 1
-UpperSwingAttackType = 2
-ThrustAttackType = 3
 
 [node name="Attributes" type="Node" parent="." node_paths=PackedStringArray("Character")]
 script = ExtResource("2_606se")

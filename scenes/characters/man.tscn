@@ -2,16 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://driavi5sd6nke" path="res://Models/Characters/Man.glb" id="1_ugvvu"]
 [ext_resource type="Script" uid="uid://dgp7jdqbngckq" path="res://scenes/characters/CharacterSkeleton.cs" id="2_pfr4v"]
-[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://Animations/Idle.res" id="3_pdy8h"]
-[ext_resource type="Animation" uid="uid://vorjeo70311q" path="res://Animations/Run.res" id="4_cafic"]
-[ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://Animations/RunBackwards.res" id="5_15xca"]
-[ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://Animations/RunLeft.res" id="6_sq47r"]
-[ext_resource type="Animation" uid="uid://clyofosrc7ih5" path="res://Animations/RunRight.res" id="7_djtxc"]
-[ext_resource type="Animation" uid="uid://bwos43eed5cqm" path="res://Animations/WalkBackward.res" id="8_34nhn"]
-[ext_resource type="Animation" uid="uid://bflpurxdybbja" path="res://Animations/Walking.res" id="9_ock6h"]
-[ext_resource type="Animation" uid="uid://dfvfjflql58s2" path="res://Animations/WalkLeft.res" id="10_85mct"]
-[ext_resource type="Animation" uid="uid://o0s1ny42dcy0" path="res://Animations/WalkStrafeRight.res" id="11_uxkje"]
-[ext_resource type="AnimationLibrary" uid="uid://kxngjioxjj28" path="res://Animations/AnimationLibrary.tres" id="12_yolp3"]
+[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/Idle.res" id="3_pdy8h"]
+[ext_resource type="Animation" uid="uid://vorjeo70311q" path="res://assets/animations/Run.res" id="4_cafic"]
+[ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://assets/animations/RunBackwards.res" id="5_15xca"]
+[ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://assets/animations/RunLeft.res" id="6_sq47r"]
+[ext_resource type="Animation" uid="uid://clyofosrc7ih5" path="res://assets/animations/RunRight.res" id="7_djtxc"]
+[ext_resource type="Animation" uid="uid://bwos43eed5cqm" path="res://assets/animations/WalkBackward.res" id="8_34nhn"]
+[ext_resource type="Animation" uid="uid://bflpurxdybbja" path="res://assets/animations/Walking.res" id="9_ock6h"]
+[ext_resource type="Animation" uid="uid://dfvfjflql58s2" path="res://assets/animations/WalkLeft.res" id="10_85mct"]
+[ext_resource type="Animation" uid="uid://o0s1ny42dcy0" path="res://assets/animations/WalkStrafeRight.res" id="11_uxkje"]
+[ext_resource type="AnimationLibrary" uid="uid://kxngjioxjj28" path="res://assets/animations/AnimationLibrary.tres" id="12_yolp3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ugvvu"]
 radius = 0.16
@@ -142,15 +142,15 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.6
 shape = SubResource("BoxShape3D_pfr4v")
 
 [node name="Physical Bone LeftUpperArm_2" type="PhysicalBone3D" parent="Armature/Skeleton3D/PhysicalBoneSimulator3D" index="2"]
-transform = Transform3D(0.80266035, 0.5648021, -0.19166334, 0.13631397, 0.13912615, 0.9808478, 0.5806503, -0.81341404, 0.034680646, 0.2905239, 0.46971396, 0.06439897)
+transform = Transform3D(0.80266035, 0.5648021, -0.19166334, 0.13631397, 0.13912615, 0.9808478, 0.5806503, -0.81341404, 0.034680642, 0.2905239, 0.46971396, 0.06439897)
 collision_layer = 12
 collision_mask = 9
 joint_type = 2
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.202365e-08, -2.1994121e-07, 0.1899996)
-body_offset = Transform3D(0.99999964, -2.9802322e-07, 2.7380884e-07, 1.4901161e-08, -4.8428774e-08, -0.99999964, 2.0861626e-07, 0.9999995, 5.9604645e-08, 0, 0.18999952, 2.0861626e-07)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.273146e-08, -2.192334e-07, 0.1899996)
+body_offset = Transform3D(0.99999964, -2.9802322e-07, 2.7753413e-07, 1.4901161e-08, -4.8428774e-08, -0.99999964, 2.0861626e-07, 0.9999995, 5.5879354e-08, 0, 0.18999952, 2.0861626e-07)
 mass = 2.25
 bone_name = "LeftUpperArm_2"
-joint_constraints/swing_span = 149.99997
+joint_constraints/swing_span = 149.99995
 joint_constraints/twist_span = 45.0
 joint_constraints/bias = 0.3
 joint_constraints/softness = 0.8
@@ -172,7 +172,7 @@ angular_damp = 0.3
 bone_name = "LeftLowerArm_2"
 joint_constraints/angular_limit_enabled = true
 joint_constraints/angular_limit_upper = 115.0
-joint_constraints/angular_limit_lower = -1.9999996
+joint_constraints/angular_limit_lower = -1.9999993
 joint_constraints/angular_limit_bias = 0.3
 joint_constraints/angular_limit_softness = 0.9
 joint_constraints/angular_limit_relaxation = 1.0
@@ -190,7 +190,7 @@ joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6845112e-05, 4.0562387e
 body_offset = Transform3D(0.9999999, -4.3213367e-06, -1.2107193e-07, -1.6763806e-07, -3.7252903e-09, -1.0000002, 4.172325e-06, 1.0000002, 6.146729e-08, 1.6868114e-05, 0.19000065, -4.172325e-07)
 mass = 2.25
 bone_name = "RightUpperArm_2"
-joint_constraints/swing_span = 149.99997
+joint_constraints/swing_span = 149.99995
 joint_constraints/twist_span = 45.0
 joint_constraints/bias = 0.3
 joint_constraints/softness = 0.8
@@ -201,18 +201,18 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.05)
 shape = SubResource("CapsuleShape3D_gca12")
 
 [node name="Physical Bone RightLowerArm_2" type="PhysicalBone3D" parent="Armature/Skeleton3D/PhysicalBoneSimulator3D" index="5"]
-transform = Transform3D(0.65993553, -0.75114316, 0.016399574, -0.056284856, -0.027660627, 0.9980315, -0.74921095, -0.6595594, -0.060532227, -0.32421735, 0.033899102, 0.08176039)
+transform = Transform3D(0.65993553, -0.7511431, 0.016399574, -0.056284856, -0.02766063, 0.9980315, -0.74921095, -0.6595595, -0.060532227, -0.32421735, 0.033899102, 0.08176039)
 collision_layer = 4
 axis_lock_angular_y = true
 joint_type = 3
-joint_offset = Transform3D(-4.371139e-08, -8.742275e-08, 0.9999997, 0, 0.9999997, 8.742275e-08, -1, 3.8213697e-15, -4.3711374e-08, 1.02816784e-07, 2.2202809e-07, 0.20000032)
+joint_offset = Transform3D(-4.371139e-08, -8.742275e-08, 0.9999997, 0, 0.9999997, 8.742275e-08, -1, 3.8213697e-15, -4.3711374e-08, 1.0281679e-07, 2.2202809e-07, 0.20000032)
 joint_rotation = Vector3(-8.742278e-08, 1.5707964, 0)
-body_offset = Transform3D(1, 6.467104e-06, -6.631017e-07, -7.227063e-07, -5.066395e-07, -1.0000002, -6.5267086e-06, 1.0000001, -4.3958426e-07, 2.9802322e-08, 0.20000036, -1.3411045e-07)
+body_offset = Transform3D(1, 6.4074993e-06, -6.631017e-07, -7.227063e-07, -5.066395e-07, -1.0000002, -6.5267086e-06, 1.0000001, -4.3958426e-07, 2.9802322e-08, 0.20000036, -1.3411045e-07)
 angular_damp = 0.3
 bone_name = "RightLowerArm_2"
 joint_constraints/angular_limit_enabled = true
 joint_constraints/angular_limit_upper = 115.0
-joint_constraints/angular_limit_lower = -1.9999996
+joint_constraints/angular_limit_lower = -1.9999993
 joint_constraints/angular_limit_bias = 0.3
 joint_constraints/angular_limit_softness = 0.9
 joint_constraints/angular_limit_relaxation = 1.0

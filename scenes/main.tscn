@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://nbgbi5ylgl32"]
 
-[ext_resource type="PackedScene" uid="uid://bb0o5uxfy03gd" path="res://scenes/player/player.tscn" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://cewk5nxumfedt" path="res://scenes/enemy.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://bb0o5uxfy03gd" path="res://scenes/player/player.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://cewk5nxumfedt" path="res://scenes/characters/enemy.tscn" id="2_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -51,7 +51,7 @@ shape = SubResource("BoxShape3D_7dm0k")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh = SubResource("BoxMesh_ig7tw")
 
-[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+[node name="Player" parent="." instance=ExtResource("1_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." groups=["enemy"]]
@@ -72,16 +72,16 @@ shape = SubResource("BoxShape3D_h2yge")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2750897, 3.1374302)
 shape = SubResource("BoxShape3D_h2yge")
 
-[node name="Enemy" parent="." instance=ExtResource("2_0xm2m")]
+[node name="Enemy" parent="." instance=ExtResource("2_sugp2")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.5840955, 1.008672, 12.73214)
 
-[node name="Enemy2" parent="." instance=ExtResource("2_0xm2m")]
+[node name="Enemy2" parent="." instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.50335157, 0, -0.8640817, 0, 1, 0, 0.8640817, 0, -0.50335157, 0.34723002, 2.8005846, 3.356413)
 
-[node name="Enemy3" parent="." instance=ExtResource("2_0xm2m")]
+[node name="Enemy3" parent="." instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.9962402, 0, 0.08663388, 0, 1, 0, -0.08663388, 0, -0.9962402, -1.713723, 0.9897003, 3.4735131)
 
-[node name="Enemy4" parent="." instance=ExtResource("2_0xm2m")]
+[node name="Enemy4" parent="." instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.5898169, 0, 0.807537, 0, 1, 0, -0.807537, 0, -0.5898169, -4.268763, 1.0516624, 9.241188)
 
 [node name="Armour" type="Area3D" parent="." groups=["enemy"]]

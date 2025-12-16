@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yax103timoop"
-path.s3tc="res://.godot/imported/Man_Skin.png-bcbf58f5c892d87ef42f036fbb9bcf61.s3tc.ctex"
+uid="uid://dib1aeg4gmcxf"
+path.s3tc="res://.godot/imported/Man_head.png-0153f5ec9ec81721b8a3346624461b00.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "8827943bd52537787ea54e888cf31d95"
+"md5": "d6bad215ba996dbc72e1e5e3fe9f6b3f"
 }
 
 [deps]
 
-source_file="res://Textures/Characters/Man_Skin.png"
-dest_files=["res://.godot/imported/Man_Skin.png-bcbf58f5c892d87ef42f036fbb9bcf61.s3tc.ctex"]
+source_file="res://assets/textures/characters/Man_head.png"
+dest_files=["res://.godot/imported/Man_head.png-0153f5ec9ec81721b8a3346624461b00.s3tc.ctex"]
 
 [params]
 

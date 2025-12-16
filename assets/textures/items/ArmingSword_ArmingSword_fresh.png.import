@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fhu27ugfa02c"
-path.s3tc="res://.godot/imported/Guy_head.png-7c78e48ade05fde92fe1fccc64c5cf3b.s3tc.ctex"
+uid="uid://dk6n2r3e7b61n"
+path.s3tc="res://.godot/imported/ArmingSword_ArmingSword_fresh.png-26b749d3dcfc22cfad34fb64fd3193fa.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "d6bad215ba996dbc72e1e5e3fe9f6b3f"
+"md5": "54c382dcf214f0879c6e1e863fd29194"
 }
 
 [deps]
 
-source_file="res://Guy_head.png"
-dest_files=["res://.godot/imported/Guy_head.png-7c78e48ade05fde92fe1fccc64c5cf3b.s3tc.ctex"]
+source_file="res://assets/textures/items/ArmingSword_ArmingSword_fresh.png"
+dest_files=["res://.godot/imported/ArmingSword_ArmingSword_fresh.png-26b749d3dcfc22cfad34fb64fd3193fa.s3tc.ctex"]
 
 [params]
 

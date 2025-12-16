@@ -1,21 +1,21 @@
 [gd_scene load_steps=33 format=3 uid="uid://dtmfsufgue62r"]
 
-[ext_resource type="PackedScene" uid="uid://suy5xh64hgmh" path="res://Models/Arms.glb" id="1_h3l3m"]
-[ext_resource type="Animation" uid="uid://kluhloxkjbhq" path="res://Animations/Viewport/OneHandedDrawWeapon.res" id="2_0lskn"]
-[ext_resource type="Animation" uid="uid://bpsf0ttqptc2d" path="res://Animations/Viewport/OneHandedIdle.res" id="3_gocs2"]
-[ext_resource type="Animation" uid="uid://xi6nijub5nsx" path="res://Animations/Viewport/OneHandedMiddleSwing.res" id="4_vciho"]
-[ext_resource type="Animation" uid="uid://bgmc15addl54q" path="res://Animations/Viewport/OneHandedThrust.res" id="5_201tp"]
-[ext_resource type="Animation" uid="uid://ctcp76ykdl7px" path="res://Animations/Viewport/OneHandedUpperSwing.res" id="6_043a5"]
-[ext_resource type="AnimationLibrary" uid="uid://khk6d0jqqcyu" path="res://Animations/Viewport/ViewportAnimations.res" id="7_opnqq"]
-[ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://arming_sword.tscn" id="8_gocs2"]
+[ext_resource type="PackedScene" uid="uid://suy5xh64hgmh" path="res://Models/Arms.glb" id="1_uc70w"]
+[ext_resource type="Animation" uid="uid://kluhloxkjbhq" path="res://assets/animations/viewport_animations/OneHandedDrawWeapon.res" id="2_fuchj"]
+[ext_resource type="Animation" uid="uid://bpsf0ttqptc2d" path="res://assets/animations/viewport_animations/OneHandedIdle.res" id="3_8ckg2"]
+[ext_resource type="Animation" uid="uid://xi6nijub5nsx" path="res://assets/animations/viewport_animations/OneHandedMiddleSwing.res" id="4_sm5kj"]
+[ext_resource type="Animation" uid="uid://bgmc15addl54q" path="res://assets/animations/viewport_animations/OneHandedThrust.res" id="5_5imgi"]
+[ext_resource type="Animation" uid="uid://ctcp76ykdl7px" path="res://assets/animations/viewport_animations/OneHandedUpperSwing.res" id="6_tapvu"]
+[ext_resource type="AnimationLibrary" uid="uid://khk6d0jqqcyu" path="res://assets/animations/viewport_animations/ViewportAnimations.res" id="7_lih5w"]
+[ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/weapons/arming_sword.tscn" id="8_y2i4c"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m5qa8"]
 _data = {
-&"OneHandedDrawWeapon": ExtResource("2_0lskn"),
-&"OneHandedIdle": ExtResource("3_gocs2"),
-&"OneHandedMiddleSwing": ExtResource("4_vciho"),
-&"OneHandedThrust": ExtResource("5_201tp"),
-&"OneHandedUpperSwing": ExtResource("6_043a5")
+&"OneHandedDrawWeapon": ExtResource("2_fuchj"),
+&"OneHandedIdle": ExtResource("3_8ckg2"),
+&"OneHandedMiddleSwing": ExtResource("4_sm5kj"),
+&"OneHandedThrust": ExtResource("5_5imgi"),
+&"OneHandedUpperSwing": ExtResource("6_tapvu")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_043a5"]
@@ -121,7 +121,7 @@ nodes/Animation/node = SubResource("AnimationNodeAnimation_043a5")
 nodes/Animation/position = Vector2(-340, 40)
 node_connections = [&"output", 0, &"Blend2", &"Blend2", 0, &"Animation", &"Blend2", 1, &"ArmStateMachine"]
 
-[node name="Arms" instance=ExtResource("1_h3l3m")]
+[node name="Arms" instance=ExtResource("1_uc70w")]
 
 [node name="Skeleton3D" parent="Armature" index="0"]
 bones/0/rotation = Quaternion(0.615834, 0.47689375, 0.44661817, -0.44028747)
@@ -161,7 +161,7 @@ transform = Transform3D(-3.9615966e-08, 0.9063075, 0.42261818, -0.9999999, -4.37
 [node name="AnimationPlayer" parent="." index="1"]
 libraries = {
 &"": SubResource("AnimationLibrary_m5qa8"),
-&"ViewportAnimations": ExtResource("7_opnqq")
+&"ViewportAnimations": ExtResource("7_lih5w")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
@@ -171,4 +171,4 @@ parameters/Blend2/blend_amount = 1.0
 
 [node name="ItemContainer" type="Node3D" parent="." index="3"]
 
-[node name="ArmingSword" parent="ItemContainer" index="0" instance=ExtResource("8_gocs2")]
+[node name="ArmingSword" parent="ItemContainer" index="0" instance=ExtResource("8_y2i4c")]

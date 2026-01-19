@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cbogc3l6exaxf" path="res://scenes/characters/character_state_model.tscn" id="1_7dar5"]
 [ext_resource type="Script" uid="uid://brm5xw2hbhwi5" path="res://scenes/characters/states/Humanoid.cs" id="1_vkd1g"]
-[ext_resource type="Script" uid="uid://b057m5pje6y3l" path="res://scenes/Resource.cs" id="2_vkd1g"]
+[ext_resource type="Script" uid="uid://noe1jkg8jfrl" path="res://scenes/characters/states/Resources.cs" id="2_vkd1g"]
 
 [node name="Humanoid" type="Node"]
 script = ExtResource("1_vkd1g")

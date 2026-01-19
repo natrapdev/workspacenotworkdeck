@@ -132,9 +132,10 @@ states/OneHandedUpperSwing/node = SubResource("AnimationNodeAnimation_pylmc")
 states/OneHandedUpperSwing/position = Vector2(518, 44)
 states/Start/position = Vector2(60, 99)
 transitions = ["Start", "OneHandedIdle", SubResource("AnimationNodeStateMachineTransition_urp6f"), "OneHandedIdle", "OneHandedThrust", SubResource("AnimationNodeStateMachineTransition_pbfsw"), "OneHandedIdle", "OneHandedMiddleSwing", SubResource("AnimationNodeStateMachineTransition_5tmop"), "OneHandedIdle", "OneHandedUpperSwing", SubResource("AnimationNodeStateMachineTransition_7ahtn"), "OneHandedUpperSwing", "OneHandedIdle 2", SubResource("AnimationNodeStateMachineTransition_7lmhl"), "OneHandedMiddleSwing", "OneHandedIdle 2", SubResource("AnimationNodeStateMachineTransition_dx0e4"), "OneHandedThrust", "OneHandedIdle 2", SubResource("AnimationNodeStateMachineTransition_jm5j8"), "OneHandedIdle 2", "End", SubResource("AnimationNodeStateMachineTransition_7hik5")]
-graph_offset = Vector2(-77, -69)
+graph_offset = Vector2(-37, -14)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_iruf7"]
+graph_offset = Vector2(-370.66272, 20.407974)
 nodes/output/position = Vector2(620, 220)
 nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace2D_e4hrk")
 nodes/Locomotion/position = Vector2(-100, 80)
@@ -157,7 +158,7 @@ _data = {
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_606se"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "CollisionShape", "CharacterAnimationTree", "ViewportArms", "HeadLookAtTargetMarker", "CameraPivot") groups=["player"]]
+[node name="Player(OLD)" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "CollisionShape", "CharacterAnimationTree", "ViewportArms", "HeadLookAtTargetMarker", "CameraPivot") groups=["player"]]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 script = ExtResource("1_urp6f")
 CharacterModel = NodePath("CharacterModel")
@@ -197,7 +198,7 @@ CameraPanSpeed = 0.75
 Camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" groups=["player"]]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.465431e-07, 0, -1.6762576)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -0.001420359, 0.003122449, -1.5888901)
 cull_mask = 1048573
 
 [node name="Viewport" type="Node3D" parent="CameraPivot/Camera3D"]
@@ -209,7 +210,7 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -
 root_node = NodePath("../CharacterModel")
 tree_root = SubResource("AnimationNodeBlendTree_iruf7")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Locomotion/blend_position = Vector2(0, 0)
+parameters/Locomotion/blend_position = Vector2(0.0070546865, 0)
 parameters/Blend2/blend_amount = 0.0
 
 [node name="HeadLookAtTargetMarker" type="Marker3D" parent="." groups=["player"]]
@@ -234,6 +235,7 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="ViewportCamera" type="Camera3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("MainCamera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36156178, 2.442016)
 cull_mask = 2
 script = ExtResource("14_bwjto")
 MainCamera = NodePath("../../../CameraPivot/Camera3D")

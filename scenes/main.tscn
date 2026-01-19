@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://nbgbi5ylgl32"]
 
-[ext_resource type="PackedScene" uid="uid://bb0o5uxfy03gd" path="res://scenes/player/player.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://c0uw5k0lhdgjn" path="res://scenes/player.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cewk5nxumfedt" path="res://scenes/characters/enemy.tscn" id="2_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
@@ -50,9 +50,6 @@ shape = SubResource("BoxShape3D_7dm0k")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh = SubResource("BoxMesh_ig7tw")
-
-[node name="Player" parent="." instance=ExtResource("1_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." groups=["enemy"]]
 
@@ -128,3 +125,6 @@ shape = SubResource("BoxShape3D_0xm2m")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Armour3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.082642205, 0, 0, 0)
 mesh = SubResource("BoxMesh_h2yge")
+
+[node name="Player" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4349694, 0)

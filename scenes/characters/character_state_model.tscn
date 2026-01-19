@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=3 uid="uid://cbogc3l6exaxf"]
+
+[ext_resource type="Script" uid="uid://c6nk4ckoqywn8" path="res://scenes/characters/states/StateModel.cs" id="1_oonmf"]
+[ext_resource type="Script" uid="uid://b5n7h3rjqdivn" path="res://scenes/characters/states/StateData.cs" id="2_lw30x"]
+[ext_resource type="Script" uid="uid://dumwyrnc2wtiu" path="res://scenes/characters/states/Idle.cs" id="2_oonmf"]
+[ext_resource type="Script" uid="uid://bej5g06gn3l6a" path="res://scenes/characters/states/Walk.cs" id="3_oonmf"]
+[ext_resource type="Script" uid="uid://cv4acahqd1g8v" path="res://scenes/characters/states/Jump.cs" id="4_bsxwf"]
+[ext_resource type="Script" uid="uid://dx2bp5kkihf0c" path="res://scenes/characters/states/Airborne.cs" id="5_bsxwf"]
+
+[node name="StateModel" type="Node"]
+script = ExtResource("1_oonmf")
+
+[node name="StateData" type="Node" parent="."]
+script = ExtResource("2_lw30x")
+
+[node name="Idle" type="Node" parent="."]
+script = ExtResource("2_oonmf")
+
+[node name="Walk" type="Node" parent="."]
+script = ExtResource("3_oonmf")
+
+[node name="Jump" type="Node" parent="."]
+script = ExtResource("4_bsxwf")
+
+[node name="Airborne" type="Node" parent="."]
+script = ExtResource("5_bsxwf")

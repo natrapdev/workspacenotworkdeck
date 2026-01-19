@@ -94,7 +94,8 @@ public partial class PlayerCombatController : Node3D
                 var camPivot = GetNode<Node3D>("../CameraPivot");
                 CharacterModel.RotationDegrees = CharacterModel.RotationDegrees.Lerp(new Vector3(0, camPivot.RotationDegrees.Y, 0), 0.1f);
 
-                if (playback.GetCurrentPlayPosition() < playback.GetCurrentLength() / 2.25
+                if ((playback.GetCurrentNode().ToString().Contains("Swing") || playback.GetCurrentNode().ToString().Contains("Thrust"))
+                && playback.GetCurrentPlayPosition() < playback.GetCurrentLength() / 2.25
                 && playback.GetCurrentPlayPosition() > playback.GetCurrentLength() * 0.2)
                 {
                     isAttacking = true;
@@ -126,12 +127,16 @@ public partial class PlayerCombatController : Node3D
         }
     }
 
-
+    private bool _isCheckingWeaponCollisions = false;
+    private bool _hitSomething = false;
     public override void _PhysicsProcess(double delta)
     {
-        if (isAttacking)
+        var playback = (AnimationNodeStateMachinePlayback)ArmAnimationTree.Get(armStatePlaybackPath);        
+        
+        if (isAttacking && !_isCheckingWeaponCollisions && !_hitSomething)
         {
-			var playback = (AnimationNodeStateMachinePlayback)ArmAnimationTree.Get(armStatePlaybackPath);
+            GD.Print($"Checking");
+            _isCheckingWeaponCollisions = true;
             var weaponStart = HeldWeapon.GetNode<Marker3D>("BladeStart");
             var weaponEnd = HeldWeapon.GetNode<Marker3D>("BladeEnd");
             float increment = (weaponEnd.Position.Y - weaponStart.Position.Y) / WeaponRaycastAmount;
@@ -151,8 +156,11 @@ public partial class PlayerCombatController : Node3D
 
                 var result = _spaceState.IntersectRay(queryParams);
 
-                if (result.Count > 0)
+                if (result.Count > 0 && !_hitSomething && _isCheckingWeaponCollisions)
                 {
+                    _hitSomething = true;
+                    GD.Print($"Ray {i} hit something");
+
                     Node3D collider = (Node3D)result["collider"];
 
                     if (collider.Name.ToString().Contains("Armour"))
@@ -165,9 +173,16 @@ public partial class PlayerCombatController : Node3D
 					hit.Mesh = new BoxMesh();
 					hit.Scale = new Vector3(.1f, .1f, .1f);
 					hit.GlobalPosition = (Vector3)result["position"];
+
+                    isAttacking = false;
+                    executeAttack = false;
+                    playback.Start(weaponStyleName + "Idle");
+                    break;
                     
                 }
             }
+            _hitSomething = false;
+            _isCheckingWeaponCollisions = false;
         }
     }
 

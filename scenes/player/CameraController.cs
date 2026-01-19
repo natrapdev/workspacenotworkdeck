@@ -10,27 +10,11 @@ public partial class CameraController : Node3D
 	[Export] public float CameraPanSpeed { get; set; }
 	[Export] public Camera3D Camera { get; set; }
 
-	public MeshInstance3D Head;
-
 	private const float bodyFollowHeadAngle = 60f;
 
 	public override void _Ready()
 	{
 
-		var player = GetTree().GetNodesInGroup("player").ToArray();
-
-		for (int i = 0; i < player.Length; i++)
-		{
-			var item = player[i];
-
-			if (item is MeshInstance3D d)
-			{
-				if (item.Name.Equals("Head"))
-				{
-					Head = d;
-				}
-			}
-		}
 	}
 
 	public override void _Input(InputEvent inputEvent)

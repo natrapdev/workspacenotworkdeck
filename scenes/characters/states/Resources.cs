@@ -35,12 +35,17 @@ public partial class Resources : Node
         {"foot", 0.0143f}
     };
 
-    private Dictionary<string, float> _bloodVolumeInBodyPart;
-
+    private Dictionary<string, float> _bodyPartBloodVolume;
 
     public override void _Ready()
     {
+        _bodyPartBloodVolume = _bodyPartMassCoefficients;
         _currentStamina = MaxStamina;
+
+        foreach (string bodyPart in _bodyPartMassCoefficients.Keys)
+        {
+            _bodyPartBloodVolume[bodyPart] = CalculateBodyPartBloodVolume(bodyPart);
+        }
     }
 
     public bool HasEnoughStamina(CharacterState state)
@@ -76,5 +81,8 @@ public partial class Resources : Node
         return BodyMass * _bodyPartMassCoefficients[bodyPart];
     }
 
-
+    public float BloodVolumeInBodyPart(string bodyPart)
+    {
+        return _bodyPartBloodVolume[bodyPart];
+    }
 }

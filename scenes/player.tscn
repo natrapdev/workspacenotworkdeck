@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://b582aa1vhaevg" path="res://scenes/player/CameraController.cs" id="9_ur7pv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
+radius = 0.26708984
+height = 1.8180542
 
 [sub_resource type="Animation" id="Animation_bbgaj"]
 resource_name = "idle"
@@ -7653,7 +7655,7 @@ nodes/OneHandedLocomotion/node = SubResource("AnimationNodeBlendSpace2D_ujl30")
 nodes/OneHandedLocomotion/position = Vector2(-640, 340)
 node_connections = [&"output", 0, &"LocomotionBlend2", &"LocomotionBlend2", 0, &"DefaultLocomotion", &"LocomotionBlend2", 1, &"OneHandedLocomotion"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "HumanoidNode", "InputSource")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "HumanoidNode", "InputSource") groups=["player"]]
 script = ExtResource("1_d2wvv")
 CharacterModel = NodePath("HumanMan")
 HumanoidNode = NodePath("Humanoid")
@@ -7667,6 +7669,7 @@ CharacterModel = NodePath("../HumanMan")
 script = ExtResource("3_ur7pv")
 
 [node name="Collision" type="CollisionShape3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.088412255, 0)
 shape = SubResource("CapsuleShape3D_g2els")
 
 [node name="HumanMan" parent="." instance=ExtResource("2_qhqgy")]
@@ -7686,7 +7689,7 @@ parameters/DefaultLocomotion/blend_position = Vector2(0.0035272837, -0.005714297
 parameters/OneHandedLocomotion/blend_position = Vector2(0, 0)
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("Player", "CharacterNode", "Camera") groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.80451, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5677792, 0)
 script = ExtResource("9_ur7pv")
 Player = NodePath("..")
 CharacterNode = NodePath("../HumanMan")
@@ -7694,5 +7697,4 @@ CameraPanSpeed = 0.75
 Camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" groups=["player"]]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -0.25782442, -1.1901093)
-cull_mask = 1048573
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, -1.5369958)

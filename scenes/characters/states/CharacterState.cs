@@ -12,7 +12,7 @@ public partial class CharacterState : Node
 	public CharacterBody3D character;
 	public Node3D characterModel;
 	public AnimationTree animationTree;
-	public Resources characterResource = new();
+	public Resources characterResource;
 	public StateData stateData;
 	public Node3D camPivot;
 	public float staminaCost = 0f;
@@ -24,8 +24,10 @@ public partial class CharacterState : Node
 	{
 		{"idle", 1},
 		{"walk", 2},
-		{"slashing", 3},
-		{"stabbing", 3},
+		{"slash1", 3},
+		{"slash2", 3},
+		{"stab", 3},
+		{"interact", 5},
 		{"airborne", 10},
 		{"jump", 10},
 	};
@@ -34,14 +36,13 @@ public partial class CharacterState : Node
 	public override void _Ready() // pleaselp elpeplease PLEASE change this soon
 	{
 		/*
-		 * Purely out of by own laziness I am hardcoding all of these values in.
+		 * Purely out of my own laziness I am hardcoding all of these values in.
 		 * This is not an optimal approach to this. Please change this soon.
 		 * Thank you in advance. or if you don't do anything you had it coming bozo
 		 * Love, natty p of 2025-01-19
 		 */
-		character = GetNode<CharacterBody3D>("../../..");
-		characterModel = character.GetNode<Node3D>("HumanMan");
-		camPivot = character.GetNode<Node3D>("CameraPivot");
+		// character = GetNode<CharacterBody3D>("../../..");
+		// characterModel = character.GetNode<Node3D>("HumanMan");
 		animationTree = GetNode<AnimationTree>("../../../AnimationTree");
 	}
 
@@ -107,4 +108,10 @@ public partial class CharacterState : Node
 	{
 		return GetProgress() >= time;
 	}
+
+    public static implicit operator Dictionary<object, object>(CharacterState v)
+    {
+        throw new NotImplementedException();
+    }
+
 }

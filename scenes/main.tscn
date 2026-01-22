@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://nbgbi5ylgl32"]
+[gd_scene load_steps=13 format=3 uid="uid://nbgbi5ylgl32"]
 
+[ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/weapons/arming_sword.tscn" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c0uw5k0lhdgjn" path="res://scenes/player.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cewk5nxumfedt" path="res://scenes/characters/enemy.tscn" id="2_sugp2"]
 
@@ -31,6 +32,23 @@ size = Vector3(1, 1, 0.09262276)
 [sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
 
 [node name="Main" type="Node"]
+
+[node name="ItemCollection" type="Node" parent="." groups=["pickable_items"]]
+
+[node name="ArmingSword" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31300426, 2.1797967)
+
+[node name="ArmingSword3" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2784319, 1.8389885, 2.8139176)
+
+[node name="ArmingSword2" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9416249, 2.737406)
+
+[node name="ArmingSword4" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8475482, 3.029673)
+
+[node name="ArmingSword5" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5858676, 0.40678012, 1.8065093)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_h2yge")

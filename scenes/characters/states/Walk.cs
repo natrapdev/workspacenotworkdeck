@@ -27,7 +27,7 @@ public partial class Walk : CharacterState
 
 		animationTree.Set(defaultLocomotionPath, input.direction);
 
-		float stamina = 1f; // PLACEHOLDER
+		float stamina = characterResource.CurrentStamina();
 		float targetSpeed = (float)(stamina >= 0.4 ? _walkspeed : _walkspeed - (70 * Mathf.Pow(stamina - 0.45, 4)));
 
 		velocity.X = Mathf.MoveToward(character.Velocity.X, direction.X * targetSpeed, _accelerationTime);

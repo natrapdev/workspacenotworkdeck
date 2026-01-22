@@ -7,4 +7,5 @@ public class InputPackage
 {
     public List<string> actions = [];
     public Vector2 direction;
+    public Node3D interactedItem;
 }

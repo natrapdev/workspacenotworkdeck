@@ -1,16 +1,84 @@
-[gd_scene load_steps=3 format=3 uid="uid://b11hvvl7kaefi"]
+[gd_scene load_steps=8 format=3 uid="uid://b11hvvl7kaefi"]
 
 [ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_0mgtg"]
-[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/weapons/Weapon.cs" id="2_gchif"]
+[ext_resource type="Script" uid="uid://oqbleu2xbvcd" path="res://scenes/weapons/PickableItem.cs" id="2_gchif"]
+[ext_resource type="ArrayMesh" uid="uid://dm5suipmsq2np" path="res://Models/Items/ArmingSword.res" id="3_gchif"]
 
-[node name="ArmingSword" instance=ExtResource("1_0mgtg")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlfvb"]
+size = Vector3(0.08496094, 0.7438965, 0.020362854)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k4oio"]
+size = Vector3(0.17712402, 0.032318115, 0.019226074)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bai7t"]
+radius = 0.009765625
+height = 0.16601563
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0mgtg"]
+viewport_path = NodePath("Fake/Sprite3D/SubViewportContainer/SubViewport")
+
+[node name="ArmingSword" node_paths=PackedStringArray("ItemBillboardSprite", "PhysicalBody", "ActualMesh", "PhysicalMesh") instance=ExtResource("1_0mgtg")]
 script = ExtResource("2_gchif")
+ItemBillboardSprite = NodePath("Fake/Sprite3D")
+PhysicalBody = NodePath("Fake")
+ActualMesh = NodePath("armingSword")
+PhysicalMesh = NodePath("Fake/FakeMesh")
 
 [node name="armingSword" parent="." index="0"]
-layers = 2
+layers = 3
 
 [node name="BladeStart" type="Marker3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08916774, 0)
 
 [node name="BladeEnd" type="Marker3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8168747, 0)
+
+[node name="Fake" type="RigidBody3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
+mass = 2.5
+
+[node name="FakeMesh" type="MeshInstance3D" parent="Fake" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
+mesh = ExtResource("3_gchif")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fake" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46042895, -0.00015687943)
+shape = SubResource("BoxShape3D_vlfvb")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Fake" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07949352, -0.00015234947)
+shape = SubResource("BoxShape3D_k4oio")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Fake" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, -6.9849925e-08, 0, 6.9849925e-08, 1, 0, -0.003907323, -3.5762787e-07)
+shape = SubResource("CapsuleShape3D_bai7t")
+
+[node name="Sprite3D" type="Sprite3D" parent="Fake" index="4"]
+visible = false
+layers = 2
+modulate = Color(1, 1, 1, 0.6666667)
+pixel_size = 0.005
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture_filter = 0
+texture = SubResource("ViewportTexture_0mgtg")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Fake/Sprite3D" index="0"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="Fake/Sprite3D/SubViewportContainer" index="0"]
+handle_input_locally = false
+size = Vector2i(40, 40)
+render_target_update_mode = 4
+
+[node name="Label" type="Label" parent="Fake/Sprite3D/SubViewportContainer/SubViewport" index="0"]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_vertical = 1
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1

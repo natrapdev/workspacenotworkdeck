@@ -26,6 +26,11 @@ public partial class InputGatherer : Node
 			}
 		}
 
+		if (Input.IsActionJustPressed("interact"))
+		{
+			newInput.actions.Add("interact");
+		}
+
 		return newInput;
 	}
 }

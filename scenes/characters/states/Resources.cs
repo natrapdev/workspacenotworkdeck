@@ -18,7 +18,11 @@ public partial class Resources : Node
 
     public CharacterBody3D character;
     public Node3D characterModel;
+    public LookAtModifier3D HeadLookAtModifier;
+    public BoneAttachment3D HeadBoneAttachment;
 
+    private Skeleton3D _characterSkeleton;
+    private int _characterSkeletonHeadIndex;
     private readonly List<string> _statuses = [];
     private float _totalBloodVolume;
     private float _heartRate; // beats per minute
@@ -50,7 +54,7 @@ public partial class Resources : Node
 
     private float _lastStamina;
 
-    public override void _Ready()
+    public void OnReady()
     {
         _worldItemsContainer = FindWorldItemContainer();
         _inventory = new string[InventorySpace];
@@ -63,6 +67,12 @@ public partial class Resources : Node
         }
 
         _lastStamina = _currentStamina;
+
+        Node3D rig = characterModel.GetNodeOrNull<Node3D>("rig");
+        _characterSkeleton = rig.GetNodeOrNull<Skeleton3D>("Skeleton3D");
+        HeadLookAtModifier = _characterSkeleton.GetNode<LookAtModifier3D>("HeadLookAt");
+        HeadBoneAttachment = _characterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
+        _characterSkeletonHeadIndex = _characterSkeleton.FindBone("spine.006");
     }
 
     public void Update()
@@ -86,21 +96,16 @@ public partial class Resources : Node
 
     public void UpdateNearbyItems(PickableItem newPickableItemFocus)
     {
-        if (pickableItemFocus == null && newPickableItemFocus != null)
-        {
-            pickableItemFocus = newPickableItemFocus;
-            pickableItemFocus.TogglePickUpTooltip(true);
-        }
-        else if (pickableItemFocus != null && newPickableItemFocus == null)
-        {
-            pickableItemFocus.TogglePickUpTooltip(false);
-        }
-        else if (newPickableItemFocus != pickableItemFocus)
-        {
-            pickableItemFocus.TogglePickUpTooltip(false);
-            pickableItemFocus = newPickableItemFocus;
-            pickableItemFocus.TogglePickUpTooltip(true);
-        }
+        // PickableItem old;
+        pickableItemFocus?.TogglePickUpTooltip(false);
+        // old = pickableItemFocus;
+        pickableItemFocus = newPickableItemFocus;
+        pickableItemFocus?.TogglePickUpTooltip(true);
+
+        // if (old is not null && old.IsPickedUp && old != pickableItemFocus)
+        // {
+        //     old.QueueFree();
+        // }
     }
 
     private Node FindWorldItemContainer()
@@ -154,7 +159,7 @@ public partial class Resources : Node
 
             PickableItem pickableItem = item as PickableItem;
 
-            if (pickableItem.CanBePickedUp(characterModel))
+            if (pickableItem.CanBePickedUp(characterModel, HeadBoneAttachment))
             {
                 pickableItems.Add(item);
             }
@@ -166,21 +171,44 @@ public partial class Resources : Node
     private PickableItem FindBestPickableItem(List<Node3D> items)
     {
         PickableItem selectedPickableItem = null;
-        float closestAngleDifference = 180;
+        float closestLookDifference = 10;
 
         foreach (Node3D item in items)
         {
             PickableItem pickableItem = item as PickableItem;
-            float angleDifference = pickableItem.AngleDifference2D(character);
+            float angle = pickableItem.HeadItemDirectionDifference(character, HeadBoneAttachment);
 
-            if (angleDifference < closestAngleDifference)
+            // GD.Print("Look difference: " + angle);
+
+            if (angle < closestLookDifference)
             {
                 selectedPickableItem = pickableItem;
-                closestAngleDifference = angleDifference;
+                closestLookDifference = angle;
             }
         }
 
         return selectedPickableItem;
+    }
+
+    public Transform3D GetBoneGlobalTransform(int boneIndex)
+    {
+        Transform3D relativeTransform = _characterSkeleton.GetBoneGlobalPose(boneIndex);
+        Transform3D globalTransform = _characterSkeleton.GlobalTransform * relativeTransform;
+
+        return globalTransform;
+    }
+
+    public Transform3D GetHeadBoneGlobalTransform()
+    {
+        Transform3D relativeTransform = _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
+        Transform3D globalTransform = _characterSkeleton.GlobalTransform * relativeTransform;
+        
+        return globalTransform;
+    }
+
+    public Transform3D GetHeadBoneGlobalPose()
+    {
+        return _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
     }
 
     public bool HasEnoughStamina(CharacterState state)

@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://7iyiv63d1ewt" path="res://assets/meshes/creatures/human_man.glb" id="1_a07fx"]
 
-[node name="human_man" instance=ExtResource("1_a07fx")]
+[node name="HumanMan" instance=ExtResource("1_a07fx")]
 
 [node name="Skeleton3D" parent="rig" index="0"]
 bones/0/position = Vector3(-5.8019073e-06, -0.08761807, -0.034448422)
@@ -11,7 +11,6 @@ bones/1/rotation = Quaternion(-0.09456411, 1.2579925e-13, -2.2545823e-08, 0.9955
 bones/2/rotation = Quaternion(-0.06915102, -1.4856775e-14, -1.648688e-08, 0.9976062)
 bones/3/rotation = Quaternion(-0.014007757, 2.948003e-14, -3.3397118e-09, 0.9999019)
 bones/4/rotation = Quaternion(0.2619419, 2.3009363e-07, 1.2490355e-07, 0.96508366)
-bones/6/rotation = Quaternion(-0.13016805, -3.5458515e-07, -7.7586186e-08, 0.991492)
 bones/7/rotation = Quaternion(-0.56882095, -0.39897865, -0.5145672, 0.5024733)
 bones/8/rotation = Quaternion(-0.3289029, 0.7203575, -0.49854398, 0.35265)
 bones/9/rotation = Quaternion(0.12372111, 0.021366697, -0.005003798, 0.99207443)
@@ -64,6 +63,15 @@ bones/62/rotation = Quaternion(0.993195, -1.1829677e-08, 1.1815622e-07, 0.116463
 bones/63/rotation = Quaternion(2.2351813e-08, 9.405349e-17, 2.0679705e-09, 1)
 bones/64/rotation = Quaternion(-0.44715384, -1.0662744e-07, 5.3305197e-08, 0.8944571)
 bones/65/rotation = Quaternion(-5.153047e-08, 0.94866234, -0.31629074, -7.162203e-08)
+
+[node name="HeadLookAt" type="LookAtModifier3D" parent="rig/Skeleton3D" index="2"]
+bone_name = "spine.006"
+bone = 6
+
+[node name="HeadBoneAttachment" type="BoneAttachment3D" parent="rig/Skeleton3D" index="3"]
+transform = Transform3D(1, 2.842171e-14, 2.3841835e-07, -4.2632564e-14, 0.9999997, 2.682209e-07, -2.3841835e-07, -2.0861626e-07, 0.99999976, -5.8019073e-06, 0.5614297, -0.012850338)
+bone_name = "spine.006"
+bone_idx = 6
 
 [node name="AnimationPlayer" parent="." index="1"]
 active = false

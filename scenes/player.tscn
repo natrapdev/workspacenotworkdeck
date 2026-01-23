@@ -1,9 +1,9 @@
 [gd_scene load_steps=52 format=3 uid="uid://c0uw5k0lhdgjn"]
 
 [ext_resource type="Script" uid="uid://bo4kydkm8578t" path="res://scenes/Player.cs" id="1_d2wvv"]
-[ext_resource type="PackedScene" uid="uid://7iyiv63d1ewt" path="res://assets/meshes/creatures/human_man.glb" id="2_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://cjusbw4v0k8ln" path="res://scenes/humanoid.tscn" id="2_ur7pv"]
 [ext_resource type="Script" uid="uid://ce88sqbb8bvjl" path="res://scenes/characters/states/InputGatherer.cs" id="3_ur7pv"]
+[ext_resource type="PackedScene" uid="uid://cykgx24ja4tp8" path="res://scenes/characters/human_man.tscn" id="4_ur7pv"]
 [ext_resource type="Animation" uid="uid://dcsqisdcdmgx1" path="res://assets/animations/walk_front.res" id="5_smehm"]
 [ext_resource type="Animation" uid="uid://djt5cd62kyakj" path="res://assets/animations/walk_back.res" id="6_ur7pv"]
 [ext_resource type="Animation" uid="uid://dy1gxme3y6fc1" path="res://assets/animations/strafe_left.res" id="7_y4r1p"]
@@ -7646,7 +7646,6 @@ blend_point_8/node = SubResource("AnimationNodeAnimation_ke2ow")
 blend_point_8/pos = Vector2(1, -1)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_smehm"]
-graph_offset = Vector2(-606.52954, -27.176346)
 nodes/LocomotionBlend2/node = SubResource("AnimationNodeBlend2_ur7pv")
 nodes/LocomotionBlend2/position = Vector2(-180, 100)
 nodes/DefaultLocomotion/node = SubResource("AnimationNodeBlendSpace2D_jej6c")
@@ -7655,11 +7654,12 @@ nodes/OneHandedLocomotion/node = SubResource("AnimationNodeBlendSpace2D_ujl30")
 nodes/OneHandedLocomotion/position = Vector2(-640, 340)
 node_connections = [&"output", 0, &"LocomotionBlend2", &"LocomotionBlend2", 0, &"DefaultLocomotion", &"LocomotionBlend2", 1, &"OneHandedLocomotion"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "HumanoidNode", "InputSource") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "HumanoidNode", "InputSource", "CameraPivot") groups=["player"]]
 script = ExtResource("1_d2wvv")
 CharacterModel = NodePath("HumanMan")
 HumanoidNode = NodePath("Humanoid")
 InputSource = NodePath("PlayerInput")
+CameraPivot = NodePath("CameraPivot")
 
 [node name="Humanoid" parent="." node_paths=PackedStringArray("Character", "CharacterModel") instance=ExtResource("2_ur7pv")]
 Character = NodePath("..")
@@ -7672,7 +7672,7 @@ script = ExtResource("3_ur7pv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.088412255, 0)
 shape = SubResource("CapsuleShape3D_g2els")
 
-[node name="HumanMan" parent="." instance=ExtResource("2_qhqgy")]
+[node name="HumanMan" parent="." instance=ExtResource("4_ur7pv")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../HumanMan")
@@ -7689,7 +7689,7 @@ parameters/DefaultLocomotion/blend_position = Vector2(0.0035272837, -0.005714297
 parameters/OneHandedLocomotion/blend_position = Vector2(0, 0)
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("Player", "CharacterNode", "Camera") groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5677792, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 script = ExtResource("9_ur7pv")
 Player = NodePath("..")
 CharacterNode = NodePath("../HumanMan")
@@ -7697,4 +7697,4 @@ CameraPanSpeed = 0.75
 Camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" groups=["player"]]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, -1.5369958)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)

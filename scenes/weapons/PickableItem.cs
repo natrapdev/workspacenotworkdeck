@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+using MyFirst3DGame.scenes.characters.states;
+
 namespace MyFirst3DGame.Items;
 
 public partial class PickableItem : Node3D
@@ -12,16 +14,16 @@ public partial class PickableItem : Node3D
 	[Export] public MeshInstance3D ActualMesh { get; set; }
 	[Export] public MeshInstance3D PhysicalMesh { get; set; }
 
-	private bool _isPickedUp = false;
-	const float MAXIMUM_LOOK_OFFSET = 0.15f;
+	public bool IsPickedUp = false;
+	const float MAXIMUM_LOOK_OFFSET = 500f;
 
 	public override void _PhysicsProcess(double delta)
 	{
 		PhysicalBody.Freeze = Anchored;
-		ActualMesh.Visible = _isPickedUp;
-		PhysicalBody.Visible = !_isPickedUp;
+		ActualMesh.Visible = IsPickedUp;
+		PhysicalBody.Visible = !IsPickedUp;
 
-		if (!_isPickedUp)
+		if (!IsPickedUp)
 		{
 			ActualMesh.GlobalPosition = PhysicalBody.GlobalPosition;
 		}
@@ -29,17 +31,21 @@ public partial class PickableItem : Node3D
 		{
 			PhysicalBody.Position = Vector3.Zero;
 			ActualMesh.Position = Vector3.Zero;
+			Visible = false;
 		}
 	}
 
 	public void TogglePickUpTooltip(bool show)
 	{
-		ItemBillboardSprite.Visible = show;
+		ItemBillboardSprite.Visible = show && !IsPickedUp;
 	}
 
-	public bool CanBePickedUp(Node3D character)
+	public bool CanBePickedUp(Node3D character, BoneAttachment3D headBoneAttachment)
 	{
-		return DistanceFromItem(character) <= PickUpDistance && AngleDifference2D(character) <= MAXIMUM_LOOK_OFFSET;
+		bool isCloseEnough = DistanceFromItem(character) <= PickUpDistance;
+		bool isBeingLookedAt = HeadItemDirectionDifference(character, headBoneAttachment) <= MAXIMUM_LOOK_OFFSET;
+
+		return isCloseEnough && isBeingLookedAt;
 	}
 
 	public float DistanceFromItem(Node3D character)
@@ -47,14 +53,14 @@ public partial class PickableItem : Node3D
 		return (PhysicalBody.GlobalPosition - character.GlobalPosition).Length();
 	}
 
-	public float AngleDifference2D(Node3D character)
+	public float HeadItemDirectionDifference(Node3D character, BoneAttachment3D headBoneAttachment)
 	{
-		Vector3 facingDirection = character.GlobalTransform.Basis.Z;
-		Vector3 characterPosition = character.GlobalTransform.Origin;
+		Vector3 headPosition = headBoneAttachment.GlobalPosition;
+		Vector3 headForward = headBoneAttachment.GlobalBasis.Z;
+		
+		Vector3 direction = (PhysicalBody.GlobalPosition - headPosition).Normalized();
+		float angle = headForward.AngleTo(direction);
 
-		float angleDifferenceX = Mathf.Abs(characterPosition.DirectionTo(PhysicalMesh.GlobalTransform.Origin).X - facingDirection.X);
-		// float angleDifferenceY = Mathf.Abs(characterPosition.DirectionTo(PhysicalMesh.GlobalTransform.Origin).Y - facingDirection.Y);
-
-		return angleDifferenceX;
+		return Mathf.Abs(Mathf.RadToDeg(angle));
 	}
 }

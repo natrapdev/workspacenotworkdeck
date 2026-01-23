@@ -5,8 +5,9 @@
 [ext_resource type="Script" uid="uid://noe1jkg8jfrl" path="res://scenes/characters/states/Resources.cs" id="2_vkd1g"]
 [ext_resource type="Script" uid="uid://mpa3rdou6csb" path="res://scenes/characters/humanoid/Inventory.cs" id="4_1ee2n"]
 
-[node name="Humanoid" type="Node"]
+[node name="Humanoid" type="Node" node_paths=PackedStringArray("HeadLookAtTarget")]
 script = ExtResource("1_vkd1g")
+HeadLookAtTarget = NodePath("HeadLookAtTarget")
 
 [node name="Resource" type="Node" parent="."]
 script = ExtResource("2_vkd1g")
@@ -15,3 +16,5 @@ script = ExtResource("2_vkd1g")
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("4_1ee2n")
+
+[node name="HeadLookAtTarget" type="Marker3D" parent="."]

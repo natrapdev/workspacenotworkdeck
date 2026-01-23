@@ -17,6 +17,7 @@ public partial class CharacterState : Node
 	public Node3D camPivot;
 	public float staminaCost = 0f;
 	public float fatigueCost = 0f;
+	public Humanoid CharacterHumanoid;
 
 	public string defaultLocomotionPath = "parameters/DefaultLocomotion/blend_position";
 

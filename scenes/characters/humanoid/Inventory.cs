@@ -1,58 +1,68 @@
 using Godot;
+using MyFirst3DGame.Items;
 using System;
 using System.Collections.Generic;
 
-namespace MyFirst3DGame.scenes.characters.humanoid;
+namespace MyFirst3DGame.scenes.characters.states;
+
 public partial class Inventory : Node
 {
     [Export] public int InventorySpace { get; set; } = 3;
-
-    private string[] _inventoryContent;
+    public Node3D[] InventoryContent { get; set; }
 
     public override void _Ready()
     {
-        _inventoryContent = new string[InventorySpace];
+        InventoryContent = new Node3D[InventorySpace];
     }
 
-    public string[] GetInventory()
+    public Node3D GetInventoryItem(int index)
     {
-        return _inventoryContent;
+        return InventoryContent[index];
     }
 
-    public void SetInventory(string[] newInventory)
+    public void AddItemToInventory(Node3D item)
     {
-        this._inventoryContent = newInventory;
-    }
-
-    public void AddItemToInventory(string item)
-    {
-        for (int i = 0; i < _inventoryContent.Length; i++)
+        for (int i = 0; i < InventoryContent.Length; i++)
         {
-            if (String.IsNullOrEmpty(_inventoryContent[i]))
+            if (InventoryContent[i] is null)
             {
-                _inventoryContent[i] = item;
-                break;
+                AddItemToInventory(item, i);
+                return;
             }
         }
     }
 
-    public void AddItemToInventory(string item, int index)
+    public void AddItemToInventory(Node3D item, int index)
     {
-        if (String.IsNullOrEmpty(_inventoryContent[index]))
+        if (InventoryContent[index] is null)
         {
-            _inventoryContent[index] = item;
+            InventoryContent[index] = item;
+
+            if (item is PickableItem)
+            {
+                PickableItem pickedItem = item as PickableItem;
+                pickedItem.IsPickedUp = true;
+            }
         }
         else
         {
-            GD.PushWarning($"Item \"{item}\" can't take inventory space at index {index}; it is already occupied by \"{_inventoryContent[index]}\"");
+            GD.PushWarning($"Item \"{item?.Name}\" can't take inventory space at index {index}; it is already occupied by \"{InventoryContent[index]?.Name}\"");
+        }
+    }
+
+    public void RemoveItemFromInventory(int index)
+    {
+        if (InventoryContent[index] is not null)
+        {
+            InventoryContent[index] = null;
         }
     }
 
     public void ClearInventory()
     {
-        for (int i = 0; i < _inventoryContent.Length; i++)
+        for (int i = 0; i < InventoryContent.Length; i++)
         {
-            this._inventoryContent[i] = "";
+            this.InventoryContent[i] = null;
         }
     }
 }

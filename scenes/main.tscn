@@ -36,16 +36,16 @@ size = Vector3(1, 1, 0.09262276)
 [node name="ItemCollection" type="Node" parent="." groups=["pickable_items"]]
 
 [node name="ArmingSword" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31300426, 2.1797967)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8091394, 0.31300426, 2.1797967)
 
 [node name="ArmingSword3" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2784319, 1.8389885, 2.8139176)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2784319, 1.8389885, 2.2919717)
 
 [node name="ArmingSword2" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9416249, 2.737406)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9416249, 1.7163389)
 
 [node name="ArmingSword4" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8475482, 3.029673)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8475482, 2.7016432)
 
 [node name="ArmingSword5" parent="ItemCollection" instance=ExtResource("1_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5858676, 0.40678012, 1.8065093)

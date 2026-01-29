@@ -7,21 +7,22 @@ public partial class InteractWithItem : CharacterState
 {
     public override string CheckRelevance(InputPackage input)
 	{
-		if (!character.IsOnFloor())
+		if (!Character.IsOnFloor())
 		{
 			return "airborne";
 		}
 		return FindFirstValidState(input);
 	}
+
+
+
     public override void OnEnterState()
     {
-        PickableItem item = characterResource.pickableItemFocus;
-        GD.Print("Trying to pick up " + characterResource.pickableItemFocus.Name);
-        CharacterHumanoid.Inventory.AddItemToInventory(item);
+        InteractableItem item = CharacterResource.ItemFocus;
 
-        if (!item.IsPickedUp)
+        if (item is Weapon weapon)
         {
-            GD.Print("invenotry full");
+            weapon.PickedUp(CharacterHumanoid);
         }
     }
 

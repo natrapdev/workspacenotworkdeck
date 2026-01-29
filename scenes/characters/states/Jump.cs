@@ -9,7 +9,7 @@ public partial class Jump : CharacterState
 	private const float GRAVITY = 9.8f;
 	public override string CheckRelevance(InputPackage input)
 	{
-		if (!character.IsOnFloor())
+		if (!Character.IsOnFloor())
 		{
 			return "airborne";
 		}
@@ -19,12 +19,12 @@ public partial class Jump : CharacterState
 
 	public override void Update(InputPackage input, float delta)
 	{
-		character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
+		Character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
 	}
 
 	public override void OnEnterState()
 	{
-		character.Velocity += new Vector3(0, JUMP_IMPULSE, 0);
+		Character.Velocity += new Vector3(0, JUMP_IMPULSE, 0);
 	}
 	public override void OnExitState()
 	{

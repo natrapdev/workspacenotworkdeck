@@ -2,50 +2,44 @@ using Godot;
 //using Godot.Collections;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class CharacterState : Node
 {
-	public Dictionary<string, CharacterState> stateList;
-	public CharacterBody3D character;
-	public Node3D characterModel;
-	public AnimationTree animationTree;
-	public Resources characterResource;
-	public StateData stateData;
-	public Node3D camPivot;
-	public float staminaCost = 0f;
-	public float fatigueCost = 0f;
-	public Humanoid CharacterHumanoid;
+	public CharacterBody3D Character { get; set; }
+	public Node3D CharacterModel { get; set; }
+	public AnimationTree CharacterAnimationTree { get; set; }
+	public Resources CharacterResource { get; set; }
+	public StateData CharacterStateData { get; set; }
+	public Humanoid CharacterHumanoid { get; set; }
+	public Skeleton3D CharacterSkeleton { get; set; }
+	public BoneAttachment3D HeadBoneAttachment { get; set; }
+	public LookAtModifier3D HeadLookAt { get; set; }
+	public Animator CharacterAnimator { get; set; } 
 
-	public string defaultLocomotionPath = "parameters/DefaultLocomotion/blend_position";
+	public Dictionary<string, CharacterState> StateList { get; set; }
 
-	public static readonly Dictionary<string, int> statePriorities = new()
+	public float StaminaCost = 0f;
+	public float FatigueCost = 0f;
+
+	private static readonly Dictionary<string, int> _statePriorities = new()
 	{
 		{"idle", 1},
 		{"walk", 2},
-		{"slash1", 3},
-		{"slash2", 3},
-		{"stab", 3},
-		{"interact", 5},
+		{"interact", 3},
+		{"unsheathe1", 4},
+		{"unsheathe2", 4},
+		{"attack1", 5},
+		{"attack2", 5},
+		{"attack3", 5},
 		{"airborne", 10},
 		{"jump", 10},
 	};
 
-	double initialSystemTime = Time.GetUnixTimeFromSystem();
-	public override void _Ready() // pleaselp elpeplease PLEASE change this soon
-	{
-		/*
-		 * Purely out of my own laziness I am hardcoding all of these values in.
-		 * This is not an optimal approach to this. Please change this soon.
-		 * Thank you in advance. or if you don't do anything you had it coming bozo
-		 * Love, natty p of 2025-01-19
-		 */
-		// character = GetNode<CharacterBody3D>("../../..");
-		// characterModel = character.GetNode<Node3D>("HumanMan");
-		animationTree = GetNode<AnimationTree>("../../../AnimationTree");
-	}
+	readonly Stopwatch stopwatch = new();
 
 	public virtual void Update(InputPackage input, float delta)
 	{
@@ -63,9 +57,9 @@ public partial class CharacterState : Node
 
 		foreach (string action in sortedInputs)
 		{
-			if (characterResource.HasEnoughStamina(stateList[action]))
+			if (CharacterResource.HasEnoughStamina(StateList[action]))
 			{
-				if (stateList[action].Equals(this))
+				if (StateList[action].Equals(this))
 				{
 					return "OK";
 				}
@@ -79,12 +73,9 @@ public partial class CharacterState : Node
 		return "Could not find an idle state";
 	}
 
-	public List<string> SortInputActions(List<string> actions)
-	{
-		return [.. actions.OrderByDescending(action => statePriorities[action])];
-	}
+    public static List<string> SortInputActions(List<string> actions) => [.. actions.OrderByDescending(a => _statePriorities[a])];
 
-	public virtual void OnEnterState()
+    public virtual void OnEnterState()
 	{
 
 	}
@@ -94,25 +85,13 @@ public partial class CharacterState : Node
 
 	}
 
-	public float GetProgress()
+	public void SetTimer()
 	{
-		double currentTime = Time.GetUnixTimeFromSystem();
-		return (float)(currentTime - initialSystemTime);
+		if (stopwatch.IsRunning) stopwatch.Reset();
+
+		stopwatch.Start();
 	}
 
-	public void SetInitialSystemTime()
-	{
-		initialSystemTime = Time.GetUnixTimeFromSystem();
-	}
-
-	public bool ExceedsTimeLength(float time)
-	{
-		return GetProgress() >= time;
-	}
-
-    public static implicit operator Dictionary<object, object>(CharacterState v)
-    {
-        throw new NotImplementedException();
-    }
-
+	public float GetElapsedTimeMilliseconds() => stopwatch.ElapsedMilliseconds;
+	public bool ExceedsTimeLength(float time) => stopwatch.ElapsedMilliseconds > time;
 }

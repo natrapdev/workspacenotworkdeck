@@ -1,10 +1,9 @@
-using System;
-using System.Linq;
 using Godot;
+using System;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class Idle : CharacterState
+public partial class UnsheathePrimary : CharacterState
 {
 	public override string CheckRelevance(InputPackage input)
 	{
@@ -15,9 +14,9 @@ public partial class Idle : CharacterState
 		return FindFirstValidState(input);
 	}
 
-    public override void OnEnterState()
-    {
-        Character.Velocity = Vector3.Zero;
-    }
+	public override void OnEnterState()
+	{
+		CharacterAnimator?.PlayUnsheatheAnimation(CharacterHumanoid.WeaponInventory.PrimaryWeapon);	
+	}
 
 }

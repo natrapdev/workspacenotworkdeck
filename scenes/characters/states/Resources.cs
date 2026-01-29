@@ -16,10 +16,11 @@ public partial class Resources : Node
     [Export] public float FatigueGain { get; set; } = .1f;
     [Export] public int InventorySpace { get; set; } = 3;
 
-    public CharacterBody3D character;
-    public Node3D characterModel;
+    public CharacterBody3D Character;
+    public Node3D CharacterModel;
     public LookAtModifier3D HeadLookAtModifier;
     public BoneAttachment3D HeadBoneAttachment;
+    public Weapon EquippedWeapon;
 
     private Skeleton3D _characterSkeleton;
     private int _characterSkeletonHeadIndex;
@@ -30,6 +31,10 @@ public partial class Resources : Node
     private float _cardiacOutput;
     private float _currentStamina = 1f;
     private float _currentFatigue = 0;
+
+    // These weights will determine the best nearby interactable item that will be selected.
+    private const float DistanceWeight = 1.2f;
+    private const float AngleWeight = 1;
 
     // How body mass should be distributed across the body
     private readonly Dictionary<string, float> _bodyPartMassCoefficients = new()
@@ -50,7 +55,7 @@ public partial class Resources : Node
     private Dictionary<string, float> _bodyPartBloodVolume;
     private string[] _inventory;
     private readonly List<Node3D> _nearbyPickableItems = [];
-    public PickableItem pickableItemFocus;
+    public InteractableItem ItemFocus;
 
     private float _lastStamina;
 
@@ -68,7 +73,7 @@ public partial class Resources : Node
 
         _lastStamina = _currentStamina;
 
-        Node3D rig = characterModel.GetNodeOrNull<Node3D>("rig");
+        Node3D rig = CharacterModel.GetNodeOrNull<Node3D>("rig");
         _characterSkeleton = rig.GetNodeOrNull<Skeleton3D>("Skeleton3D");
         HeadLookAtModifier = _characterSkeleton.GetNode<LookAtModifier3D>("HeadLookAt");
         HeadBoneAttachment = _characterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
@@ -97,12 +102,12 @@ public partial class Resources : Node
     public void UpdateNearbyItems(PickableItem newPickableItemFocus)
     {
         // PickableItem old;
-        pickableItemFocus?.TogglePickUpTooltip(false);
-        // old = pickableItemFocus;
-        pickableItemFocus = newPickableItemFocus;
-        pickableItemFocus?.TogglePickUpTooltip(true);
+        ItemFocus?.ToggleTooltip(false);
+        // old = ItemFocus;
+        ItemFocus = newPickableItemFocus;
+        ItemFocus?.ToggleTooltip(true);
 
-        // if (old is not null && old.IsPickedUp && old != pickableItemFocus)
+        // if (old is not null && old.IsPickedUp && old != ItemFocus)
         // {
         //     old.QueueFree();
         // }
@@ -159,7 +164,7 @@ public partial class Resources : Node
 
             PickableItem pickableItem = item as PickableItem;
 
-            if (pickableItem.CanBePickedUp(characterModel, HeadBoneAttachment))
+            if (pickableItem.CanInteract(CharacterModel, HeadBoneAttachment))
             {
                 pickableItems.Add(item);
             }
@@ -171,19 +176,20 @@ public partial class Resources : Node
     private PickableItem FindBestPickableItem(List<Node3D> items)
     {
         PickableItem selectedPickableItem = null;
-        float closestLookDifference = 10;
+        float bestScore = float.PositiveInfinity;
 
         foreach (Node3D item in items)
         {
             PickableItem pickableItem = item as PickableItem;
-            float angle = pickableItem.HeadItemDirectionDifference(character, HeadBoneAttachment);
+            float angle = pickableItem.LookDifference(Character, HeadBoneAttachment);
+            float distance = pickableItem.DistanceBetween(Character);
 
-            // GD.Print("Look difference: " + angle);
+            float score = (distance * DistanceWeight + angle * AngleWeight) / 2;
 
-            if (angle < closestLookDifference)
+            if (score < bestScore)
             {
                 selectedPickableItem = pickableItem;
-                closestLookDifference = angle;
+                bestScore = score;
             }
         }
 
@@ -213,7 +219,7 @@ public partial class Resources : Node
 
     public bool HasEnoughStamina(CharacterState state)
     {
-        return state.staminaCost <= _currentStamina && _currentStamina > 0;
+        return state.StaminaCost <= _currentStamina && _currentStamina > 0;
     }
 
     public void ChangeStamina(float changeValue)

@@ -7,7 +7,7 @@
 [ext_resource type="Animation" uid="uid://bgmc15addl54q" path="res://assets/animations/viewport_animations/OneHandedThrust.res" id="5_5imgi"]
 [ext_resource type="Animation" uid="uid://ctcp76ykdl7px" path="res://assets/animations/viewport_animations/OneHandedUpperSwing.res" id="6_tapvu"]
 [ext_resource type="AnimationLibrary" uid="uid://khk6d0jqqcyu" path="res://assets/animations/viewport_animations/ViewportAnimations.res" id="7_lih5w"]
-[ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/weapons/arming_sword.tscn" id="8_y2i4c"]
+[ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/items/arming_sword.tscn" id="8_y2i4c"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m5qa8"]
 _data = {

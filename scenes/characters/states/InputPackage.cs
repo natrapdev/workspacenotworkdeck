@@ -6,6 +6,6 @@ namespace MyFirst3DGame.scenes.characters.states;
 public class InputPackage
 {
     public List<string> actions = [];
+    public List<string> actionModifiers = [];
     public Vector2 direction;
-    public Node3D interactedItem;
 }

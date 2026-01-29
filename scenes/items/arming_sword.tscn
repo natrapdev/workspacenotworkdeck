@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://b11hvvl7kaefi"]
 
 [ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_0mgtg"]
-[ext_resource type="Script" uid="uid://oqbleu2xbvcd" path="res://scenes/weapons/PickableItem.cs" id="2_gchif"]
+[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/items/Weapon.cs" id="2_5sd3t"]
 [ext_resource type="ArrayMesh" uid="uid://dm5suipmsq2np" path="res://Models/Items/ArmingSword.res" id="3_gchif"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlfvb"]
@@ -11,18 +11,18 @@ size = Vector3(0.08496094, 0.7438965, 0.020362854)
 size = Vector3(0.17712402, 0.032318115, 0.019226074)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bai7t"]
-radius = 0.009765625
-height = 0.16601563
+radius = 0.0087890625
+height = 0.15332031
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0mgtg"]
 viewport_path = NodePath("Fake/Sprite3D/SubViewportContainer/SubViewport")
 
-[node name="ArmingSword" node_paths=PackedStringArray("ItemBillboardSprite", "PhysicalBody", "ActualMesh", "PhysicalMesh") instance=ExtResource("1_0mgtg")]
-script = ExtResource("2_gchif")
-ItemBillboardSprite = NodePath("Fake/Sprite3D")
+[node name="ArmingSword" node_paths=PackedStringArray("PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
+script = ExtResource("2_5sd3t")
 PhysicalBody = NodePath("Fake")
 ActualMesh = NodePath("armingSword")
 PhysicalMesh = NodePath("Fake/FakeMesh")
+TooltipSprite = NodePath("Fake/Sprite3D")
 
 [node name="armingSword" parent="." index="0"]
 layers = 3
@@ -50,7 +50,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07949352, -0.00015234947
 shape = SubResource("BoxShape3D_k4oio")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Fake" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, -6.9849925e-08, 0, 6.9849925e-08, 1, 0, -0.003907323, -3.5762787e-07)
+transform = Transform3D(1, 0, 0, 0, 1, -6.9849925e-08, 0, 6.9849925e-08, 1, 0, 0.0024403331, -3.5718446e-07)
 shape = SubResource("CapsuleShape3D_bai7t")
 
 [node name="Sprite3D" type="Sprite3D" parent="Fake" index="4"]

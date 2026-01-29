@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://c0uw5k0lhdgjn"]
+[gd_scene load_steps=89 format=3 uid="uid://c0uw5k0lhdgjn"]
 
 [ext_resource type="Script" uid="uid://bo4kydkm8578t" path="res://scenes/Player.cs" id="1_d2wvv"]
 [ext_resource type="PackedScene" uid="uid://cjusbw4v0k8ln" path="res://scenes/humanoid.tscn" id="2_ur7pv"]
@@ -7548,6 +7548,186 @@ _data = {
 &"walk_front_one_handed": SubResource("Animation_wy2jo")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ujl30"]
+animation = &"idle_one_handed"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_31cv2"]
+animation = &"slash1_end_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pf23h"]
+animation = &"slash1_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dt7fs"]
+animation = &"slash2_end_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wqfne"]
+animation = &"slash2_prepare_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wnwbv"]
+animation = &"slash3_end_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gl8cc"]
+animation = &"slash3_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_487ah"]
+animation = &"slash_prepare_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_md1ol"]
+animation = &"thrust_end_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bj30b"]
+animation = &"thrust_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jc3p3"]
+animation = &"thrust_prepare_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hax0n"]
+animation = &"unsheathe_one_handed"
+play_mode = 1
+advance_on_start = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t4otl"]
+animation = &"unsheathe_one_handed"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j2b1d"]
+xfade_time = 0.2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cs1tg"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2dvfe"]
+xfade_time = 0.2
+priority = 2
+advance_mode = 2
+advance_condition = &"is_sheathing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_giy8y"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fdfoy"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"is_slashing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hhpqf"]
+advance_mode = 2
+advance_condition = &"is_stabbing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g5jhy"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_holxr"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mx1m4"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4gjji"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u2ulf"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6e8lb"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2gdjj"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sc3ue"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lxlsd"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ha2mi"]
+switch_mode = 1
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_apa73"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_74r1k"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8svfe"]
+xfade_time = 0.5
+switch_mode = 1
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2a3c5"]
+xfade_time = 0.5
+switch_mode = 1
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_42b1b"]
+xfade_time = 0.5
+switch_mode = 1
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ur7pv"]
+xfade_time = 0.5
+priority = 2
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"cancel_unsheathe"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_h7ic4"]
+states/idle_one_handed/node = SubResource("AnimationNodeAnimation_ujl30")
+states/idle_one_handed/position = Vector2(542, -12)
+states/slash1_end_one_handed/node = SubResource("AnimationNodeAnimation_31cv2")
+states/slash1_end_one_handed/position = Vector2(200, -363)
+states/slash1_one_handed/node = SubResource("AnimationNodeAnimation_pf23h")
+states/slash1_one_handed/position = Vector2(-41, -302)
+states/slash2_end_one_handed/node = SubResource("AnimationNodeAnimation_dt7fs")
+states/slash2_end_one_handed/position = Vector2(475, -302)
+states/slash2_prepare_one_handed/node = SubResource("AnimationNodeAnimation_wqfne")
+states/slash2_prepare_one_handed/position = Vector2(475, -392)
+states/slash3_end_one_handed/node = SubResource("AnimationNodeAnimation_wnwbv")
+states/slash3_end_one_handed/position = Vector2(200, -132)
+states/slash3_one_handed/node = SubResource("AnimationNodeAnimation_gl8cc")
+states/slash3_one_handed/position = Vector2(-41, -188)
+states/slash_prepare_one_handed/node = SubResource("AnimationNodeAnimation_487ah")
+states/slash_prepare_one_handed/position = Vector2(200, -252)
+states/thrust_end_one_handed/node = SubResource("AnimationNodeAnimation_md1ol")
+states/thrust_end_one_handed/position = Vector2(834, -132)
+states/thrust_one_handed/node = SubResource("AnimationNodeAnimation_bj30b")
+states/thrust_one_handed/position = Vector2(834, -302)
+states/thrust_prepare_one_handed/node = SubResource("AnimationNodeAnimation_jc3p3")
+states/thrust_prepare_one_handed/position = Vector2(716, -214)
+states/unsheathe_one_handed/node = SubResource("AnimationNodeAnimation_t4otl")
+states/unsheathe_one_handed/position = Vector2(200, 20)
+"states/unsheathe_one_handed 2/node" = SubResource("AnimationNodeAnimation_hax0n")
+"states/unsheathe_one_handed 2/position" = Vector2(900, 20)
+transitions = ["Start", "unsheathe_one_handed", SubResource("AnimationNodeStateMachineTransition_j2b1d"), "unsheathe_one_handed", "idle_one_handed", SubResource("AnimationNodeStateMachineTransition_cs1tg"), "idle_one_handed", "unsheathe_one_handed 2", SubResource("AnimationNodeStateMachineTransition_2dvfe"), "unsheathe_one_handed 2", "End", SubResource("AnimationNodeStateMachineTransition_giy8y"), "idle_one_handed", "slash_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_fdfoy"), "idle_one_handed", "thrust_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_hhpqf"), "slash_prepare_one_handed", "slash1_one_handed", SubResource("AnimationNodeStateMachineTransition_g5jhy"), "slash1_one_handed", "slash1_end_one_handed", SubResource("AnimationNodeStateMachineTransition_holxr"), "slash1_end_one_handed", "idle_one_handed", SubResource("AnimationNodeStateMachineTransition_mx1m4"), "thrust_prepare_one_handed", "thrust_one_handed", SubResource("AnimationNodeStateMachineTransition_4gjji"), "thrust_one_handed", "thrust_end_one_handed", SubResource("AnimationNodeStateMachineTransition_u2ulf"), "thrust_end_one_handed", "idle_one_handed", SubResource("AnimationNodeStateMachineTransition_6e8lb"), "slash_prepare_one_handed", "slash3_one_handed", SubResource("AnimationNodeStateMachineTransition_2gdjj"), "slash3_one_handed", "slash3_end_one_handed", SubResource("AnimationNodeStateMachineTransition_sc3ue"), "slash3_end_one_handed", "idle_one_handed", SubResource("AnimationNodeStateMachineTransition_lxlsd"), "slash1_end_one_handed", "slash2_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_ha2mi"), "slash2_prepare_one_handed", "slash2_end_one_handed", SubResource("AnimationNodeStateMachineTransition_apa73"), "slash2_end_one_handed", "idle_one_handed", SubResource("AnimationNodeStateMachineTransition_74r1k"), "slash2_end_one_handed", "thrust_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_8svfe"), "slash3_end_one_handed", "thrust_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_2a3c5"), "slash1_end_one_handed", "thrust_prepare_one_handed", SubResource("AnimationNodeStateMachineTransition_42b1b"), "unsheathe_one_handed", "unsheathe_one_handed 2", SubResource("AnimationNodeStateMachineTransition_ur7pv")]
+graph_offset = Vector2(-113, -110)
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_smehm"]
 animation = &"walk_front"
 
@@ -7596,7 +7776,12 @@ blend_point_8/node = SubResource("AnimationNodeAnimation_a8ls1")
 blend_point_8/pos = Vector2(-1, 1)
 sync = true
 
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_au7lq"]
+filters = ["rig/Skeleton3D:foot.L", "rig/Skeleton3D:foot.R", "rig/Skeleton3D:shin.L", "rig/Skeleton3D:shin.R", "rig/Skeleton3D:thigh.L", "rig/Skeleton3D:thigh.R", "rig/Skeleton3D:toe.L", "rig/Skeleton3D:toe.R"]
+sync = true
+
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_ur7pv"]
+sync = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qfm1y"]
 animation = &"walk_front_one_handed"
@@ -7646,13 +7831,19 @@ blend_point_8/node = SubResource("AnimationNodeAnimation_ke2ow")
 blend_point_8/pos = Vector2(1, -1)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_smehm"]
+graph_offset = Vector2(-563.07935, -17.486008)
+nodes/output/position = Vector2(480, -100)
 nodes/LocomotionBlend2/node = SubResource("AnimationNodeBlend2_ur7pv")
-nodes/LocomotionBlend2/position = Vector2(-180, 100)
+nodes/LocomotionBlend2/position = Vector2(-240, 200)
 nodes/DefaultLocomotion/node = SubResource("AnimationNodeBlendSpace2D_jej6c")
 nodes/DefaultLocomotion/position = Vector2(-600, 100)
 nodes/OneHandedLocomotion/node = SubResource("AnimationNodeBlendSpace2D_ujl30")
 nodes/OneHandedLocomotion/position = Vector2(-640, 340)
-node_connections = [&"output", 0, &"LocomotionBlend2", &"LocomotionBlend2", 0, &"DefaultLocomotion", &"LocomotionBlend2", 1, &"OneHandedLocomotion"]
+nodes/BodyStateMachine/node = SubResource("AnimationNodeStateMachine_h7ic4")
+nodes/BodyStateMachine/position = Vector2(-360, -220)
+nodes/LegsBodyBlend2/node = SubResource("AnimationNodeBlend2_au7lq")
+nodes/LegsBodyBlend2/position = Vector2(-60, 40)
+node_connections = [&"output", 0, &"LegsBodyBlend2", &"LocomotionBlend2", 0, &"DefaultLocomotion", &"LocomotionBlend2", 1, &"OneHandedLocomotion", &"LegsBodyBlend2", 0, &"BodyStateMachine", &"LegsBodyBlend2", 1, &"LocomotionBlend2"]
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CharacterModel", "HumanoidNode", "InputSource", "CameraPivot") groups=["player"]]
 script = ExtResource("1_d2wvv")
@@ -7661,9 +7852,10 @@ HumanoidNode = NodePath("Humanoid")
 InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
 
-[node name="Humanoid" parent="." node_paths=PackedStringArray("Character", "CharacterModel") instance=ExtResource("2_ur7pv")]
+[node name="Humanoid" parent="." node_paths=PackedStringArray("Character", "CharacterModel", "AnimationTree") instance=ExtResource("2_ur7pv")]
 Character = NodePath("..")
 CharacterModel = NodePath("../HumanMan")
+AnimationTree = NodePath("../AnimationTree")
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("3_ur7pv")
@@ -7685,8 +7877,13 @@ root_node = NodePath("../HumanMan")
 tree_root = SubResource("AnimationNodeBlendTree_smehm")
 anim_player = NodePath("../AnimationPlayer")
 parameters/LocomotionBlend2/blend_amount = 0.0
-parameters/DefaultLocomotion/blend_position = Vector2(0.0035272837, -0.0057142973)
+parameters/DefaultLocomotion/blend_position = Vector2(0, 0)
 parameters/OneHandedLocomotion/blend_position = Vector2(0, 0)
+parameters/BodyStateMachine/conditions/cancel_unsheathe = false
+parameters/BodyStateMachine/conditions/is_sheathing = false
+parameters/BodyStateMachine/conditions/is_slashing = false
+parameters/BodyStateMachine/conditions/is_stabbing = false
+parameters/LegsBodyBlend2/blend_amount = 1.0
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("Player", "CharacterNode", "Camera") groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
@@ -7698,3 +7895,4 @@ Camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" groups=["player"]]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+fov = 60.0

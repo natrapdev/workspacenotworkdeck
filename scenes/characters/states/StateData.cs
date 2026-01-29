@@ -24,8 +24,8 @@ public partial class StateData : Node
     {
         foreach (string stateName in states.Keys.ToArray())
         {
-            states[stateName].staminaCost = _staminaCosts[stateName];
-            states[stateName].fatigueCost = _fatigueCosts[stateName];
+            states[stateName].StaminaCost = _staminaCosts[stateName];
+            states[stateName].FatigueCost = _fatigueCosts[stateName];
         }
     }
 }

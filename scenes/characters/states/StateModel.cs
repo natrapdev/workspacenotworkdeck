@@ -7,50 +7,59 @@ namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class StateModel : Node
 {
-	Dictionary<string, CharacterState> states = [];
-	string currentStateName;
-	public CharacterBody3D Character { get; set; }
-	public Node3D CharacterModel { get; set; }
-	public AnimationTree CharacterAnimationTree { get; set; }
-	public Resources CharacterResource { get; set; }
-	public StateData CharacterStateData { get; set; }
-	public Humanoid CharacterHumanoid { get; set; }
+	public Dictionary<string, CharacterState> States = [];
+	public string CurrentStateName { get; set; }
+	public CharacterBody3D Character { get; private set; }
+	public Node3D CharacterModel { get; private set; }
+	public AnimationTree CharacterAnimationTree { get; private set; }
+	public Resources CharacterResource { get; private set; }
+	public StateData CharacterStateData { get; private set; }
+	[Export] public Humanoid CharacterHumanoid { get; set; }
+	public Skeleton3D CharacterSkeleton { get; private set; }
+	[Export] public Animator CharacterAnimator { get; set; }
 
 	public override void _Ready()
 	{
-		CharacterHumanoid = GetNode<Humanoid>("../");
-		Character = GetNode<CharacterBody3D>("../..");
-		CharacterModel = Character.GetNode<Node3D>("HumanMan");
-		CharacterResource = GetNode<Resources>("../Resource");
-		CharacterResource.character = Character;
-		CharacterResource.characterModel = CharacterModel;
+		CharacterHumanoid.Ready += OnHumanoidReady;
+	}
+
+	private void OnHumanoidReady()
+	{
+		Character = CharacterHumanoid.Character;
+		CharacterModel = CharacterHumanoid.CharacterModel;
+		CharacterResource = CharacterHumanoid.GetNode<Resources>("Resource");
+		CharacterResource.Character = Character;
+		CharacterResource.CharacterModel = CharacterModel;
 		CharacterResource.OnReady();
 		CharacterStateData = GetNode<StateData>("StateData");
+		CharacterSkeleton = CharacterHumanoid.Skeleton;
+		CharacterAnimationTree = CharacterHumanoid.AnimationTree;
 
-		// states list might not be necessary
-		states.Add("idle", GetNodeOrNull<Idle>("Idle"));
-		states.Add("walk", GetNodeOrNull<Walk>("Walk"));
-		states.Add("jump", GetNodeOrNull<Jump>("Jump"));
-		states.Add("airborne", GetNodeOrNull<Airborne>("Airborne"));
-		states.Add("interact", GetNodeOrNull<InteractWithItem>("InteractWithItem"));
+		// States list might not be necessary
+		States.Add("idle", GetNodeOrNull<Idle>("Idle"));
+		States.Add("walk", GetNodeOrNull<Walk>("Walk"));
+		States.Add("jump", GetNodeOrNull<Jump>("Jump"));
+		States.Add("airborne", GetNodeOrNull<Airborne>("Airborne"));
+		States.Add("interact", GetNodeOrNull<InteractWithItem>("InteractWithItem"));
+		States.Add("unsheathe1", GetNodeOrNull<UnsheathePrimary>("UnsheathePrimary"));
 
-		currentStateName = "idle";
+		CurrentStateName = "idle";
 
-		foreach (Node child in GetChildren())
+		foreach (var child in GetChildren())
 		{
-			if (child is CharacterState)
+			if (child is CharacterState state)
 			{
-				CharacterState state = child as CharacterState;
-
-				state.character = Character;
-				state.characterModel = CharacterModel;
-				state.characterResource = CharacterResource;
-				state.stateData = CharacterStateData;
+				state.Character = Character;
+				state.CharacterModel = CharacterModel;
+				state.CharacterAnimationTree = CharacterAnimationTree;
+				state.CharacterResource = CharacterResource;
+				state.CharacterStateData = CharacterStateData;
 				state.CharacterHumanoid = CharacterHumanoid;
-				state.stateList = states;
-
-				// the walk state depends on cam pivot i dont want that anymore
-				state.camPivot = Character.GetNode<Node3D>("CameraPivot"); // GET RID OF THIS DEPENDENCY ASAP!!!
+				state.CharacterSkeleton = CharacterSkeleton;
+				state.HeadBoneAttachment = CharacterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
+				state.HeadLookAt = CharacterSkeleton.GetNode<LookAtModifier3D>("HeadLookAt");
+				state.StateList = States;
+				state.CharacterAnimator = CharacterAnimator;
 			}
 		}
 	}
@@ -58,19 +67,19 @@ public partial class StateModel : Node
 	public virtual void Update(InputPackage input, float delta)
 	{
 		CharacterResource.Update();
-		string relevance = states[currentStateName].CheckRelevance(input);
+		string relevance = States[CurrentStateName].CheckRelevance(input);
 
 		if (!relevance.Equals("OK"))
 		{
 			SwitchTo(relevance);
 		}
-		states[currentStateName].Update(input, delta);
+		States[CurrentStateName].Update(input, delta);
 	}
 
 	public virtual void SwitchTo(string state)
 	{
-		states[currentStateName].OnExitState();
-		currentStateName = state;
-		states[currentStateName].OnEnterState();
+		States[CurrentStateName].OnExitState();
+		CurrentStateName = state;
+		States[CurrentStateName].OnEnterState();
 	}
 }

@@ -20,7 +20,7 @@ public partial class Inventory : Node
         return InventoryContent[index];
     }
 
-    public void AddItemToInventory(Node3D item)
+    public virtual void AddItemToInventory(Node3D item)
     {
         for (int i = 0; i < InventoryContent.Length; i++)
         {
@@ -32,7 +32,7 @@ public partial class Inventory : Node
         }
     }
 
-    public void AddItemToInventory(Node3D item, int index)
+    public virtual void AddItemToInventory(Node3D item, int index)
     {
         if (InventoryContent[index] is null)
         {
@@ -50,7 +50,7 @@ public partial class Inventory : Node
         }
     }
 
-    public void RemoveItemFromInventory(int index)
+    public virtual void RemoveItemFromInventory(int index)
     {
         if (InventoryContent[index] is not null)
         {

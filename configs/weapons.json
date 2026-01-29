@@ -3,7 +3,7 @@
 		
 		"armingSword" : {
 			"name" : "Arming Sword",
-			"oneHanded": false,
+			"oneHanded": true,
 			"sharpness" : 1,
 			"mass" : 1.2,
 			"damage" : 100,

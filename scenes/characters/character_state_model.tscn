@@ -1,7 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cbogc3l6exaxf"]
 
 [ext_resource type="Script" uid="uid://c6nk4ckoqywn8" path="res://scenes/characters/states/StateModel.cs" id="1_oonmf"]
-[ext_resource type="Script" uid="uid://b5n7h3rjqdivn" path="res://scenes/characters/states/StateData.cs" id="2_lw30x"]
 [ext_resource type="Script" uid="uid://dumwyrnc2wtiu" path="res://scenes/characters/states/Idle.cs" id="2_oonmf"]
 [ext_resource type="Script" uid="uid://bej5g06gn3l6a" path="res://scenes/characters/states/Walk.cs" id="3_oonmf"]
 [ext_resource type="Script" uid="uid://cv4acahqd1g8v" path="res://scenes/characters/states/Jump.cs" id="4_bsxwf"]
@@ -9,12 +8,16 @@
 [ext_resource type="Script" uid="uid://oin8jhikj5jf" path="res://scenes/characters/states/InteractWithItem.cs" id="7_amfjo"]
 [ext_resource type="Script" uid="uid://co5rehsif1xl" path="res://scenes/characters/states/UnsheathePrimary.cs" id="8_8seqb"]
 [ext_resource type="Script" uid="uid://dek6b3ks5rvxk" path="res://scenes/characters/states/UnsheatheSecondary.cs" id="8_htwuo"]
+[ext_resource type="Script" uid="uid://myhiiqxhshqe" path="res://scenes/characters/states/Attack.cs" id="10_hteuh"]
 
 [node name="StateModel" type="Node"]
 script = ExtResource("1_oonmf")
 
+[node name="StateDataStorage" type="Node" parent="."]
+
 [node name="StateData" type="Node" parent="."]
-script = ExtResource("2_lw30x")
+
+[node name="StateDatabase" type="AnimationPlayer" parent="StateData"]
 
 [node name="Idle" type="Node" parent="."]
 script = ExtResource("2_oonmf")
@@ -38,3 +41,4 @@ script = ExtResource("8_8seqb")
 script = ExtResource("8_htwuo")
 
 [node name="Attack" type="Node" parent="."]
+script = ExtResource("10_hteuh")

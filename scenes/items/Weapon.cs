@@ -17,7 +17,7 @@ public partial class Weapon : PickableItem
 	/// 	2. Secondary]]>
 	/// </summary>
 	[Export] public int WeaponSlot { get; set; } = 1;
-	public string WeaponType { get; set; }
+	public string WeaponType { get; set; } = "";
 	public WeaponInventory ParentWeaponInventory { get; set; }
 
 	private double _baseDamage = 25;
@@ -62,6 +62,7 @@ public partial class Weapon : PickableItem
 
 			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {_mass} kg | Type {WeaponType}");
 
+			Moves.Add("prepare", "prepare_" + WeaponType);
 			Moves.Add("unsheathe1", "unsheathe_" + WeaponType);
 			Moves.Add("attack1", "slash1_" + WeaponType);
 			Moves.Add("attack2", "stab_" + WeaponType);
@@ -73,7 +74,7 @@ public partial class Weapon : PickableItem
 		}
 	}
 
-    public override void PickedUp(Humanoid humanoid)
+    public override void PickedUp(HumanoidModel humanoid)
     {
 		IsPickedUp = true;
         WeaponInventory weaponInventory = humanoid.WeaponInventory;

@@ -1,6 +1,6 @@
 [gd_resource type="AnimationLibrary" load_steps=14 format=3 uid="uid://kxngjioxjj28"]
 
-[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/Idle.res" id="1_ta2mo"]
+[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/human/body/idle.res" id="1_ta2mo"]
 [ext_resource type="Animation" uid="uid://vorjeo70311q" path="res://assets/animations/Run.res" id="2_0ak6w"]
 [ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://assets/animations/RunBackwards.res" id="3_jp3xj"]
 [ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://assets/animations/RunLeft.res" id="4_4mell"]

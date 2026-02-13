@@ -1,0 +1,38 @@
+[gd_resource type="AnimationLibrary" load_steps=17 format=3 uid="uid://c51fuobpqhqqm"]
+
+[ext_resource type="Animation" uid="uid://bl4war762veyd" path="res://assets/animations/human/legs/idle.res" id="1_m8bd0"]
+[ext_resource type="Animation" uid="uid://dkg7iune7fk2l" path="res://assets/animations/human/legs/idle_one_handed.res" id="2_giat2"]
+[ext_resource type="Animation" uid="uid://dxcr60l158sot" path="res://assets/animations/human/legs/slash1_one_handed.res" id="3_xquee"]
+[ext_resource type="Animation" uid="uid://qlh8qdugl603" path="res://assets/animations/human/legs/slash3_one_handed.res" id="4_bxkpj"]
+[ext_resource type="Animation" uid="uid://2ld1o4poqesc" path="res://assets/animations/human/legs/slash_prepare_one_handed.res" id="5_godqy"]
+[ext_resource type="Animation" uid="uid://e02c4e1b4twa" path="res://assets/animations/human/legs/strafe_left.res" id="6_xc6v4"]
+[ext_resource type="Animation" uid="uid://drax6sktrl1mq" path="res://assets/animations/human/legs/strafe_left_one_handed.res" id="7_limj6"]
+[ext_resource type="Animation" uid="uid://dimox1s0q6bym" path="res://assets/animations/human/legs/strafe_right.res" id="8_axe6s"]
+[ext_resource type="Animation" uid="uid://cxl2hu0soubqf" path="res://assets/animations/human/legs/strafe_right_one_handed.res" id="9_acrnh"]
+[ext_resource type="Animation" uid="uid://fkx5hecnj5n1" path="res://assets/animations/human/legs/thrust_one_handed.res" id="10_uec0p"]
+[ext_resource type="Animation" uid="uid://dvofpvdg0yhqc" path="res://assets/animations/human/legs/unsheathe_one_handed.res" id="11_81qmm"]
+[ext_resource type="Animation" uid="uid://b73xs8x3m26xt" path="res://assets/animations/human/legs/walk_back.res" id="12_jknto"]
+[ext_resource type="Animation" uid="uid://co6sj5a8achop" path="res://assets/animations/human/legs/walk_back_one_handed.res" id="13_k6ap0"]
+[ext_resource type="Animation" uid="uid://b7iy7cliywn7t" path="res://assets/animations/human/legs/walk_front.res" id="14_ijps0"]
+[ext_resource type="Animation" uid="uid://cvlnalh3a73qo" path="res://assets/animations/human/legs/walk_front_one_handed.res" id="15_6e208"]
+[ext_resource type="Animation" uid="uid://dgf7ski8vtm4t" path="res://assets/animations/human/legs/slash2_one_handed.res" id="16_giat2"]
+
+[resource]
+_data = {
+&"idle": ExtResource("1_m8bd0"),
+&"idle_one_handed": ExtResource("2_giat2"),
+&"slash1_one_handed": ExtResource("3_xquee"),
+&"slash2_one_handed": ExtResource("16_giat2"),
+&"slash3_one_handed": ExtResource("4_bxkpj"),
+&"slash_prepare_one_handed": ExtResource("5_godqy"),
+&"strafe_left": ExtResource("6_xc6v4"),
+&"strafe_left_one_handed": ExtResource("7_limj6"),
+&"strafe_right": ExtResource("8_axe6s"),
+&"strafe_right_one_handed": ExtResource("9_acrnh"),
+&"thrust_one_handed": ExtResource("10_uec0p"),
+&"unsheathe_one_handed": ExtResource("11_81qmm"),
+&"walk_back": ExtResource("12_jknto"),
+&"walk_back_one_handed": ExtResource("13_k6ap0"),
+&"walk_front": ExtResource("14_ijps0"),
+&"walk_front_one_handed": ExtResource("15_6e208")
+}

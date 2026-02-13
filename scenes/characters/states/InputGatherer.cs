@@ -1,64 +1,109 @@
 using Godot;
 using System;
-using System.ComponentModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class InputGatherer : Node
 {
-	public Resources CharacterResources { get; set; }
-	public Inventory CharacterInventory { get; set; }
-	public WeaponInventory CharacterWeaponInventory { get; set; }
-	public Humanoid CharacterHumanoid { get; set; }
+	[Export] public HumanoidModel Humanoid { get; set; }
 
-	public override void _Ready()
+	private readonly Dictionary<string, int> _combatActionPriorities = new()
 	{
-		CharacterHumanoid = GetNode<Humanoid>("../Humanoid");
-		CharacterResources = CharacterHumanoid.GetNode<Resources>("Resource");
-		CharacterInventory = CharacterHumanoid.GetNode<Inventory>("Inventory");
-		CharacterWeaponInventory = CharacterInventory.GetNode<WeaponInventory>("WeaponInventory");
-	}
+		{"unsheathe1", 1},
+		{"unsheathe2", 2},
+		{"attack1", 3},
+		{"attack2", 3},
+	};
 
 	public InputPackage GatherInput()
 	{
-		InputPackage newInput = new();
+		List<string> actions = [];
+		List<string> combatActions = [];
 
-		newInput.actions.Add("idle");
+		actions.Add("idle");
 
-		newInput.direction = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
+		Vector2 inputDirection = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
 
-		if (newInput.direction != Vector2.Zero && CharacterHumanoid.CanMove)
+		if (inputDirection != Vector2.Zero)
 		{
-			newInput.actions.Add("walk");
+			actions.Add("walk");
 		}
 
 		if (Input.IsActionJustPressed("jump"))
 		{
-			if (newInput.actions.Contains("walk"))
+			if (actions.Contains("walk"))
 			{
-				newInput.actions.Add("jump");
+				actions.Add("jump");
 			}
 		}
 
 		if (Input.IsActionJustPressed("interact"))
 		{
-			if (CharacterResources.ItemFocus is not null)
+			if (Humanoid.Resource.ItemFocus is not null)
 			{
-				newInput.actions.Add("interact");
+				actions.Add("interact");
 			}
 		}
 
-		if (Input.IsActionJustPressed("unsheathe1") && CharacterWeaponInventory.GetEquippedWeapon() is null && CharacterWeaponInventory.PrimaryWeapon is not null)
+		if (Input.IsActionJustPressed("unsheathe1"))
 		{
-			newInput.actions.Add("unsheathe1");
+			combatActions.Add("unsheathe1");
 		}
 
-		// if (Input.IsActionJustPressed("unsheathe2") && CharacterResources.EquippedWeapon is null)
-		// {
-		// 	newInput.actions.Add("unsheathe2");
-		// }
+		if (Input.IsActionJustPressed("unsheathe2") && Humanoid.CurrentWeapon is null)
+		{
+			combatActions.Add("unsheathe2");
+		}
 
-		return newInput;
+		if (Input.IsActionJustPressed("attack1"))
+		{
+			combatActions.Add("attack1");
+		}
+
+		if (Input.IsActionJustPressed("attack2"))
+		{
+			combatActions.Add("attack2");
+		}
+
+		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
+		PriorityQueue<string, int> sortedCombatActions = new(new DescendingComparer());
+
+		SortActions(actions, sortedActions);
+		SortCombatActions(combatActions, sortedCombatActions);
+
+		return new InputPackage(sortedActions, sortedCombatActions, inputDirection);
 	}
+
+	private void SortActions(List<string> actionNames, PriorityQueue<State, int> sorted)
+	{
+		foreach (string action in actionNames)
+		{
+			State state = GetState(action);
+			sorted.Enqueue(state, state.Priority);
+		}
+	}
+
+	private void SortCombatActions(List<string> actionNames, PriorityQueue<string, int> sorted)
+	{
+		foreach (string action in actionNames)
+		{
+			sorted.Enqueue(action, _combatActionPriorities[action]);
+		}
+	}
+
+	private State GetState(string name) => Humanoid.StateContainer.GetStateByName(name);
+}
+
+public struct InputPackage(PriorityQueue<State, int> actions, PriorityQueue<string, int> combatActionNames, Vector2 direction)
+{
+    public PriorityQueue<State, int> Actions { get; set; } = actions;
+    public PriorityQueue<string, int> CombatActionNames { get; set; } = combatActionNames;
+    public Vector2 Direction { get; set; } = direction;
+}
+
+public class DescendingComparer : IComparer<int>
+{
+	public int Compare(int x, int y) => y.CompareTo(x);
 }

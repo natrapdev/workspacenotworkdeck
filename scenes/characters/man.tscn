@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://driavi5sd6nke" path="res://Models/Characters/Man.glb" id="1_ugvvu"]
 [ext_resource type="Script" uid="uid://dgp7jdqbngckq" path="res://scenes/characters/CharacterSkeleton.cs" id="2_pfr4v"]
-[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/Idle.res" id="3_pdy8h"]
+[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/human/body/idle.res" id="3_pdy8h"]
 [ext_resource type="Animation" uid="uid://vorjeo70311q" path="res://assets/animations/Run.res" id="4_cafic"]
 [ext_resource type="Animation" uid="uid://2tr847i7hxl2" path="res://assets/animations/RunBackwards.res" id="5_15xca"]
 [ext_resource type="Animation" uid="uid://yl3s88o42pt5" path="res://assets/animations/RunLeft.res" id="6_sq47r"]

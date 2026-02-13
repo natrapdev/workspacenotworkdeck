@@ -5,47 +5,47 @@ using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class Walk : CharacterState
+public partial class Walk : State
 {
 	private float _walkspeed = 1.5f;
 	private float _accelerationTime = 0.15f;
-	private const float _BodyRotationSpeed = 30f;
 
-	public override string CheckRelevance(InputPackage input)
+	public override State ChangeState(InputPackage input)
 	{
 		if (!Character.IsOnFloor())
 		{
-			return "airborne";
+			return Parent.GetStateByName("airborne");
 		}
-
 		return FindFirstValidState(input);
 	}
 
-	public override void Update(InputPackage input, float delta)
+	public override void OnUpdate(InputPackage input, float delta)
 	{
-		Vector3 velocity = Character.Velocity;
-		Vector3 direction = (CharacterModel.Transform.Basis * new Vector3(input.direction.X, 0, input.direction.Y)).Normalized();
+		string animationDirection = Animator.GetAnimationDirectionModifier(input.Direction);
+		string animationWeapon = Animator.GetAnimationWeaponModifier();
+		string animation = animationDirection.Contains("left") || animationDirection.Contains("right") ? "strafe" : "walk";
 
-		float stamina = CharacterResource.CurrentStamina();
+		Animation = animation + animationDirection + animationWeapon;
+
+		Vector3 velocity = Character.Velocity;
+		Vector3 direction = (Character.Transform.Basis * new Vector3(input.Direction.X, 0, input.Direction.Y)).Normalized();
+
+		float stamina = Resource.CurrentStamina();
 		float targetSpeed = (float)(stamina >= 0.4 ? _walkspeed : _walkspeed - (70 * Mathf.Pow(stamina - 0.45, 4)));
 
 		velocity.X = Mathf.MoveToward(Character.Velocity.X, direction.X * targetSpeed, _accelerationTime);
 		velocity.Z = Mathf.MoveToward(Character.Velocity.Z, direction.Z * targetSpeed, _accelerationTime);
 
-		Vector3 characterRotation = CharacterModel.GlobalRotation;
-		float targetAngle = HeadBoneAttachment.GlobalRotation.Y;
-		float currentAngle = characterRotation.Y;
-		float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, _BodyRotationSpeed * delta);
+		float speed = (input.Direction.Y < 0 && input.Direction.X > 0) || (input.Direction.X < 0 && input.Direction.Y < 0) ? -1 : 1;
 
-		CharacterModel.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+		Animator.SetSpeedScale(speed);
+
 		Character.Velocity = velocity;
 	}
-	public override void OnEnterState()
-	{
 
-	}
-	public override void OnExitState()
+    public override void OnExit()
 	{
-		
+		Animator.SetSpeedScale(1);
+		Character.Velocity = Vector3.Zero;	
 	}
 }

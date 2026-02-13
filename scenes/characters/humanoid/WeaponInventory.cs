@@ -12,6 +12,8 @@ public partial class WeaponInventory : Node
 
     public string PrimaryWeaponContainerPath { get; set; } = "rig/Skeleton3D/HipPrimaryAttachment/Container";
     public string RightHandWeaponContainerPath { get; set; } = "rig/Skeleton3D/RightHandAttachment/Container";
+    [Export] public Skeleton3D Skeleton { get; set; }
+    [Export] public HumanoidModel Humanoid { get; set; }
     private Weapon _equippedWeapon = null;
 
     public void AddWeaponToInventory(Node3D item)
@@ -50,7 +52,7 @@ public partial class WeaponInventory : Node
             1 => PrimaryWeapon,
             2 => SecondaryWeapon,
             3 => Dagger,
-            _ => throw new NotImplementedException()
+            _ => throw new NullReferenceException()
         };
 
         MoveWeaponToRightHand(_equippedWeapon);
@@ -58,6 +60,13 @@ public partial class WeaponInventory : Node
 
     public void UnEquipWeapon()
     {
+        switch (_equippedWeapon.WeaponSlot)
+        {
+            case 1: MoveWeaponToPrimarySlot(); break;
+            // TODO: other weapon slots
+            default: throw new NullReferenceException();  
+        }
+
         _equippedWeapon = null;
     }
 
@@ -71,6 +80,7 @@ public partial class WeaponInventory : Node
     }
 
     private void MoveWeaponToPrimarySlot() => MoveWeaponToSlot(PrimaryWeapon, PrimaryWeaponContainerPath);
+    
     private void MoveWeaponToRightHand(Weapon weapon) => MoveWeaponToSlot(weapon, RightHandWeaponContainerPath);
 
     private void MoveWeaponToSlot(Weapon weapon, string path)
@@ -82,5 +92,6 @@ public partial class WeaponInventory : Node
         weapon.Position = Vector3.Zero;
         weapon.RotationDegrees = Vector3.Zero;
     }
-    private Node3D GetItemContainer(string path) => GetNode<Humanoid>("../../").CharacterModel.GetNode<Node3D>(path);
+    
+    private Node3D GetItemContainer(string path) => Humanoid.GetNode<Node3D>(path);
 }

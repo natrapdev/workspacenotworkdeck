@@ -14,6 +14,7 @@ config/name="Retribuo"
 run/main_scene="uid://nbgbi5ylgl32"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+config/size/mode=0
 
 [autoload]
 

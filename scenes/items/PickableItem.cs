@@ -32,12 +32,17 @@ public partial class PickableItem : InteractableItem
 		}
 	}
 
-	public virtual void PickedUp(Humanoid humanoid)
+	public virtual void PickedUp(HumanoidModel humanoid)
 	{
 		IsPickedUp = true;
 		Inventory inventory = humanoid.Inventory;
 		PhysicalBody.AddCollisionExceptionWith(humanoid.Character);
 		inventory.AddItemToInventory(this);
 		PhysicalBody.CollisionMask = 2;
+	}
+
+	public virtual void PutInRightHand()
+	{
+		
 	}
 }

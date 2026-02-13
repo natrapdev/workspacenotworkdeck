@@ -4,36 +4,37 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
-public partial class Airborne : CharacterState
+public partial class Airborne : State
 {
     const float GRAVITY = 9.8f;
     const float MAX_FALL_RECOVERY_DISTANCE = 8f;
-    private float airTime;
+    private float _airTime;
     private readonly Stopwatch _stopwatch = new();
 
-    public override string CheckRelevance(InputPackage input)
+    public override State ChangeState(InputPackage input)
 	{
 		if (Character.IsOnFloor())
 		{
 			return FindFirstValidState(input);
 		}
 
-		return "OK";
+		return this;
 	}
 
-	public override void Update(InputPackage input, float delta)
+	public override void OnUpdate(InputPackage input, float delta)
 	{
 		Character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
-        airTime = _stopwatch.ElapsedMilliseconds;
+        _airTime = _stopwatch.ElapsedMilliseconds;
 	}
 
-	public override void OnEnterState()
+	public override void OnEnter()
 	{
 		_stopwatch.Start();
 	}
-	public override void OnExitState()
+	public override void OnExit()
 	{
 		_stopwatch.Stop();
-		GD.Print("Airtime: " + airTime);
+		GD.Print("Airtime: " + _airTime);
+		_stopwatch.Reset();
 	}
 }

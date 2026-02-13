@@ -3,27 +3,25 @@ using System;
 using MyFirst3DGame.Items;
 
 namespace MyFirst3DGame.scenes.characters.states;
-public partial class InteractWithItem : CharacterState
+
+public partial class InteractWithItem : State
 {
-    public override string CheckRelevance(InputPackage input)
-	{
-		if (!Character.IsOnFloor())
-		{
-			return "airborne";
-		}
-		return FindFirstValidState(input);
-	}
-
-
-
-    public override void OnEnterState()
+    public override State ChangeState(InputPackage input)
     {
-        InteractableItem item = CharacterResource.ItemFocus;
-
-        if (item is Weapon weapon)
+        if (!Character.IsOnFloor())
         {
-            weapon.PickedUp(CharacterHumanoid);
+            return Parent.GetStateByName("airborne");
         }
+        return FindFirstValidState(input);
     }
 
+    public override void OnEnter()
+    {
+        InteractableItem item = Resource.ItemFocus;
+
+        if (item is Weapon weapon && Humanoid.WeaponInventory.PrimaryWeapon is null)
+        {
+            weapon.PickedUp(Humanoid);
+        }
+    }
 }

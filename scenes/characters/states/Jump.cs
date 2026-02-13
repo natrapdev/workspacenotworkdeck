@@ -3,31 +3,27 @@ using System;
 using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
-public partial class Jump : CharacterState
+public partial class Jump : State
 {
 	private const float JUMP_IMPULSE = 2.5f;
-	private const float GRAVITY = 9.8f;
-	public override string CheckRelevance(InputPackage input)
+
+	public override State ChangeState(InputPackage input)
 	{
 		if (!Character.IsOnFloor())
 		{
-			return "airborne";
+			return Parent.GetStateByName("airborne");
 		}
 
 		return FindFirstValidState(input);
 	}
 
-	public override void Update(InputPackage input, float delta)
+	public override void OnUpdate(InputPackage input, float delta)
 	{
-		Character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
+		Character.Velocity -= new Vector3(0, Gravity * delta, 0);
 	}
 
-	public override void OnEnterState()
+	public override void OnEnter()
 	{
 		Character.Velocity += new Vector3(0, JUMP_IMPULSE, 0);
-	}
-	public override void OnExitState()
-	{
-		
 	}
 }

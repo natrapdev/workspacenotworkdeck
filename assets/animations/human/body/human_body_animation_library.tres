@@ -1,0 +1,38 @@
+[gd_resource type="AnimationLibrary" load_steps=17 format=3 uid="uid://di0hlyt4anoer"]
+
+[ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/human/body/idle.res" id="1_kmiot"]
+[ext_resource type="Animation" uid="uid://cwdruiai3e5cq" path="res://assets/animations/human/body/idle_one_handed.res" id="2_nhbgs"]
+[ext_resource type="Animation" uid="uid://dw6k00y3l4otg" path="res://assets/animations/human/body/slash1_one_handed.res" id="3_x1g2m"]
+[ext_resource type="Animation" uid="uid://wbixru2axahq" path="res://assets/animations/human/body/slash3_one_handed.res" id="4_ely4x"]
+[ext_resource type="Animation" uid="uid://cd62638u2l2xx" path="res://assets/animations/human/body/slash_prepare_one_handed.res" id="5_0atnx"]
+[ext_resource type="Animation" uid="uid://dy1gxme3y6fc1" path="res://assets/animations/human/body/strafe_left.res" id="6_rpclj"]
+[ext_resource type="Animation" uid="uid://rnp000ww0m1x" path="res://assets/animations/human/body/strafe_left_one_handed.res" id="7_ok3t2"]
+[ext_resource type="Animation" uid="uid://btuqb1yhnpcn6" path="res://assets/animations/human/body/strafe_right.res" id="8_skt6s"]
+[ext_resource type="Animation" uid="uid://d2yljcs1w0o3k" path="res://assets/animations/human/body/strafe_right_one_handed.res" id="9_bn76q"]
+[ext_resource type="Animation" uid="uid://djpu0vq4grm6w" path="res://assets/animations/human/body/thrust_one_handed.res" id="10_hjkpg"]
+[ext_resource type="Animation" uid="uid://b10qa2yhcg7c6" path="res://assets/animations/human/body/unsheathe_one_handed.res" id="11_3onop"]
+[ext_resource type="Animation" uid="uid://djt5cd62kyakj" path="res://assets/animations/human/body/walk_back.res" id="12_5olfv"]
+[ext_resource type="Animation" uid="uid://k7m3kxb8xcfo" path="res://assets/animations/human/body/walk_back_one_handed.res" id="13_qk3ix"]
+[ext_resource type="Animation" uid="uid://dcsqisdcdmgx1" path="res://assets/animations/human/body/walk_front.res" id="14_mxnqp"]
+[ext_resource type="Animation" uid="uid://cn0l3xw2l77up" path="res://assets/animations/human/body/walk_front_one_handed.res" id="15_4b4qn"]
+[ext_resource type="Animation" uid="uid://dohr5ultohfs6" path="res://assets/animations/human/body/slash2_one_handed.res" id="16_nhbgs"]
+
+[resource]
+_data = {
+&"idle": ExtResource("1_kmiot"),
+&"idle_one_handed": ExtResource("2_nhbgs"),
+&"slash1_one_handed": ExtResource("3_x1g2m"),
+&"slash2_one_handed": ExtResource("16_nhbgs"),
+&"slash3_one_handed": ExtResource("4_ely4x"),
+&"slash_prepare_one_handed": ExtResource("5_0atnx"),
+&"strafe_left": ExtResource("6_rpclj"),
+&"strafe_left_one_handed": ExtResource("7_ok3t2"),
+&"strafe_right": ExtResource("8_skt6s"),
+&"strafe_right_one_handed": ExtResource("9_bn76q"),
+&"thrust_one_handed": ExtResource("10_hjkpg"),
+&"unsheathe_one_handed": ExtResource("11_3onop"),
+&"walk_back": ExtResource("12_5olfv"),
+&"walk_back_one_handed": ExtResource("13_qk3ix"),
+&"walk_front": ExtResource("14_mxnqp"),
+&"walk_front_one_handed": ExtResource("15_4b4qn")
+}

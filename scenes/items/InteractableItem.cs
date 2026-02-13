@@ -26,7 +26,7 @@ public partial class InteractableItem : Node3D
     /// <param name="character"></param>
     /// <param name="headBoneAttachment"></param>
     /// <returns></returns>
-	public virtual bool CanInteract(Node3D character, BoneAttachment3D headBoneAttachment)
+	public virtual bool CanInteract(CharacterBody3D character, BoneAttachment3D headBoneAttachment)
 	{
 		bool isCloseEnough = DistanceBetween(character) <= InteractDistance;
 		bool isBeingLookedAt = LookDifference(character, headBoneAttachment) <= MAXIMUM_LOOK_OFFSET;
@@ -34,7 +34,7 @@ public partial class InteractableItem : Node3D
 		return isCloseEnough && isBeingLookedAt;
 	}
 
-	public virtual float DistanceBetween(Node3D character)
+	public virtual float DistanceBetween(CharacterBody3D character)
 	{
         Vector3 position = GlobalPosition + HandleOffset;
 		return (position - character.GlobalPosition).Length();
@@ -46,7 +46,7 @@ public partial class InteractableItem : Node3D
     /// <param name="character"></param>
     /// <param name="headBoneAttachment"></param>
     /// <returns></returns>
-	public virtual float LookDifference(Node3D character, BoneAttachment3D headBoneAttachment)
+	public virtual float LookDifference(CharacterBody3D character, BoneAttachment3D headBoneAttachment)
 	{
 		Vector3 headPosition = headBoneAttachment.GlobalPosition;
 		Vector3 headForward = headBoneAttachment.GlobalBasis.Z;

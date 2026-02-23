@@ -34,36 +34,39 @@ public partial class State : Node, IState
     [Export] public float StaminaCost { get; set; }
     [Export] public float FatigueCost { get; set; }
 
-    public float ElapsedTimeMilliseconds { get { return _stopwatch.ElapsedMilliseconds; } }
+    public float ElapsedTimeMilliseconds { get { return (_stopwatch.ElapsedMilliseconds); } }
     public float ElapsedTimeSeconds { get { return ElapsedTimeMilliseconds / 1000; } }
 
     public float Duration { get; set; } = 0f;
     private readonly Stopwatch _stopwatch = new();
 
-    private bool _canForceState;
+    private bool _canForceState = false;
     private State _forcedState;
 
-    private bool _canQueue;
+    private bool _canQueue = false;
     private State _queuedState;
+
+    public List<State> FollowUpStates = [];
 
     public virtual State ChangeState(InputPackage input)
     {
         if (AcceptsQueueing())
         {
-            GD.Print("can accept queueing");
             CheckFollowUps(input);
         }
 
         if (_canQueue && TransitionsToQueued())
         {
-            GD.Print("Trying to force " + _forcedState);
+            // GD.Print("trying to force " + _queuedState.StateName);
             ForceState(_queuedState);
             _canQueue = false;
+            _queuedState = null;
         }
 
         if (_canForceState)
         {
             _canForceState = false;
+            Humanoid.SwitchTo(_forcedState);
             return _forcedState;
         }
 
@@ -120,7 +123,7 @@ public partial class State : Node, IState
 
             if (Resource.HasEnoughStamina(state))
             {
-                return state;
+                return state;   
             }
         }
 
@@ -131,38 +134,41 @@ public partial class State : Node, IState
 
     public void ForceState(State forcedState)
     {
-        if (forcedState.Priority >= _forcedState.Priority)
-        {
-            GD.Print("FORCING: " + _forcedState.StateName);
-            _forcedState = forcedState;
-        }
+        _forcedState = forcedState;
+        _canForceState = true;
     }
 
     public virtual void UpdateResource(float delta) => Resource.Update(delta);
 
-    public State DefaultLifecycle(InputPackage input)
+    public virtual State DefaultLifecycle(InputPackage input)
     {
+        // GD.Print(StateName + " : " + ElapsedTimeSeconds + "s / " + Duration + "s");
+
         if (ExceedsTimeLength(Duration) && !CanBeLongerThanAnimation)
         {
             return FindFirstValidState(input);
         }
+
         return this;
     }
 
     public void CheckFollowUps(InputPackage input)
     {
-        State followUp = input.Actions.Dequeue();
-        input.Actions.Enqueue(followUp, followUp.Priority);
+        State followUp = input.Actions.Peek();
 
-        if (followUp == this && NextState is not null && Resource.HasEnoughStamina(this))
+        if (FollowUpStates.Contains(followUp) && (_queuedState is null || followUp.Priority > _queuedState?.Priority))
+        {
+            _canQueue = true;
+            _queuedState = followUp;
+        }
+        else if (followUp == this && NextState is not null && Resource.HasEnoughStamina(NextState))
         {
             _canQueue = true;
             _queuedState = NextState;
         }
-
-        if (Humanoid.CurrentState is IChildState childState) // Find the base state
+        else if (Humanoid.CurrentState is IChildState childState) // Find the base state
         {
-            if (childState.BaseState == followUp)
+            if (childState.BaseState == followUp && (childState as State).NextState is not null && (childState as State).NextState.Priority >= Humanoid.CurrentState.Priority)
             {
                 _canQueue = true;
                 _queuedState = (childState as State).NextState;

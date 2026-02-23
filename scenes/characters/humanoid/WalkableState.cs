@@ -18,7 +18,7 @@ public partial class WalkableState : LegState
             targetState = "idle";
         }
 
-        if (!targetState.Equals(Humanoid.CurrentState.StateName))
+        if (!targetState.Equals(Humanoid.HumanoidLegs.CurrentState.StateName))
         {
             ChangeState(StateContainer.GetStateByName(targetState));
         }

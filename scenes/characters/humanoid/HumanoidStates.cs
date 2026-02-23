@@ -27,17 +27,6 @@ public partial class HumanoidStates : Node
 			{
 				States.Add(state.StateName, state);
 				SetProperties(state, state);
-				// state.Character = Character;
-				// state.Animator = Animator;
-				// state.Skeleton = Skeleton;
-				// state.Animator = Animator;
-				// state.Resource = Resource;
-				// state.Combat = Combat;
-				// state.StateData = StateData;
-				// state.Parent = this;
-				// state.Duration = StateData.GetDuration(state.BackendAnimation);
-				// CreateStatePipeline(state);
-				// // state.AreaAwareness = AreaAwareness;
 			}
 		}
 	}
@@ -69,6 +58,14 @@ public partial class HumanoidStates : Node
 		state.NextState = state.GetChildOrNull<State>(0);
 		state.HumanoidLegs = HumanoidLegs;
 
+		foreach (var child in state.GetChildren())
+		{
+			if (child is State parentedState)
+			{
+				state.FollowUpStates.Add(parentedState);
+			}
+		}
+
 		if (state is IChildState childState)
 		{
 			childState.BaseState = baseState;
@@ -76,6 +73,7 @@ public partial class HumanoidStates : Node
 
 		if (state.NextState is not null)
 		{
+			GD.Print($"{state.StateName}'s next state: {state.NextState.StateName}");
 			SetProperties(baseState, state.NextState, count++);
 		}
 	}
@@ -95,6 +93,14 @@ public partial class HumanoidStates : Node
 		state.Duration = StateData.GetDuration(state.BackendAnimation);
 		state.NextState = state.GetChildOrNull<State>(0);
 		state.HumanoidLegs = HumanoidLegs;
+
+		foreach (var child in state.GetChildren())
+		{
+			if (child is State parentedState)
+			{
+				state.FollowUpStates.Add(parentedState);
+			}
+		}
 
 		if (state is IChildState childState)
 		{

@@ -55,9 +55,10 @@ environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, -0.5410038, 0.8410201, 0, -0.8410201, -0.5410038, 0, 13.107447, -5.137328)
+layers = 3
 shadow_enabled = true
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 50.0
+shadow_blur = 0.5
+directional_shadow_mode = 1
 
 [node name="Ground" type="StaticBody3D" parent="."]
 

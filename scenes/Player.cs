@@ -7,10 +7,10 @@ public partial class Player : CharacterBody3D
 {
 	[Export] public CharacterAppearance CharacterModel { get; set; }
 	[Export] public HumanoidModel Humanoid { get; set; }
-	[Export] public Node InputSource { get; set; }
+	[Export] public InputGatherer InputSource { get; set; }
 	[Export] public Node3D CameraPivot { get; set; }
 
-	public readonly Vector3 CameraOffset = new(0, .175f, .2f);
+	public readonly Vector3 CameraOffset = new(0, .1f, .2f);
 	private const float _CameraTowardsOffset = 50f;
 
 	private Skeleton3D _skeleton;
@@ -26,16 +26,12 @@ public partial class Player : CharacterBody3D
 		Camera = CameraPivot.GetChild<Camera3D>(0);
 		_skeleton = Humanoid.Skeleton;
 		HeadBoneAttachment = _skeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
-		LookAtModifier3D headLookAt = _skeleton.GetNode<LookAtModifier3D>("HeadLookAt");
-		headLookAt.TargetNode = headLookAt.GetPathTo(Humanoid.GetNode("HeadLookAtTarget"));
-		LookAtModifier3D bodyLookAt = _skeleton.GetNode<LookAtModifier3D>("BodyLookAt");
-		bodyLookAt.TargetNode = bodyLookAt.GetPathTo(Humanoid.GetNode("HeadLookAtTarget"));
 	}
 
 	public override void _Process(double delta)
 	{
 		FirstPersonCamera();
-		InputPackage input = ((InputGatherer)InputSource).GatherInput();
+		InputPackage input = InputSource.GatherInput();
 
 		Humanoid.Update(input, (float)delta);
 
@@ -46,6 +42,7 @@ public partial class Player : CharacterBody3D
 	{
 		// Transform3D headGlobalTransform = _characterStateModel.CharacterResource.GetHeadBoneGlobalTransform();
 		// Camera.GlobalPosition = headGlobalTransform.Basis * CameraOffset + headGlobalTransform.Origin;
+		
 		Transform3D targetTransform = HeadBoneAttachment.GlobalTransform;
 		Camera.GlobalPosition = targetTransform.Basis * CameraOffset + targetTransform.Origin;
 

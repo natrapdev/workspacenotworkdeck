@@ -1,32 +1,14 @@
 using Godot;
 using MyFirst3DGame.Items;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class Animator : Node
 {
-    // public StateModel StateModel { get; private set; }
-    // public AnimationTree AnimationTree { get; private set; }
-    // [Export] public string BodyStateMachinePath { get; set; } = "parameters/BodyStateMachine/playback";
-    // [Export] public string DefaultLocomotionPath { get; set; } = "parameters/DefaultLocomotion/blend_position";
-    // [Export] public string OneHandedLocomotionPath { get; set; } = "parameters/OneHandedLocomotion/blend_position";
-    // [Export] public string LocomotionBlendPath { get; set; } = "parameters/LocomotionBlend2/blend_amount";
-    // [Export] public string LegsBodyBlendPath { get; set; } = "parameters/LegsBodyBlend2/blend_amount";
-
-    // public Humanoid Humanoid { get; set; }
-
-    // public Node3D CharacterModel;
-    // public CharacterBody3D Character;
-
-    // private AnimationNodeBlend2 _locomotionBlend;
-    // private AnimationNodeStateMachinePlayback _bodyStateMachinePlayback;
-    // private AnimationNodeBlend2 _legsBodyBlend;
-    // public string CurrentAnimation { get; set; }
-    // string locomotionPath;
-    // private bool _isPlayingAnimation = false;
-
     [Export] public HumanoidModel Humanoid { get; set; }
     [Export] public Skeleton3D Skeleton { get; set; }
 
@@ -39,8 +21,25 @@ public partial class Animator : Node
     public int LegsAnimationSpeed { get; set; } = 1;
     public int BodyAnimationSpeed { get; set; } = 1;
 
+    public float SpeedScale { get { return BodyAnimator.SpeedScale; } }
+
     private bool _animateFullBody = true;
     private float _syncDelta = .01f;
+
+    private readonly Dictionary<string, float> AnimationBlendTimes = new()
+    {
+        {"slash_prepare_one_handed", 0.2f},
+        {"slash1_one_handed", 0.3f},
+        {"slash2_one_handed", 0.3f},
+        {"slash3_one_handed", 0.25f},
+        {"thrust_one_handed", 0.35f},
+        {"idle", 0.3f},
+        {"idle_one_handed", 0.3f},
+        {"walk_front", 0.5f},
+        {"walk_back", 0.5f},
+        {"strafe_left", 0.45f},
+        {"strafe_right", 0.45f}
+    };
 
     public void UpdateAnimations()
     {
@@ -56,20 +55,24 @@ public partial class Animator : Node
 
     public void SetBodyAnimation(string animation)
     {
-        BodyAnimator.Play(
-            name: "human_body_animation_library/" + animation, 
-            customBlend: -1, 
-            customSpeed: BodyAnimationSpeed, 
-            fromEnd: BodyAnimationSpeed < 0
-        );
+        if (animation != CurrentBodyAnimation)
+        {
+            CurrentBodyAnimation = animation;
+            BodyAnimator.Play(
+                name: "human_body_animation_library/" + animation,
+                customBlend: AnimationBlendTimes.TryGetValue(animation, out float value) ? value : 0.2,
+                customSpeed: BodyAnimationSpeed,
+                fromEnd: BodyAnimationSpeed < 0
+            );
+        }
     }
 
     public void SetLegsAnimation(string animation)
     {
         LegsAnimator.Play(
             name: "human_legs_animation_library/" + animation,
-            customBlend: -1,
-            customSpeed: LegsAnimationSpeed, 
+            customBlend: AnimationBlendTimes.TryGetValue(animation, out float value) ? value : 0.2,
+            customSpeed: LegsAnimationSpeed,
             fromEnd: LegsAnimationSpeed < 0
         );
     }
@@ -105,12 +108,28 @@ public partial class Animator : Node
 
     public void SetSpeedScale(float speed)
     {
-        LegsAnimator.SpeedScale = speed;
-        BodyAnimator.SpeedScale = speed;
+        if (_animateFullBody)
+        {
+            LegsAnimator.SpeedScale = speed;
+            BodyAnimator.SpeedScale = speed;
+        }
+        else
+        {
+            LegsAnimator.SpeedScale = speed;
+        }
     }
 
-    public void MoveBodyAnimationToEnd() => BodyAnimator.Seek(BodyAnimator.CurrentAnimation.Length);
-    public void MoveLegsAnimationToEnd() => LegsAnimator.Seek(LegsAnimator.CurrentAnimation.Length);
+    public void ResetSpeedScale()
+    {
+        LegsAnimator.SpeedScale = 1;
+        BodyAnimator.SpeedScale = 1;
+    }
+
+    public void SetBodySpeedScale(float speed) => BodyAnimator.SpeedScale = speed;
+    public void SetLegsSpeedScale(float speed) => LegsAnimator.SpeedScale = speed;
+
+    public void MoveBodyAnimationToEnd() => BodyAnimator.Seek(BodyAnimator.CurrentAnimation.ToString().Length);
+    public void MoveLegsAnimationToEnd() => LegsAnimator.Seek(LegsAnimator.CurrentAnimation.ToString().Length);
 
     public void ResetBodyAnimation() => BodyAnimator.Seek(0);
     public void ResetLegsAnimation() => LegsAnimator.Seek(0);

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -13,8 +14,10 @@ public partial class InputGatherer : Node
 	{
 		{"unsheathe1", 1},
 		{"unsheathe2", 2},
-		{"attack1", 3},
-		{"attack2", 3},
+		{"slash_prepare", 3},
+		{"attack1", 4},
+		{"attack2", 5},
+		{"attack3", 5},
 	};
 
 	public InputPackage GatherInput()
@@ -52,19 +55,43 @@ public partial class InputGatherer : Node
 			combatActions.Add("unsheathe1");
 		}
 
-		if (Input.IsActionJustPressed("unsheathe2") && Humanoid.CurrentWeapon is null)
+		// if (Input.IsActionJustPressed("unsheathe2"))
+		// {
+		// 	combatActions.Add("unsheathe2");
+		// }
+
+		if (Input.IsActionPressed("attack1"))
 		{
-			combatActions.Add("unsheathe2");
+			if (Humanoid.CurrentState.StateName.Contains("slash1"))
+			{
+				combatActions.Add("attack1");
+			}
+			else
+			{
+				combatActions.Add("slash_prepare");
+			}
 		}
 
-		if (Input.IsActionJustPressed("attack1"))
+		if (Input.IsActionJustReleased("attack1"))
 		{
 			combatActions.Add("attack1");
 		}
 
+		// if (Humanoid.CurrentState.StateName.Contains("prepare"))
+		// {
+		// 	combatActions.Add("attack1");
+		// }
+
 		if (Input.IsActionJustPressed("attack2"))
 		{
-			combatActions.Add("attack2");
+			if (Humanoid.CurrentState.StateName.Contains("prepare") || combatActions.Contains("slash_prepare"))
+			{
+				combatActions.Add("attack3");
+			}
+			else
+			{
+				combatActions.Add("attack2");
+			}
 		}
 
 		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
@@ -98,9 +125,9 @@ public partial class InputGatherer : Node
 
 public struct InputPackage(PriorityQueue<State, int> actions, PriorityQueue<string, int> combatActionNames, Vector2 direction)
 {
-    public PriorityQueue<State, int> Actions { get; set; } = actions;
-    public PriorityQueue<string, int> CombatActionNames { get; set; } = combatActionNames;
-    public Vector2 Direction { get; set; } = direction;
+	public PriorityQueue<State, int> Actions { get; set; } = actions;
+	public PriorityQueue<string, int> CombatActionNames { get; set; } = combatActionNames;
+	public Vector2 Direction { get; set; } = direction;
 }
 
 public class DescendingComparer : IComparer<int>

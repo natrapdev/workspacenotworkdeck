@@ -14,8 +14,8 @@ size = Vector3(0.17712402, 0.032318115, 0.019226074)
 radius = 0.0087890625
 height = 0.15332031
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_0mgtg"]
-viewport_path = NodePath("Fake/Sprite3D/SubViewportContainer/SubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_5sd3t"]
+viewport_path = NodePath("Fake/Sprite3D/SubViewport")
 
 [node name="ArmingSword" node_paths=PackedStringArray("PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
 script = ExtResource("2_5sd3t")
@@ -55,27 +55,25 @@ shape = SubResource("CapsuleShape3D_bai7t")
 
 [node name="Sprite3D" type="Sprite3D" parent="Fake" index="4"]
 visible = false
-layers = 2
-modulate = Color(1, 1, 1, 0.6666667)
 pixel_size = 0.005
 billboard = 1
 no_depth_test = true
 fixed_size = true
 texture_filter = 0
-texture = SubResource("ViewportTexture_0mgtg")
+texture = SubResource("ViewportTexture_5sd3t")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Fake/Sprite3D" index="0"]
+[node name="SubViewport" type="SubViewport" parent="Fake/Sprite3D" index="0"]
+transparent_bg = true
+size = Vector2i(40, 40)
+
+[node name="Panel" type="Panel" parent="Fake/Sprite3D/SubViewport" index="0"]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SubViewport" type="SubViewport" parent="Fake/Sprite3D/SubViewportContainer" index="0"]
-handle_input_locally = false
-size = Vector2i(40, 40)
-render_target_update_mode = 4
-
-[node name="Label" type="Label" parent="Fake/Sprite3D/SubViewportContainer/SubViewport" index="0"]
+[node name="Label" type="Label" parent="Fake/Sprite3D/SubViewport/Panel" index="0"]
 clip_contents = true
 custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 size_flags_vertical = 1

@@ -62,10 +62,10 @@ public partial class Weapon : PickableItem
 
 			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {_mass} kg | Type {WeaponType}");
 
-			Moves.Add("prepare", "prepare_" + WeaponType);
+			Moves.Add("slash_prepare", "slash_prepare_" + WeaponType);
 			Moves.Add("unsheathe1", "unsheathe_" + WeaponType);
 			Moves.Add("attack1", "slash1_" + WeaponType);
-			Moves.Add("attack2", "stab_" + WeaponType);
+			Moves.Add("attack2", "thrust_" + WeaponType);
 			Moves.Add("attack3", "slash3_" + WeaponType);
 		}
 		else

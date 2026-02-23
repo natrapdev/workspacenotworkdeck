@@ -5,7 +5,7 @@ using System.Linq;
 namespace MyFirst3DGame.scenes.characters.states;
 public partial class Jump : State
 {
-	private const float JUMP_IMPULSE = 2.5f;
+	private const float JUMP_IMPULSE = 2.25f;
 
 	public override State ChangeState(InputPackage input)
 	{
@@ -24,6 +24,9 @@ public partial class Jump : State
 
 	public override void OnEnter()
 	{
-		Character.Velocity += new Vector3(0, JUMP_IMPULSE, 0);
+		var forward = Character.GlobalTransform.Basis.Z.Normalized() * JUMP_IMPULSE;
+		var dirMult = Character.Velocity.Z >= 0 ? 1 : -1;
+
+		Character.Velocity = new Vector3(0, .5f*JUMP_IMPULSE, 0) + (forward * (JUMP_IMPULSE * dirMult));
 	}
 }

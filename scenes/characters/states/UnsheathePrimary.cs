@@ -22,11 +22,15 @@ public partial class UnsheathePrimary : State
 
 	public override void OnUpdate(InputPackage input, float delta)
 	{
-		if (CanMoveHeldItem() && Humanoid.WeaponInventory.GetEquippedWeapon() is null && Humanoid.CurrentWeapon is null)
+		if (CanMoveHeldItem()
+      		&& Humanoid.WeaponInventory.GetEquippedWeapon() is null
+      		&& Humanoid.CurrentWeapon is null)
 		{
 			Humanoid.WeaponInventory.EquipWeapon(1);
 		}
-		else if (CanMoveHeldItem() && Humanoid.WeaponInventory.GetEquippedWeapon() is not null && Humanoid.CurrentWeapon is not null)
+		else if (CanMoveHeldItem()
+				&& Humanoid.WeaponInventory.GetEquippedWeapon() is not null
+				&& Humanoid.CurrentWeapon is not null)
 		{
 			Humanoid.WeaponInventory.UnEquipWeapon();
 		}
@@ -35,7 +39,7 @@ public partial class UnsheathePrimary : State
 
 	public override void OnEnter()
 	{
-
+		Character.Velocity = Vector3.Zero;
 		// animPlayback = Animator?.PlayUnsheatheAnimation(CharacterHumanoid.WeaponInventory.PrimaryWeapon);
 		// await animPlayback;
 

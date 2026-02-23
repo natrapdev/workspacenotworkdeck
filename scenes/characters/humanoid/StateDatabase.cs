@@ -31,6 +31,8 @@ public partial class StateDatabase : AnimationPlayer
             timeCode = data.Length - timeCode;
         }
 
+        timeCode *= Humanoid.Animator.SpeedScale;
+
         return track != -1 && (bool)data.ValueTrackInterpolate(track, timeCode);
     }
 }

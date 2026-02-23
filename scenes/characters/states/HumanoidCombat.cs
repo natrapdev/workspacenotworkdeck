@@ -37,9 +37,13 @@ public partial class HumanoidCombat : Node
         {
             translatedName = Humanoid.WeaponInventory.GetWeapon(1).Moves[bestAction];
         }
-        else
+        else if (Humanoid.CurrentWeapon is not null)
         {
             translatedName = Humanoid.CurrentWeapon.Moves[bestAction];
+        }
+        else
+        {
+            return;
         }
 
         State combatState = Humanoid.StateContainer.GetStateByName(translatedName);

@@ -50,10 +50,24 @@ public partial class HumanoidResource : Node
         {"foot", 0.0143f}
     };
 
+    public Transform3D HeadBoneGlobalTransform
+    {
+        get
+        {
+            Transform3D relativeTransform = _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
+            Transform3D globalTransform = _characterSkeleton.GlobalTransform * relativeTransform;
+
+            return globalTransform;
+        }
+    }
+
+    public float TotalBloodVolume { get { return BodyMass * 75f; } } // blood in mL/kg
+    public float CurrentStamina { get { return _currentStamina / MaxStamina; } }
+
     private Node _worldItemsContainer;
     private Dictionary<string, float> _bodyPartBloodVolume;
     
-    public InteractableItem ItemFocus;
+    public InteractableItem ItemFocus { get; set; }
 
     private float _lastStamina;
 
@@ -213,24 +227,11 @@ public partial class HumanoidResource : Node
         return globalTransform;
     }
 
-    public Transform3D HeadBoneGlobalTransform
-    {
-        get
-        {
-            Transform3D relativeTransform = _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
-            Transform3D globalTransform = _characterSkeleton.GlobalTransform * relativeTransform;
-
-            return globalTransform;
-        }
-    }
-
     public Transform3D GetHeadBoneGlobalPose() => _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
     public bool HasEnoughStamina(State state) => state.StaminaCost <= _currentStamina && _currentStamina > 0;
-    public void UpdateStamina(float changeValue) => _currentFatigue = Mathf.Clamp(_currentFatigue + changeValue, -MaxStamina, MaxStamina);
+    public void UpdateStamina(float changeValue) => Mathf.Clamp(_currentStamina += changeValue, -MaxStamina, MaxStamina);
     public void UpdateFatigue(float changeValue) => _currentFatigue += changeValue;
-    public float TotalBloodVolume => BodyMass * 75f; // blood in mL/kg
     public float CalculateBodyPartBloodVolume(string bodyPart) => TotalBloodVolume * _bodyPartMassCoefficients[bodyPart];
     public float CalculateBodyPartMass(string bodyPart) => BodyMass * _bodyPartMassCoefficients[bodyPart];
     public float BloodVolumeInBodyPart(string bodyPart) => _bodyPartBloodVolume[bodyPart];
-    public float CurrentStamina() => this._lastStamina / MaxStamina;
 }

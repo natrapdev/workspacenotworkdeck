@@ -11,6 +11,8 @@ public partial class Idle : State
 	/// </summary>
 	[Export] public float HeadRotationLimitDegrees { get; set; } = 60f;
 
+	[Export] private float AccelerationTime { get; set; } = 0.15f;
+
 	public override State ChangeState(InputPackage input)
 	{
 		if (!Character.IsOnFloor())
@@ -20,22 +22,38 @@ public partial class Idle : State
 		return FindFirstValidState(input);
 	}
 
-	public override void OnUpdate(InputPackage input, float delta) => Animation = "idle" + Animator.GetAnimationWeaponModifier();
+    public override void OnUpdate(InputPackage input, float delta)
+    {
+        Animation = "idle" + Animator.GetAnimationWeaponModifier();
 
-	public override void TrackLookDirection(InputPackage input, float delta)
+		Vector3 velocity = Character.Velocity;
+
+		velocity.X = Mathf.MoveToward(Character.Velocity.X, 0, AccelerationTime);
+		velocity.Z = Mathf.MoveToward(Character.Velocity.Z, 0, AccelerationTime);
+
+		Character.Velocity = velocity;
+    }
+
+    public override void TrackLookDirection(InputPackage input, float delta)
 	{
-		Vector3 characterRotation = Character.GlobalRotation;
-		float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
-		float currentAngle = characterRotation.Y;
-		float angleDifference = Mathf.AngleDifference(currentAngle, targetAngle);
-
-		if (Mathf.Abs(angleDifference) >= Mathf.DegToRad(HeadRotationLimitDegrees))
+		if (Humanoid.CurrentState is not IPartialBodyState)
 		{
-			float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta * Mathf.Abs(angleDifference));
 
-			Character.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+			Vector3 characterRotation = Character.GlobalRotation;
+			float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
+			float currentAngle = characterRotation.Y;
+			float angleDifference = Mathf.AngleDifference(currentAngle, targetAngle);
+
+			if (Mathf.Abs(angleDifference) >= Mathf.DegToRad(HeadRotationLimitDegrees))
+			{
+				float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta * Mathf.Abs(angleDifference));
+
+				Character.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+			}
+		}
+		else
+		{
+			base.TrackLookDirection(input, delta);
 		}
 	}
-
-	public override void OnEnter() => Character.Velocity = Vector3.Zero;
 }

@@ -20,9 +20,10 @@ public partial class LegState : Node, ILegState
 
     public virtual void ChangeState(State state)
     {
+        CurrentState.Exit();
         CurrentState = state;
+        CurrentState.Enter();
         Parent.CurrentState = CurrentState;
         Humanoid.Animator.UpdateLegsAnimation();
     }
-
 }

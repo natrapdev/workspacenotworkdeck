@@ -10,7 +10,7 @@ public partial class Walk : State
 {
 	private float _walkspeed = 1.5f;
 	private float _animSpeed = 1f;
-	[Export] private float AccelerationTime { get; set; } = 0.15f;
+	[Export] private float AccelerationSpeed { get; set; } = .6f;
 
 	public override State ChangeState(InputPackage input)
 	{
@@ -30,15 +30,15 @@ public partial class Walk : State
 		Animation = animation + animationDirection + animationWeapon;
 
 		Vector3 velocity = Character.Velocity;
-		Vector3 direction = (Character.Transform.Basis * new Vector3(input.Direction.X, 0, input.Direction.Y)).Normalized();
+		Vector3 direction = (Humanoid.Transform.Basis * new Vector3(input.Direction.X, 0, input.Direction.Y)).Normalized();
 
 		float stamina = Resource.CurrentStamina;
-		float targetSpeed = (float)(stamina >= 0.4 ? _walkspeed : _walkspeed - (70 * Mathf.Pow(stamina - 0.45, 4)));
+		float targetSpeed = (float)(
+			stamina >= 0.4 ? _walkspeed : _walkspeed - (70 * Mathf.Pow(stamina - 0.45, 4))
+		);
 
-		velocity.X = Mathf.MoveToward(Character.Velocity.X, direction.X * targetSpeed, AccelerationTime);
-		velocity.Z = Mathf.MoveToward(Character.Velocity.Z, direction.Z * targetSpeed, AccelerationTime);
-
-		// _animSpeed = (input.Direction.Y < 0 && input.Direction.X > 0) || (input.Direction.X < 0 && input.Direction.Y < 0) ? -1 : 1;
+		velocity.X = Mathf.MoveToward(Character.Velocity.X, direction.X * targetSpeed, AccelerationSpeed);
+		velocity.Z = Mathf.MoveToward(Character.Velocity.Z, direction.Z * targetSpeed, AccelerationSpeed);
 
 		_animSpeed = input.Direction.Y < 0 ? -1 : 1;
 		var speedModifier = velocity.Length() / _walkspeed;

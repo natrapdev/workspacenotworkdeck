@@ -1,4 +1,4 @@
-[gd_resource type="AnimationLibrary" load_steps=17 format=3 uid="uid://c51fuobpqhqqm"]
+[gd_resource type="AnimationLibrary" format=3 uid="uid://c51fuobpqhqqm"]
 
 [ext_resource type="Animation" uid="uid://bl4war762veyd" path="res://assets/animations/human/legs/idle.res" id="1_m8bd0"]
 [ext_resource type="Animation" uid="uid://dkg7iune7fk2l" path="res://assets/animations/human/legs/idle_one_handed.res" id="2_giat2"]

@@ -39,7 +39,7 @@ public partial class Idle : State
 		if (Humanoid.CurrentState is not IPartialBodyState)
 		{
 
-			Vector3 characterRotation = Character.GlobalRotation;
+			Vector3 characterRotation = Humanoid.GlobalRotation;
 			float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
 			float currentAngle = characterRotation.Y;
 			float angleDifference = Mathf.AngleDifference(currentAngle, targetAngle);
@@ -48,7 +48,7 @@ public partial class Idle : State
 			{
 				float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta * Mathf.Abs(angleDifference));
 
-				Character.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+				Humanoid.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
 			}
 		}
 		else

@@ -13,10 +13,10 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
     public override State ChangeState(InputPackage input)
     {
         if (!Character.IsOnFloor())
-		{
-			return Parent.GetStateByName("airborne");
-		}
-		return base.ChangeState(input);
+        {
+            return Parent.GetStateByName("airborne");
+        }
+        return base.ChangeState(input);
     }
 
     public override void OnUpdate(InputPackage input, float delta)
@@ -36,12 +36,5 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
         {
             FollowUpStates.Add(Parent.GetStateByName("slash3_one_handed"));
         }
-
-        Animator.SetBodySpeedScale(Mathf.Clamp(Resource.CurrentStamina * 1.3f, 0.125f, 2));
-    }
-
-    public override void OnExit()
-    {
-        Animator.SetBodySpeedScale(1);
     }
 }

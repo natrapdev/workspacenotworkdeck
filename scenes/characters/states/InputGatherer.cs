@@ -2,13 +2,13 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text.Json;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class InputGatherer : Node
 {
 	[Export] public HumanoidModel Humanoid { get; set; }
+	private float _startTime, _endTime, _avgTime, _shortTime, _longTime;
 
 	private readonly Dictionary<string, int> _combatActionPriorities = new()
 	{
@@ -19,6 +19,11 @@ public partial class InputGatherer : Node
 		{"attack2", 5},
 		{"attack3", 5},
 	};
+
+	public override void _Ready()
+	{
+		base._Ready();
+	}
 
 	public InputPackage GatherInput()
 	{
@@ -55,11 +60,6 @@ public partial class InputGatherer : Node
 			combatActions.Add("unsheathe1");
 		}
 
-		// if (Input.IsActionJustPressed("unsheathe2"))
-		// {
-		// 	combatActions.Add("unsheathe2");
-		// }
-
 		if (Input.IsActionPressed("attack1"))
 		{
 			if (Humanoid.CurrentState.StateName.Contains("slash1"))
@@ -76,11 +76,6 @@ public partial class InputGatherer : Node
 		{
 			combatActions.Add("attack1");
 		}
-
-		// if (Humanoid.CurrentState.StateName.Contains("prepare"))
-		// {
-		// 	combatActions.Add("attack1");
-		// }
 
 		if (Input.IsActionJustPressed("attack2"))
 		{

@@ -19,6 +19,7 @@ public partial class State : Node, IState
     [Export] public bool CanBeLongerThanAnimation { get; set; }
 
     public CharacterBody3D Character { get; set; }
+    public Node3D CharacterModel { get; set; }
     public Animator Animator { get; set; }
     public Skeleton3D Skeleton { get; set; }
     public HumanoidModel Humanoid { get; set; }
@@ -107,12 +108,12 @@ public partial class State : Node, IState
         // float angle = characterForward.SignedAngleTo(direction, Vector3.Up);
         // Character.RotateY(Mathf.Clamp(angle, BodyRotationSpeed * delta, BodyRotationSpeed * delta));
 
-        Vector3 characterRotation = Character.GlobalRotation;
+        Vector3 characterRotation = Humanoid.GlobalRotation;
         float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
         float currentAngle = characterRotation.Y;
         float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta);
 
-        Character.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+        Humanoid.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
     }
 
     public virtual State FindFirstValidState(InputPackage input)

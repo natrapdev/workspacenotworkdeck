@@ -30,11 +30,5 @@ public partial class OneHandedSlashRight : State, IChildState, IPartialBodyState
         {
             FollowUpStates.Add(Parent.GetStateByName("idle"));
         }
-
-        Animator.SetBodySpeedScale(1.3f);
-    }
-    public override void OnExit()
-    {
-        Animator.SetBodySpeedScale(1);
     }
 }

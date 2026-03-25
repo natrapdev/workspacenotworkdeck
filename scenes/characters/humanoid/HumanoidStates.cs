@@ -57,6 +57,7 @@ public partial class HumanoidStates : Node
 		state.Duration = StateData.GetDuration(state.BackendAnimation);
 		state.NextState = state.GetChildOrNull<State>(0);
 		state.HumanoidLegs = HumanoidLegs;
+		state.CharacterModel = Humanoid.GetNode<Node3D>("CharacterModel");
 
 		foreach (var child in state.GetChildren())
 		{
@@ -93,6 +94,7 @@ public partial class HumanoidStates : Node
 		state.Duration = StateData.GetDuration(state.BackendAnimation);
 		state.NextState = state.GetChildOrNull<State>(0);
 		state.HumanoidLegs = HumanoidLegs;
+		state.CharacterModel = Humanoid.GetNode<Node3D>("CharacterModel");
 
 		foreach (var child in state.GetChildren())
 		{

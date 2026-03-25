@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://beu6ff0tpxtip"]
+[gd_scene format=4 uid="uid://beu6ff0tpxtip"]
 
 [ext_resource type="Script" uid="uid://dpk6ritlaby6n" path="res://scenes/CharacterAppearance.cs" id="1_bqv3h"]
 
@@ -254,15 +254,17 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[node name="Appearance" type="Node3D" node_paths=PackedStringArray("Body", "Arms")]
+[node name="Appearance" type="Node3D" unique_id=1564308067 node_paths=PackedStringArray("Body", "Arms")]
 script = ExtResource("1_bqv3h")
 Body = NodePath("Body")
 Arms = NodePath("Arms")
 
-[node name="Arms" type="MeshInstance3D" parent="."]
+[node name="Arms" type="MeshInstance3D" parent="." unique_id=942747638]
+cast_shadow = 3
 mesh = SubResource("ArrayMesh_bqv3h")
 skin = SubResource("Skin_2nucy")
 
-[node name="Body" type="MeshInstance3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="." unique_id=469676355]
+cast_shadow = 3
 mesh = SubResource("ArrayMesh_6dsve")
 skin = SubResource("Skin_2nucy")

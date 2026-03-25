@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b11hvvl7kaefi"]
+[gd_scene format=3 uid="uid://b11hvvl7kaefi"]
 
 [ext_resource type="PackedScene" uid="uid://c3vyl325joj1m" path="res://Models/Items/ArmingSword.glb" id="1_0mgtg"]
 [ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/items/Weapon.cs" id="2_5sd3t"]
@@ -11,13 +11,13 @@ size = Vector3(0.08496094, 0.7438965, 0.020362854)
 size = Vector3(0.17712402, 0.032318115, 0.019226074)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bai7t"]
-radius = 0.0087890625
+radius = 0.0068359375
 height = 0.15332031
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5sd3t"]
 viewport_path = NodePath("Fake/Sprite3D/SubViewport")
 
-[node name="ArmingSword" node_paths=PackedStringArray("PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
+[node name="ArmingSword" unique_id=867781399 node_paths=PackedStringArray("PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
 script = ExtResource("2_5sd3t")
 PhysicalBody = NodePath("Fake")
 ActualMesh = NodePath("armingSword")
@@ -25,35 +25,35 @@ PhysicalMesh = NodePath("Fake/FakeMesh")
 TooltipSprite = NodePath("Fake/Sprite3D")
 
 [node name="armingSword" parent="." index="0"]
-layers = 3
+visible = false
 
-[node name="BladeStart" type="Marker3D" parent="." index="1"]
+[node name="BladeStart" type="Marker3D" parent="." index="1" unique_id=775276517]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08916774, 0)
 
-[node name="BladeEnd" type="Marker3D" parent="." index="2"]
+[node name="BladeEnd" type="Marker3D" parent="." index="2" unique_id=89737826]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8168747, 0)
 
-[node name="Fake" type="RigidBody3D" parent="." index="3"]
+[node name="Fake" type="RigidBody3D" parent="." index="3" unique_id=1825555479]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
 mass = 2.5
 
-[node name="FakeMesh" type="MeshInstance3D" parent="Fake" index="0"]
+[node name="FakeMesh" type="MeshInstance3D" parent="Fake" index="0" unique_id=1395879281]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 mesh = ExtResource("3_gchif")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Fake" index="1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Fake" index="1" unique_id=1361388575]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46042895, -0.00015687943)
 shape = SubResource("BoxShape3D_vlfvb")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Fake" index="2"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Fake" index="2" unique_id=233887453]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07949352, -0.00015234947)
 shape = SubResource("BoxShape3D_k4oio")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="Fake" index="3"]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Fake" index="3" unique_id=1294447278]
 transform = Transform3D(1, 0, 0, 0, 1, -6.9849925e-08, 0, 6.9849925e-08, 1, 0, 0.0024403331, -3.5718446e-07)
 shape = SubResource("CapsuleShape3D_bai7t")
 
-[node name="Sprite3D" type="Sprite3D" parent="Fake" index="4"]
+[node name="Sprite3D" type="Sprite3D" parent="Fake" index="4" unique_id=8228715]
 visible = false
 pixel_size = 0.005
 billboard = 1
@@ -62,15 +62,15 @@ fixed_size = true
 texture_filter = 0
 texture = SubResource("ViewportTexture_5sd3t")
 
-[node name="SubViewport" type="SubViewport" parent="Fake/Sprite3D" index="0"]
+[node name="SubViewport" type="SubViewport" parent="Fake/Sprite3D" index="0" unique_id=1055807044]
 transparent_bg = true
 size = Vector2i(40, 40)
 
-[node name="Panel" type="Panel" parent="Fake/Sprite3D/SubViewport" index="0"]
+[node name="Panel" type="Panel" parent="Fake/Sprite3D/SubViewport" index="0" unique_id=408548743]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Fake/Sprite3D/SubViewport/Panel" index="0"]
+[node name="Label" type="Label" parent="Fake/Sprite3D/SubViewport/Panel" index="0" unique_id=475094404]
 clip_contents = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 0

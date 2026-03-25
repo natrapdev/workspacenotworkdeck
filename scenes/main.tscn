@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://nbgbi5ylgl32"]
+[gd_scene format=3 uid="uid://nbgbi5ylgl32"]
 
 [ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/items/arming_sword.tscn" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c0uw5k0lhdgjn" path="res://scenes/player.tscn" id="2_0wfyh"]
@@ -31,119 +31,118 @@ size = Vector3(1, 1, 0.09262276)
 
 [sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=646616523]
 
-[node name="ItemCollection" type="Node" parent="." groups=["pickable_items"]]
+[node name="ItemCollection" type="Node" parent="." unique_id=2049136584 groups=["pickable_items"]]
 
-[node name="ArmingSword" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8091394, 0.31300426, 2.1797967)
+[node name="ArmingSword" parent="ItemCollection" unique_id=1204517950 instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4458666, 0.31300426, 2.1797967)
 
-[node name="ArmingSword3" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+[node name="ArmingSword3" parent="ItemCollection" unique_id=1043247491 instance=ExtResource("1_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2784319, 1.8389885, 2.2919717)
 
-[node name="ArmingSword2" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+[node name="ArmingSword2" parent="ItemCollection" unique_id=1040912545 instance=ExtResource("1_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9416249, 1.7163389)
 
-[node name="ArmingSword4" parent="ItemCollection" instance=ExtResource("1_sugp2")]
+[node name="ArmingSword4" parent="ItemCollection" unique_id=1286058894 instance=ExtResource("1_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8475482, 2.7016432)
 
-[node name="ArmingSword5" parent="ItemCollection" instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5858676, 0.40678012, 1.8065093)
+[node name="ArmingSword5" parent="ItemCollection" unique_id=353272835 instance=ExtResource("1_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2225313, 0.40678012, 1.8065093)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1935667659]
 environment = SubResource("Environment_h2yge")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=880158058]
 transform = Transform3D(1, 0, 0, 0, -0.5410038, 0.8410201, 0, -0.8410201, -0.5410038, 0, 13.107447, -5.137328)
-layers = 3
+light_bake_mode = 1
 shadow_enabled = true
-shadow_blur = 0.5
-directional_shadow_mode = 1
+directional_shadow_mode = 0
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=226519092]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1782758297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 shape = SubResource("BoxShape3D_7dm0k")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=954535266]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh = SubResource("BoxMesh_ig7tw")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." groups=["enemy"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1938798129 groups=["enemy"]]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=724881614]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2750897, 3.1374302)
 mesh = SubResource("BoxMesh_0xm2m")
 
-[node name="Area3D" type="Area3D" parent="StaticBody3D"]
+[node name="Area3D" type="Area3D" parent="StaticBody3D" unique_id=1084590705]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/Area3D" unique_id=1794298653]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2750897, 3.1374302)
 shape = SubResource("BoxShape3D_h2yge")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=642663609]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2750897, 3.1374302)
 shape = SubResource("BoxShape3D_h2yge")
 
-[node name="Enemy" parent="." instance=ExtResource("2_sugp2")]
+[node name="Enemy" parent="." unique_id=2095754400 instance=ExtResource("2_sugp2")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.5840955, 1.008672, 12.73214)
 
-[node name="Enemy2" parent="." instance=ExtResource("2_sugp2")]
+[node name="Enemy2" parent="." unique_id=1626766683 instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.50335157, 0, -0.8640817, 0, 1, 0, 0.8640817, 0, -0.50335157, 0.34723002, 2.8005846, 3.356413)
 
-[node name="Enemy3" parent="." instance=ExtResource("2_sugp2")]
+[node name="Enemy3" parent="." unique_id=309183523 instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.9962402, 0, 0.08663388, 0, 1, 0, -0.08663388, 0, -0.9962402, -1.713723, 0.9897003, 3.4735131)
 
-[node name="Enemy4" parent="." instance=ExtResource("2_sugp2")]
+[node name="Enemy4" parent="." unique_id=1076296780 instance=ExtResource("2_sugp2")]
 transform = Transform3D(-0.5898169, 0, 0.807537, 0, 1, 0, -0.807537, 0, -0.5898169, -4.268763, 1.0516624, 9.241188)
 
-[node name="Armour" type="Area3D" parent="." groups=["enemy"]]
+[node name="Armour" type="Area3D" parent="." unique_id=605040501 groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.244094, 1.1593037, 3.5000112)
 collision_layer = 2
 collision_mask = 3
 metadata/MaterialName = &"gambeson"
 metadata/Thickness = 3.0
 
-[node name="Gambeson" type="CollisionShape3D" parent="Armour"]
+[node name="Gambeson" type="CollisionShape3D" parent="Armour" unique_id=201523167]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0014543533)
 shape = SubResource("BoxShape3D_0xm2m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour" unique_id=511680277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.082642205, 0, 0, 0)
 mesh = SubResource("BoxMesh_h2yge")
 
-[node name="Armour2" type="Area3D" parent="." groups=["enemy"]]
+[node name="Armour2" type="Area3D" parent="." unique_id=1694359139 groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0205564, 1.1593037, 3.5000112)
 collision_layer = 2
 collision_mask = 3
 metadata/MaterialName = &"chainmail"
 metadata/Thickness = 2.5
 
-[node name="Chainmail" type="CollisionShape3D" parent="Armour2"]
+[node name="Chainmail" type="CollisionShape3D" parent="Armour2" unique_id=1891334701]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0014543533)
 shape = SubResource("BoxShape3D_0xm2m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour2" unique_id=1765132634]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.082642205, 0, 0, 0)
 mesh = SubResource("BoxMesh_h2yge")
 
-[node name="Armour3" type="Area3D" parent="." groups=["enemy"]]
+[node name="Armour3" type="Area3D" parent="." unique_id=1512320707 groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7258296, 1.1593037, 3.5000112)
 collision_layer = 2
 collision_mask = 3
 metadata/MaterialName = &"steel"
 metadata/Thickness = 3.0
 
-[node name="Plate" type="CollisionShape3D" parent="Armour3"]
+[node name="Plate" type="CollisionShape3D" parent="Armour3" unique_id=1325576986]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0014543533)
 shape = SubResource("BoxShape3D_0xm2m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour3"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Armour3" unique_id=387873773]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.082642205, 0, 0, 0)
 mesh = SubResource("BoxMesh_h2yge")
 
-[node name="Player" parent="." instance=ExtResource("2_0wfyh")]
+[node name="Player" parent="." unique_id=1102152615 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4349694, 0)

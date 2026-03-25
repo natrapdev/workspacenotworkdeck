@@ -32,8 +32,8 @@ public partial class HumanoidResource : Node
     private float _currentFatigue = 0;
 
     // These weights will determine the best nearby interactable item that will be selected.
-    private const float DistanceWeight = 1.2f;
-    private const float AngleWeight = 1;
+    private const float DistanceWeight = 1f;
+    private const float AngleWeight = 0.01f;
 
     // How body mass should be distributed across the body
     private readonly Dictionary<string, float> _bodyPartMassCoefficients = new()
@@ -66,10 +66,12 @@ public partial class HumanoidResource : Node
 
     private Node _worldItemsContainer;
     private Dictionary<string, float> _bodyPartBloodVolume;
-    
+
     public InteractableItem ItemFocus { get; set; }
 
     private float _lastStamina;
+
+    public Node3D CameraPivot;
 
     public override void _Ready()
     {
@@ -90,6 +92,8 @@ public partial class HumanoidResource : Node
         HeadLookAtModifier = _characterSkeleton.GetNode<LookAtModifier3D>("HeadLookAt");
         HeadBoneAttachment = _characterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
         _characterSkeletonHeadIndex = _characterSkeleton.FindBone("spine.006");
+
+        CameraPivot = Humanoid.GetParent().GetNode<Node3D>("CameraPivot");
     }
 
     public void Update(float delta)
@@ -103,10 +107,10 @@ public partial class HumanoidResource : Node
 
         List<Node3D> nearbyPickableItems = SearchForNearbyWorldItems();
 
-        if (nearbyPickableItems != null || nearbyPickableItems.Count > 0)
-        {
-            UpdateNearbyItems(FindBestPickableItem(nearbyPickableItems));
-        }
+        UpdateNearbyItems(
+            FindBestPickableItem(nearbyPickableItems)
+        );
+
 
         _lastStamina = _currentStamina;
     }
@@ -143,7 +147,7 @@ public partial class HumanoidResource : Node
 
         foreach (Node node in GetTree().Root.GetChildren())
         {
-            if (node.Name.Equals("Main"))
+            if (String.Equals(node.Name, "main", StringComparison.OrdinalIgnoreCase))
             {
                 mainSceneNode = node;
                 break;
@@ -180,14 +184,11 @@ public partial class HumanoidResource : Node
 
         foreach (Node3D item in _worldItemsContainer.GetChildren().Cast<Node3D>())
         {
-            if (item is not PickableItem)
+            if (item is not PickableItem pickableItem)
             {
                 continue;
             }
-
-            PickableItem pickableItem = item as PickableItem;
-
-            if (pickableItem.CanInteract(Humanoid.Character, HeadBoneAttachment))
+            else if (pickableItem.CanInteract(Humanoid.Character, CameraPivot))
             {
                 pickableItems.Add(item);
             }
@@ -204,10 +205,10 @@ public partial class HumanoidResource : Node
         foreach (Node3D item in items)
         {
             PickableItem pickableItem = item as PickableItem;
-            float angle = pickableItem.LookDifference(Humanoid.Character, HeadBoneAttachment);
+            float angle = pickableItem.LookDifference(Humanoid.Character, CameraPivot);
             float distance = pickableItem.DistanceBetween(Humanoid.Character);
 
-            float score = (distance * DistanceWeight + angle * AngleWeight) / 2;
+            float score = angle;
 
             if (score < bestScore)
             {

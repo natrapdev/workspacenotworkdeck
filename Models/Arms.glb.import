@@ -41,7 +41,7 @@ _subresources={
 "animations": {
 "OneHandedDrawWeapon": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Animations/Viewport/OneHandedDrawWeapon.res",
+"save_to_file/fallback_path": "res://assets/animations/viewport_animations/OneHandedDrawWeapon.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://kluhloxkjbhq",
 "settings/loop_mode": 0,
@@ -2097,7 +2097,7 @@ _subresources={
 },
 "OneHandedIdle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Animations/Viewport/OneHandedIdle.res",
+"save_to_file/fallback_path": "res://assets/animations/viewport_animations/OneHandedIdle.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://bpsf0ttqptc2d",
 "settings/loop_mode": 1,
@@ -4153,7 +4153,7 @@ _subresources={
 },
 "OneHandedMiddleSwing": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Animations/Viewport/OneHandedMiddleSwing.res",
+"save_to_file/fallback_path": "res://assets/animations/viewport_animations/OneHandedMiddleSwing.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://xi6nijub5nsx",
 "settings/loop_mode": 0,
@@ -6209,7 +6209,7 @@ _subresources={
 },
 "OneHandedThrust": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Animations/Viewport/OneHandedThrust.res",
+"save_to_file/fallback_path": "res://assets/animations/viewport_animations/OneHandedThrust.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://bgmc15addl54q",
 "settings/loop_mode": 0,
@@ -8265,7 +8265,7 @@ _subresources={
 },
 "OneHandedUpperSwing": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Animations/Viewport/OneHandedUpperSwing.res",
+"save_to_file/fallback_path": "res://assets/animations/viewport_animations/OneHandedUpperSwing.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://ctcp76ykdl7px",
 "settings/loop_mode": 0,

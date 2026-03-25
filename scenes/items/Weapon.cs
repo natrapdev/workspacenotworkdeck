@@ -27,7 +27,6 @@ public partial class Weapon : PickableItem
 
 	public Dictionary<string, string> Moves = [];
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 
@@ -57,8 +56,8 @@ public partial class Weapon : PickableItem
 			var weaponData = (Godot.Collections.Dictionary)weapons[weaponName];
 
 			_baseDamage = (double)weaponData["damage"];
-	 		_mass = (double)weaponData["mass"];
-			WeaponType = (bool)weaponData["oneHanded"]? "one_handed" : "two_handed";
+			_mass = (double)weaponData["mass"];
+			WeaponType = (bool)weaponData["oneHanded"] ? "one_handed" : "two_handed";
 
 			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {_mass} kg | Type {WeaponType}");
 
@@ -74,13 +73,25 @@ public partial class Weapon : PickableItem
 		}
 	}
 
-    public override void PickedUp(HumanoidModel humanoid)
-    {
+	public override void _PhysicsProcess(double delta)
+	{
+		if (!IsPickedUp)
+		{
+			HandleOffset = PhysicalBody.Position;
+		}
+	}
+
+	public override void PickedUp(HumanoidModel humanoid)
+	{
 		IsPickedUp = true;
-        WeaponInventory weaponInventory = humanoid.WeaponInventory;
+		WeaponInventory weaponInventory = humanoid.WeaponInventory;
 		ParentWeaponInventory = humanoid.WeaponInventory;
 		PhysicalBody.AddCollisionExceptionWith(humanoid.Character);
-		PhysicalBody.CollisionMask = 2;
+		PhysicalBody.Visible = false;
+		ActualMesh.Visible = true;
+		// PhysicalBody.CollisionMask = 2;
+		PhysicalBody.Position = Vector3.Zero;
+		ActualMesh.Position = Vector3.Zero;
 		weaponInventory.AddWeaponToInventory(this);
-    }
+	}
 }

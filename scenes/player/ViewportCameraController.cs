@@ -1,10 +1,12 @@
+namespace Viewport;
+
 using Godot;
-using System;
-using System.Dynamic;
 
 public partial class ViewportCameraController : Camera3D
 {
-    [Export] Camera3D MainCamera { get; set; }
+    [Export] ViewportModel Viewport { get; set; }
+
+    public Camera3D MainCamera;
 
     public override void _Process(double delta)
     {

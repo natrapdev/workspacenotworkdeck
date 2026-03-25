@@ -14,6 +14,7 @@ public partial class HumanoidModel : Node3D
 	[Export] public HumanoidResource Resource { get; set; }
 	[Export] public Marker3D HeadLookAtTarget { get; set; }
 	[Export] public HumanoidLegStates HumanoidLegs { get; set; }
+	[Export] public bool Debug { get; set; } = false;
 
 	public Weapon CurrentWeapon { get; set; }
 
@@ -50,7 +51,7 @@ public partial class HumanoidModel : Node3D
 
 	public void SwitchTo(State state)
 	{
-		GD.Print(CurrentState.StateName + " -> " + state.StateName);
+		if (Debug) GD.Print(CurrentState.StateName + " -> " + state.StateName);
 
 		CurrentState.Exit();
 		CurrentState = state;

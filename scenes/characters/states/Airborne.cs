@@ -8,8 +8,8 @@ public partial class Airborne : State
 {
     const float GRAVITY = 9.8f;
     const float MAX_FALL_RECOVERY_DISTANCE = 8f;
-    private float _airTime;
-    private readonly Stopwatch _stopwatch = new();
+
+	private Vector3 _enterPos, _landPos;
 
     public override State ChangeState(InputPackage input)
 	{
@@ -24,17 +24,20 @@ public partial class Airborne : State
 	public override void OnUpdate(InputPackage input, float delta)
 	{
 		Character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
-        _airTime = _stopwatch.ElapsedMilliseconds;
 	}
 
 	public override void OnEnter()
 	{
-		_stopwatch.Start();
+		_enterPos = Character.GlobalPosition;
 	}
 	public override void OnExit()
 	{
-		_stopwatch.Stop();
-		GD.Print("Airtime: " + _airTime);
-		_stopwatch.Reset();
+		_landPos = Character.GlobalPosition;
+
+		float displacement = _enterPos.DistanceTo(_landPos);
+
+		GD.Print("Airtime: " + ElapsedTimeSeconds + " seconds");
+		GD.Print("Displacement: " + displacement);
+		GD.Print("Landing velocity: " + Character.Velocity.Length());
 	}
 }

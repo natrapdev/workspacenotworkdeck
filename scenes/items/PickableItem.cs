@@ -17,19 +17,19 @@ public partial class PickableItem : InteractableItem
 	public override void _PhysicsProcess(double delta)
 	{
 		PhysicalBody.Freeze = Anchored || IsPickedUp;
-		ActualMesh.Visible = IsPickedUp;
-		PhysicalBody.Visible = !IsPickedUp;
+		// ActualMesh.Visible = IsPickedUp;
+		// PhysicalBody.Visible = !IsPickedUp;
 
-		if (!IsPickedUp)
-		{
-			PhysicalBody.CollisionLayer = 1;
-		}
-		else
-		{
-			PhysicalBody.CollisionLayer = 2;
-			PhysicalBody.Position = Vector3.Zero;
-			PhysicalBody.Visible = false;
-		}
+		// if (!IsPickedUp)
+		// {
+		// 	PhysicalBody.CollisionLayer = 1;
+		// }
+		// else
+		// {
+		// 	PhysicalBody.CollisionLayer = 2;
+		// 	PhysicalBody.Position = Vector3.Zero;
+		// 	PhysicalBody.Visible = false;
+		// }
 	}
 
 	public virtual void PickedUp(HumanoidModel humanoid)
@@ -38,11 +38,15 @@ public partial class PickableItem : InteractableItem
 		Inventory inventory = humanoid.Inventory;
 		PhysicalBody.AddCollisionExceptionWith(humanoid.Character);
 		inventory.AddItemToInventory(this);
+		PhysicalMesh.Visible = false;
+		ActualMesh.Visible = true;
 		PhysicalBody.CollisionMask = 2;
+		PhysicalBody.Position = Vector3.Zero;
+		ActualMesh.Position = Vector3.Zero;
 	}
 
 	public virtual void PutInRightHand()
 	{
-		
+
 	}
 }

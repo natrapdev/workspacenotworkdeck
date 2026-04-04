@@ -10,7 +10,7 @@ public partial class Player : CharacterBody3D
 	[Export] public CharacterAppearance CharacterModel { get; set; }
 	[Export] public HumanoidModel Humanoid { get; set; }
 	[Export] public InputGatherer InputSource { get; set; }
-	[Export] public Node3D CameraPivot { get; set; }
+	[Export] public CameraController CameraPivot { get; set; }
 	[Export] public ViewportModel Viewport { get; set; }
 	[Export] public int AppearanceSet { get; set; } = 1; // wok alert
 
@@ -22,6 +22,9 @@ public partial class Player : CharacterBody3D
 	private HumanoidStates _characterStateModel;
 	public BoneAttachment3D HeadBoneAttachment;
 	public Camera3D Camera { get; set; }
+	private float _cameraPanSpeed = 1f;
+
+	public float AttackSensitivityMultiplier { get; set; } = .375f;
 
 	public override void _Ready()
 	{
@@ -34,9 +37,10 @@ public partial class Player : CharacterBody3D
 		if (Viewport is not null)
 		{
 			string path = Viewport.GetPathToRightHandWeaponSlot(Humanoid);
-			GD.Print(path);
 			Humanoid.WeaponInventory.RightHandWeaponContainerPath = path;
 		}
+
+		_cameraPanSpeed = CameraPivot.CameraPanSpeed;
 	}
 
 	public override void _Process(double delta)
@@ -45,9 +49,18 @@ public partial class Player : CharacterBody3D
 		InputPackage input = InputSource.GatherInput();
 
 		Humanoid.Update(input, (float)delta);
-		Viewport.Update();
+		Viewport.Update(input, (float)delta);
 
 		MoveAndSlide();
+
+		if (Humanoid.CurrentState.StateName.Contains("slash") || Humanoid.CurrentState.StateName.Contains("thrust"))
+		{
+			CameraPivot.CameraPanSpeed = _cameraPanSpeed * AttackSensitivityMultiplier;
+		}
+		else
+		{
+			CameraPivot.CameraPanSpeed = _cameraPanSpeed;
+		}
 	}
 
 	private void FirstPersonCamera()

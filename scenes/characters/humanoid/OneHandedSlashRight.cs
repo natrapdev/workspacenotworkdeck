@@ -14,6 +14,7 @@ public partial class OneHandedSlashRight : State, IChildState, IPartialBodyState
     public override void OnUpdate(InputPackage input, float delta)
     {
         LegsUpdate(input, delta);
+        HitInfo hitInfo = Combat.ScanForHitsSlash();
     }
 
     public override void OnEnter()

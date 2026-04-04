@@ -1,7 +1,6 @@
 using Godot;
 using System.Collections.Generic;
 using MyFirst3DGame.scenes.characters.states;
-using GodotPlugins.Game;
 
 namespace Viewport;
 
@@ -13,8 +12,17 @@ public partial class ViewportModel : Node3D
 	[Export] public Camera3D MainCamera { get; set; }
 	[Export] public ViewportAnimator Animator { get; set; }
 	[Export] public ViewportCameraController ViewportCamera { get; set; }
+	[Export] public ViewportTiltTracker TiltTracker { get; set; }
 
 	private WeaponInventory _weaponInventory;
+
+	public readonly Dictionary<string, Vector2> AttackVectors = new()
+	{
+		{"slash1", new Vector2(-1, 0)},
+		{"slash2", new Vector2(1, 0)},
+		{"slash3", new Vector2(0, -1)},
+		{"thrust", new Vector2(0, 0)}
+	};
 
 	public override void _Ready()
 	{
@@ -24,7 +32,7 @@ public partial class ViewportModel : Node3D
 		armModel.SetLayerMaskValue(1, false);
 		armModel.SetLayerMaskValue(2, true);
 
-		if ((Player as Player).AppearanceSet == 1)
+		if ((Player as Player).AppearanceSet == 1) // wok alert (1 = male, 0 = female)
 		{
 			armModel.Mesh = GD.Load<ArrayMesh>("res://assets/meshes/viewport/man_arms.res");
 		}
@@ -38,7 +46,7 @@ public partial class ViewportModel : Node3D
 		ViewportCamera.MainCamera = MainCamera;
 	}
 
-	public void Update()
+	public void Update(InputPackage input, float delta)
 	{
 		State currentState = Humanoid.CurrentState;
 
@@ -48,6 +56,24 @@ public partial class ViewportModel : Node3D
 
 		// ViewportCamera.Update();
 		SetArmsPosition();
+
+		if (currentState.RightWeaponHurts())
+		{
+			TiltTracker.StartTracking();
+		}
+		else
+		{
+			TiltTracker.StopTracking();
+		}
+
+		int index = currentState.StateName.IndexOf('_');
+		string baseStateName =
+			index != -1 ? currentState.StateName[..index] : currentState.StateName;
+
+		TiltTracker.UpdateTilt(
+			delta,
+			AttackVectors.GetValueOrDefault(baseStateName, Vector2.Zero)
+		);
 	}
 
 	private void SetArmsPosition()

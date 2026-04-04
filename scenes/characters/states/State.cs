@@ -1,14 +1,10 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class State : Node, IState
+public partial class State : Node
 {
     [Export] public int Priority { get; set; }
     [Export] public bool AnimateFullBody { get; set; } = true;
@@ -17,6 +13,8 @@ public partial class State : Node, IState
     [Export] public string StateName { get; set; }
     [Export] public float BodyRotationSpeed { get; set; }
     [Export] public bool CanBeLongerThanAnimation { get; set; }
+    [Export] public float StaminaCost { get; set; }
+    [Export] public float FatigueCost { get; set; }
 
     public CharacterBody3D Character { get; set; }
     public Node3D CharacterModel { get; set; }
@@ -30,12 +28,7 @@ public partial class State : Node, IState
     public State NextState { get; set; }
     public HumanoidLegStates HumanoidLegs { get; set; }
 
-    public const float Gravity = -9.8f;
-
-    [Export] public float StaminaCost { get; set; }
-    [Export] public float FatigueCost { get; set; }
-
-    public float ElapsedTimeMilliseconds { get { return (_stopwatch.ElapsedMilliseconds); } }
+    public float ElapsedTimeMilliseconds { get { return _stopwatch.ElapsedMilliseconds; } }
     public float ElapsedTimeSeconds { get { return ElapsedTimeMilliseconds / 1000; } }
 
     public float Duration { get; set; } = 0f;
@@ -48,6 +41,8 @@ public partial class State : Node, IState
     private State _queuedState;
 
     public List<State> FollowUpStates = [];
+    public static readonly float Gravity = ProjectSettings.GetSetting(
+        "physics/3d/default_gravity").As<float>();
 
     public virtual State ChangeState(InputPackage input)
     {
@@ -58,7 +53,6 @@ public partial class State : Node, IState
 
         if (_canQueue && TransitionsToQueued())
         {
-            // GD.Print("trying to force " + _queuedState.StateName);
             ForceState(_queuedState);
             _canQueue = false;
             _queuedState = null;
@@ -124,7 +118,7 @@ public partial class State : Node, IState
 
             if (Resource.HasEnoughStamina(state))
             {
-                return state;   
+                return state;
             }
         }
 
@@ -143,8 +137,6 @@ public partial class State : Node, IState
 
     public virtual State DefaultLifecycle(InputPackage input)
     {
-        // GD.Print(StateName + " : " + ElapsedTimeSeconds + "s / " + Duration + "s");
-
         if (ExceedsTimeLength(Duration) && !CanBeLongerThanAnimation)
         {
             return FindFirstValidState(input);

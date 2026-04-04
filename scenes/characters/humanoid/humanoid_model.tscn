@@ -14061,7 +14061,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -14073,7 +14073,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -14119,7 +14119,7 @@ WeaponInventory = NodePath("WeaponInventory")
 [node name="HeadLookAtTarget" type="Marker3D" parent="." unique_id=1933786852]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18265027, 0.5650905)
 
-[node name="Combat" type="Node" parent="." unique_id=1287700298]
+[node name="Combat" type="Node3D" parent="." unique_id=1718054833]
 script = ExtResource("2_fsq30")
 
 [node name="Resource" type="Node" parent="." unique_id=1574197015]
@@ -14132,9 +14132,10 @@ script = ExtResource("4_37pv0")
 Skeleton = NodePath("../rig/Skeleton3D")
 Humanoid = NodePath("..")
 
-[node name="Animator" type="Node" parent="." unique_id=596787115 node_paths=PackedStringArray("Humanoid", "BodyAnimator", "LegsAnimator")]
+[node name="Animator" type="Node" parent="." unique_id=596787115 node_paths=PackedStringArray("Humanoid", "Skeleton", "BodyAnimator", "LegsAnimator")]
 script = ExtResource("1_ifdrq")
 Humanoid = NodePath("..")
+Skeleton = NodePath("../rig/Skeleton3D")
 BodyAnimator = NodePath("Body")
 LegsAnimator = NodePath("Legs")
 
@@ -14167,9 +14168,10 @@ Humanoid = NodePath("..")
 [node name="Walkable" type="Node" parent="LegStates" unique_id=1688279545]
 script = ExtResource("8_mrjil")
 
-[node name="States" type="Node" parent="." unique_id=1456898653 node_paths=PackedStringArray("Humanoid", "Animator", "Combat", "Resource", "StateData", "HumanoidLegs")]
+[node name="States" type="Node" parent="." unique_id=1456898653 node_paths=PackedStringArray("Humanoid", "Skeleton", "Animator", "Combat", "Resource", "StateData", "HumanoidLegs")]
 script = ExtResource("1_xv1dk")
 Humanoid = NodePath("..")
+Skeleton = NodePath("../rig/Skeleton3D")
 Animator = NodePath("../Animator")
 Combat = NodePath("../Combat")
 Resource = NodePath("../Resource")

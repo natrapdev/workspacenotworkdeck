@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://cewk5nxumfedt"]
+[gd_scene format=3 uid="uid://cewk5nxumfedt"]
 
 [ext_resource type="Script" uid="uid://dre36iv3yjal5" path="res://scenes/characters/CharacterAttributes.cs" id="1_vtmim"]
 [ext_resource type="PackedScene" uid="uid://da71ni5k8rai4" path="res://scenes/characters/man.tscn" id="3_ylajs"]
@@ -151,19 +151,19 @@ _data = {
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vtmim"]
 
-[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+[node name="Enemy" type="CharacterBody3D" unique_id=699760761 groups=["enemy"]]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
-[node name="Attributes" type="Node" parent="." node_paths=PackedStringArray("Character")]
+[node name="Attributes" type="Node" parent="." unique_id=640737210 node_paths=PackedStringArray("Character")]
 script = ExtResource("1_vtmim")
 Character = NodePath("..")
 
-[node name="CharacterModel" parent="." instance=ExtResource("3_ylajs")]
+[node name="CharacterModel" parent="." unique_id=1025942864 instance=ExtResource("3_ylajs")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["player"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=659753117 groups=["player"]]
 shape = SubResource("CapsuleShape3D_i3pqv")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=475250198]
 active = false
 deterministic = false
 reset_on_save = false
@@ -173,20 +173,18 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/Locomotion/blend_position = Vector2(0, 0)
 parameters/Blend2/blend_amount = 0.0
 
-[node name="HeadLookAtTargetMarker" type="Marker3D" parent="." groups=["enemy"]]
+[node name="HeadLookAtTargetMarker" type="Marker3D" parent="." unique_id=1847708879 groups=["enemy"]]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1898516473]
 active = false
 reset_on_save = false
 root_node = NodePath("../CharacterModel")
-libraries = {
-&"": SubResource("AnimationLibrary_4jhj6"),
-&"AnimationLibrary": ExtResource("11_mm7uq")
-}
+libraries/ = SubResource("AnimationLibrary_4jhj6")
+libraries/AnimationLibrary = ExtResource("11_mm7uq")
 
-[node name="Hitbox" type="Area3D" parent="."]
+[node name="Hitbox" type="Area3D" parent="." unique_id=923338238]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=2096135733]
 shape = SubResource("CapsuleShape3D_vtmim")

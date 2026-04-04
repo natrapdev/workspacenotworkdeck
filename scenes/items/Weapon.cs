@@ -10,6 +10,10 @@ public partial class Weapon : PickableItem
 	[Export] public string ConfigFilePath { get; set; } = "res://configs/weapons.json";
 	[Export] public string EnemyGroupName { get; set; } = "enemy";
 	[Export] public int RaycastAmount { get; set; } = 7;
+	[Export] public float BladeWidth { get; set; } = 0.043f;
+	[Export] public float BladeLength { get; set; } = 0.728f;
+	[Export] public Marker3D BladeStartMarker { get; set; }
+	[Export] public Marker3D BladeEndMarker { get; set; }
 
 	/// <summary>
 	/// <![CDATA[What weapon slot the weapon takes up.

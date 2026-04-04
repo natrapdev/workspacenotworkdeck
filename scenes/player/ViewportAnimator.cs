@@ -29,7 +29,7 @@ public partial class ViewportAnimator : Node
 
     public void SetAnimation(string animation)
     {
-        if (!AnimationPlayer.HasAnimation(animation))
+        if (!AnimationPlayer.HasAnimation("viewport_animation_library/" + animation))
         {
             if (_currentAnimation is not null)
             {
@@ -46,7 +46,7 @@ public partial class ViewportAnimator : Node
         if (animation != _currentAnimation)
         {
             AnimationPlayer.Play(
-                   name: animation,
+                   name: "viewport_animation_library/" + animation,
                    customBlend: AnimationBlendTimes.TryGetValue(animation, out float value) ? value : 0.2,
                    customSpeed: PlaySpeed,
                    fromEnd: PlaySpeed < 0

@@ -17,7 +17,7 @@ public partial class HumanoidStates : Node
 
 	public Dictionary<string, State> States { get; } = [];
 
-    public override void _Ready() => Character = Humanoid.Character;
+	public override void _Ready() => Character = Humanoid.Character;
 
 	public void AcceptStates()
 	{
@@ -38,7 +38,7 @@ public partial class HumanoidStates : Node
 		if (state.GetChildCount() > 0)
 		{
 			State child = state.GetChild<State>(0);
-			CreateStatePipeline(state: state.NextState = child);
+			CreateStatePipeline(state.NextState = child);
 		}
 	}
 

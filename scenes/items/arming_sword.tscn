@@ -5,7 +5,7 @@
 [ext_resource type="ArrayMesh" uid="uid://dm5suipmsq2np" path="res://Models/Items/ArmingSword.res" id="3_gchif"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlfvb"]
-size = Vector3(0.08496094, 0.7438965, 0.020362854)
+size = Vector3(0.043151855, 0.7438965, 0.020362854)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k4oio"]
 size = Vector3(0.17712402, 0.032318115, 0.019226074)
@@ -17,8 +17,10 @@ height = 0.15332031
 [sub_resource type="ViewportTexture" id="ViewportTexture_5sd3t"]
 viewport_path = NodePath("Fake/Sprite3D/SubViewport")
 
-[node name="ArmingSword" unique_id=867781399 node_paths=PackedStringArray("PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
+[node name="ArmingSword" unique_id=867781399 node_paths=PackedStringArray("BladeStartMarker", "BladeEndMarker", "PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
 script = ExtResource("2_5sd3t")
+BladeStartMarker = NodePath("BladeStart")
+BladeEndMarker = NodePath("BladeEnd")
 PhysicalBody = NodePath("Fake")
 ActualMesh = NodePath("armingSword")
 PhysicalMesh = NodePath("Fake/FakeMesh")
@@ -42,7 +44,7 @@ transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 mesh = ExtResource("3_gchif")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Fake" index="1" unique_id=1361388575]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46042895, -0.00015687943)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
 shape = SubResource("BoxShape3D_vlfvb")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Fake" index="2" unique_id=233887453]

@@ -58,6 +58,6 @@ public partial class HumanoidModel : Node3D
 		CurrentState.Enter();
 	}
 
-	public void MoveHeadLookAtTarget(Vector3 pos) => GetNode<Marker3D>("HeadLookAtTarget").GlobalPosition = pos;
-
+	public void MoveHeadLookAtTarget(Vector3 pos) =>
+	GetNode<Marker3D>("HeadLookAtTarget").GlobalPosition = pos;
 }

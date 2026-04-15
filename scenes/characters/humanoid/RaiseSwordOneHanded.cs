@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -8,7 +8,7 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
     [Export] public LegState LegBehaviour { get; set; }
 
     public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
-    public void LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
+    public Task LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
     public override State ChangeState(InputPackage input)
     {

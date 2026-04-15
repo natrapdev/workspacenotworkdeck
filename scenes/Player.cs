@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 using Viewport;
 namespace MyFirst3DGame.scenes.characters.states;
@@ -15,7 +15,7 @@ public partial class Player : CharacterBody3D
 	[Export] public int AppearanceSet { get; set; } = 1; // wok alert
 
 	public readonly Vector3 CameraOffset = new(0, .1f, .2f);
-	private const float _CameraTowardsOffset = 50f;
+	private const float _CameraTowardsOffset = 5f;
 
 	private Skeleton3D _skeleton;
 	private State _characterStates;
@@ -24,7 +24,7 @@ public partial class Player : CharacterBody3D
 	public Camera3D Camera { get; set; }
 	private float _cameraPanSpeed = 1f;
 
-	public float AttackSensitivityMultiplier { get; set; } = .375f;
+	[Export] public float AttackSensitivityMultiplier { get; set; } = 1f;
 
 	public override void _Ready()
 	{
@@ -43,23 +43,23 @@ public partial class Player : CharacterBody3D
 		_cameraPanSpeed = CameraPivot.CameraPanSpeed;
 	}
 
-	public override void _Process(double delta)
+	public override async void _Process(double delta)
 	{
 		FirstPersonCamera();
 		InputPackage input = InputSource.GatherInput();
 
-		Humanoid.Update(input, (float)delta);
+		await Humanoid.Update(input, (float)delta);
 		Viewport.Update(input, (float)delta);
 
 		MoveAndSlide();
 
 		if (Humanoid.CurrentState.StateName.Contains("slash") || Humanoid.CurrentState.StateName.Contains("thrust"))
 		{
-			CameraPivot.CameraPanSpeed = _cameraPanSpeed * AttackSensitivityMultiplier;
+			CameraPivot.CameraPanSpeed = Mathf.Lerp(CameraPivot.CameraPanSpeed, _cameraPanSpeed * AttackSensitivityMultiplier, 0.1f * (float)delta); ;
 		}
 		else
 		{
-			CameraPivot.CameraPanSpeed = _cameraPanSpeed;
+			CameraPivot.CameraPanSpeed = Mathf.Lerp(CameraPivot.CameraPanSpeed, _cameraPanSpeed, 0.1f * (float)delta);
 		}
 	}
 

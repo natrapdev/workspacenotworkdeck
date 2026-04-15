@@ -15,7 +15,6 @@ public partial class ViewportAnimator : Node
         {"slash2_one_handed", 0.3f},
         {"slash3_one_handed", 0.25f},
         {"thrust_one_handed", 0.35f},
-        {"unsheathe_one_handed", 0.1f},
         {"idle", 0.3f},
         {"idle_one_handed", 0.3f},
         {"walk_front", 0.5f},

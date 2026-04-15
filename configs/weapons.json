@@ -1,33 +1,29 @@
 {
-	"weapons" : {
-		
-		"armingSword" : {
-			"name" : "Arming Sword",
+	"weapons": {
+		"armingSword": {
+			"name": "Arming Sword",
 			"oneHanded": true,
-			"sharpness" : 1,
-			"mass" : 1.2,
-			"damage" : 100,
-			"price" : 240,
-			"rarity" : 0.8
+			"sharpness": 1,
+			"mass": 1.2,
+			"damage": 100,
+			"price": 240,
+			"rarity": 0.8
 		}
-
 	},
-	
-	"enemyWeapons" : {
-		
+	"materialRarity": {
+		"armingSword": {
+			"iron": 0,
+			"steel": 1
+		}
 	},
-
-	"friendWeapons" : {
-
-	},
-
-	"dropStats" : {
-
-		"enemyDropQuality" : {
-			"fresh" : 0.05,
-			"used" : 0.1,
-			"worn" : 0.3,
-			"damaged" : 0.9
+	"enemyWeapons": {},
+	"friendWeapons": {},
+	"dropStats": {
+		"enemyDropQuality": {
+			"fresh": 0.05,
+			"used": 0.1,
+			"worn": 0.3,
+			"damaged": 0.9
 		}
 	}
 }

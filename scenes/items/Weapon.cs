@@ -25,11 +25,14 @@ public partial class Weapon : PickableItem
 	public WeaponInventory ParentWeaponInventory { get; set; }
 
 	private double _baseDamage = 25;
-	private double _mass = 2.5;
+	public float Mass { get; private set; } = 2.5f;
 
 	private readonly char[] _trailingChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 	public Dictionary<string, string> Moves = [];
+
+	public float Sharpness { get; private set; }
+	public string Material { get; private set; }
 
 	public override void _Ready()
 	{
@@ -60,10 +63,10 @@ public partial class Weapon : PickableItem
 			var weaponData = (Godot.Collections.Dictionary)weapons[weaponName];
 
 			_baseDamage = (double)weaponData["damage"];
-			_mass = (double)weaponData["mass"];
+			Mass = (float)weaponData["mass"];
 			WeaponType = (bool)weaponData["oneHanded"] ? "one_handed" : "two_handed";
 
-			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {_mass} kg | Type {WeaponType}");
+			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {Mass} kg | Type {WeaponType}");
 
 			Moves.Add("slash_prepare", "slash_prepare_" + WeaponType);
 			Moves.Add("unsheathe1", "unsheathe_" + WeaponType);
@@ -75,6 +78,8 @@ public partial class Weapon : PickableItem
 		{
 			GD.PushWarning("Could not find config file");
 		}
+
+		Material = "steel";
 	}
 
 	public override void _PhysicsProcess(double delta)

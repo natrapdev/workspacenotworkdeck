@@ -1,6 +1,7 @@
 using Godot;
 using MyFirst3DGame.Items;
 using System;
+using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -24,6 +25,8 @@ public partial class HumanoidModel : Node3D
 	[Export] public WeaponInventory WeaponInventory { get; set; }
 	public Inventory Inventory;
 
+	public Node3D LookAtReference { get; set; }
+
 	public override void _Ready()
 	{
 		Character = GetParent() as CharacterBody3D;
@@ -32,9 +35,18 @@ public partial class HumanoidModel : Node3D
 		CurrentState = StateContainer.States["idle"];
 		HumanoidLegs.CurrentState = CurrentState;
 		HumanoidLegs.AcceptStates();
+
+		if (Character.Name.ToString().Contains("Player"))
+		{
+			LookAtReference = GetParent().GetNode<Node3D>("CameraPivot");
+		}
+		else
+		{
+			LookAtReference = Resource.HeadBoneAttachment;
+		}
 	}
 
-	public virtual void Update(InputPackage input, float delta)
+	public virtual async Task Update(InputPackage input, float delta)
 	{
 		input = Combat.Contextualize(input);
 
@@ -46,7 +58,7 @@ public partial class HumanoidModel : Node3D
 		}
 
 		CurrentState.UpdateResource(delta);
-		CurrentState.Update(input, delta);
+		await CurrentState.Update(input, delta);
 	}
 
 	public void SwitchTo(State state)
@@ -56,6 +68,13 @@ public partial class HumanoidModel : Node3D
 		CurrentState.Exit();
 		CurrentState = state;
 		CurrentState.Enter();
+	}
+
+	public void SwitchTo(string stateName)
+	{
+		State state = StateContainer.GetStateByName(stateName);
+
+		if (state is not null) SwitchTo(state);
 	}
 
 	public void MoveHeadLookAtTarget(Vector3 pos) =>

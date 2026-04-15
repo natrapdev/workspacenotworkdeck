@@ -1,8 +1,4 @@
 using Godot;
-using Godot.Collections;
-using System;
-using System.Data;
-using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -47,12 +43,12 @@ public partial class Walk : State
 		Character.Velocity = velocity;
 	}
 
-    public override void OnEnter()
-    {
-        Animator.SetSpeedScale(_animSpeed);
+	public override void OnEnter()
+	{
+		Animator.SetSpeedScale(_animSpeed);
 	}
 
-    public override void OnExit()
+	public override void OnExit()
 	{
 		Animator.ResetSpeedScale();
 	}

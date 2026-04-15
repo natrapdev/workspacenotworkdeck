@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Godot;
 using MyFirst3DGame.Items;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -15,6 +16,7 @@ public partial class HumanoidResource : Node
     [Export] public float StaminaGain { get; set; } = 3f;
     [Export] public float FatigueGain { get; set; } = .1f;
     [Export] public int InventorySpace { get; set; } = 3;
+    [Export] public DamageModel DamageModel { get; set; }
 
     public CharacterBody3D Character { get; set; }
     public HumanoidModel Humanoid { get; set; }
@@ -36,14 +38,15 @@ public partial class HumanoidResource : Node
     private const float AngleWeight = 0.01f;
 
     // How body mass should be distributed across the body
-    private readonly Dictionary<string, float> _bodyPartMassCoefficients = new()
+    public readonly Dictionary<string, float> BodyPartMassCoefficients = new()
     {
-        {"head", 0.0826f},
+        {"head", 0.0526f},
+        {"neck", 0.03f}, // taken from the head
         {"thorax", 0.2010f},
         {"abdomen", 0.1310f},
         {"pelvis", 0.1370f},
         {"upper arm", 0.0325f}, // We usually have two of these so multiply by 2 for total
-        {"lower arm", 0.0187f - 0.0006f}, // All body parts add up to 1.0006 so this is to make it consitent
+        {"forearm", 0.0187f - 0.0006f}, // All body parts add up to 1.0006 so this is to make it consitent
         {"hand", 0.0065f},
         {"thigh", 0.1050f},
         {"shin", 0.0475f},
@@ -71,15 +74,15 @@ public partial class HumanoidResource : Node
 
     private float _lastStamina;
 
-    public Node3D CameraPivot;
+    // public Node3D CameraPivot;
 
     public override void _Ready()
     {
         _worldItemsContainer = FindWorldItemContainer();
-        _bodyPartBloodVolume = _bodyPartMassCoefficients;
+        _bodyPartBloodVolume = BodyPartMassCoefficients;
         _currentStamina = MaxStamina;
 
-        foreach (string bodyPart in _bodyPartMassCoefficients.Keys)
+        foreach (string bodyPart in BodyPartMassCoefficients.Keys)
         {
             _bodyPartBloodVolume[bodyPart] = CalculateBodyPartBloodVolume(bodyPart);
         }
@@ -93,7 +96,9 @@ public partial class HumanoidResource : Node
         HeadBoneAttachment = _characterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
         _characterSkeletonHeadIndex = _characterSkeleton.FindBone("spine.006");
 
-        CameraPivot = Humanoid.GetParent().GetNode<Node3D>("CameraPivot");
+        // CameraPivot = Humanoid.GetParent().GetNode<Node3D>("CameraPivot");
+
+        DamageModel.OnReady();
     }
 
     public void Update(float delta)
@@ -188,7 +193,7 @@ public partial class HumanoidResource : Node
             {
                 continue;
             }
-            else if (pickableItem.CanInteract(Humanoid.Character, CameraPivot))
+            else if (pickableItem.CanInteract(Humanoid.Character, Humanoid.LookAtReference))
             {
                 pickableItems.Add(item);
             }
@@ -205,7 +210,7 @@ public partial class HumanoidResource : Node
         foreach (Node3D item in items)
         {
             PickableItem pickableItem = item as PickableItem;
-            float angle = pickableItem.LookDifference(Humanoid.Character, CameraPivot);
+            float angle = pickableItem.LookDifference(Humanoid.Character, Humanoid.LookAtReference);
             float distance = pickableItem.DistanceBetween(Humanoid.Character);
 
             float score = angle;
@@ -230,9 +235,8 @@ public partial class HumanoidResource : Node
 
     public Transform3D GetHeadBoneGlobalPose() => _characterSkeleton.GetBoneGlobalPose(_characterSkeletonHeadIndex);
     public bool HasEnoughStamina(State state) => state.StaminaCost <= _currentStamina && _currentStamina > 0;
-    public void UpdateStamina(float changeValue) => Mathf.Clamp(_currentStamina += changeValue, -MaxStamina, MaxStamina);
+    public void UpdateStamina(float changeValue) => _currentStamina = Mathf.Clamp(_currentStamina + changeValue, -MaxStamina, MaxStamina);
     public void UpdateFatigue(float changeValue) => _currentFatigue += changeValue;
-    public float CalculateBodyPartBloodVolume(string bodyPart) => TotalBloodVolume * _bodyPartMassCoefficients[bodyPart];
-    public float CalculateBodyPartMass(string bodyPart) => BodyMass * _bodyPartMassCoefficients[bodyPart];
-    public float BloodVolumeInBodyPart(string bodyPart) => _bodyPartBloodVolume[bodyPart];
+    public float CalculateBodyPartBloodVolume(string bodyPart) => TotalBloodVolume * BodyPartMassCoefficients[bodyPart];
+    public float CalculateBodyPartMass(string bodyPart) => BodyMass * BodyPartMassCoefficients[bodyPart];
 }

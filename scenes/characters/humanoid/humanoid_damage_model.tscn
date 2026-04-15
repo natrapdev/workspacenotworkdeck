@@ -1,0 +1,339 @@
+[gd_scene format=3 uid="uid://dscvamw8ugsb8"]
+
+[ext_resource type="Script" uid="uid://cv7ia4ybeovtx" path="res://scenes/characters/humanoid/DamageModel.cs" id="1_gq613"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aahd8"]
+size = Vector3(0.30358887, 0.29224396, 0.21189499)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s6yqu"]
+size = Vector3(0.27017212, 0.17298126, 0.18928051)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oiyrg"]
+size = Vector3(0.31205177, 0.17384434, 0.17531085)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_huaai"]
+radius = 0.076171875
+height = 0.45516205
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l7yma"]
+radius = 0.060058594
+height = 0.52838135
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ve5ew"]
+size = Vector3(0.111312866, 0.24563694, 0.079251766)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ocaux"]
+radius = 0.076171875
+height = 0.45516205
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oiyrg"]
+radius = 0.060058594
+height = 0.52838135
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uvh40"]
+size = Vector3(0.111312866, 0.24563694, 0.079251766)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aahd8"]
+radius = 0.048828125
+height = 0.35406494
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s6yqu"]
+radius = 0.041503906
+height = 0.3168335
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_aahd8"]
+radius = 0.04706837
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f3nrc"]
+radius = 0.048828125
+height = 0.35406494
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ve5ew"]
+radius = 0.041503906
+height = 0.3168335
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uvh40"]
+radius = 0.04706837
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rbku5"]
+radius = 0.053710938
+height = 0.15808105
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uvh40"]
+radius = 0.099121094
+height = 0.2581005
+
+[node name="DamageModel" type="Node3D" unique_id=1876319864]
+script = ExtResource("1_gq613")
+
+[node name="Thorax" type="BoneAttachment3D" parent="." unique_id=1484580985]
+transform = Transform3D(1, 3.996803e-15, 2.3841848e-07, -2.9105868e-08, 0.99252015, 0.12207891, -2.3663524e-07, -0.12207887, 0.9925202, -5.801907e-06, 0.3362502, -0.007129564)
+bone_name = "spine.003"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="Thorax" unique_id=1915013782]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Thorax/Area3D" unique_id=1983094830]
+transform = Transform3D(1, -2.6369587e-08, 1.462732e-09, 2.6369586e-08, 0.9938648, -0.1106018, 1.4627659e-09, 0.1106018, 0.9938648, -3.4619916e-09, 0.021715611, 0.015522543)
+shape = SubResource("BoxShape3D_aahd8")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="Abdomen" type="BoneAttachment3D" parent="." unique_id=144800514]
+transform = Transform3D(1, -3.5527137e-15, 2.3841844e-07, -2.2465626e-08, 0.9955506, 0.094227776, -2.3735767e-07, -0.094227746, 0.9955506, -5.801907e-06, 0.19880626, 0.0058793537)
+bone_name = "spine.002"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="Abdomen" unique_id=474962093]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Abdomen/Area3D" unique_id=1038492959]
+transform = Transform3D(1, -2.5070674e-08, 1.3206691e-09, 2.5070555e-08, 0.994456, -0.105153315, 1.322917e-09, 0.105153315, 0.994456, 3.1832315e-12, -0.06600001, -0.000768187)
+shape = SubResource("BoxShape3D_s6yqu")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="Pelvis" type="BoneAttachment3D" parent="." unique_id=1430250854]
+transform = Transform3D(1, -1.2434498e-14, 2.3841822e-07, 5.515595e-08, 0.9728727, -0.23134108, -2.319506e-07, 0.2313411, 0.9728726, -5.801907e-06, -0.08761807, -0.034448422)
+bone_name = "spine"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="Pelvis" unique_id=671233423]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pelvis/Area3D" unique_id=1909923728]
+transform = Transform3D(1, 5.515989e-08, 6.4686247e-09, -5.5159905e-08, 0.97286886, 0.23135717, 6.468511e-09, -0.23135717, 0.97286886, 2.7894203e-09, 0.06220541, 0.021298505)
+shape = SubResource("BoxShape3D_oiyrg")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftThigh" type="BoneAttachment3D" parent="." unique_id=473463758]
+transform = Transform3D(0.9965233, 0.05759428, -0.06020082, 0.035248253, -0.9461746, -0.32173002, -0.07549057, 0.3184905, -0.9449117, 0.07999999, -0.030797694, -0.0070620067)
+bone_name = "thigh.L"
+bone_idx = 57
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftThigh" unique_id=387852654]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="LeftThigh/Area3D" unique_id=1457828173]
+transform = Transform3D(0.99885184, -0.047104657, 0.008726535, 0.047106452, 0.99888986, 0, -0.008716848, 0.00041107612, 0.9999619, -3.3132732e-05, 0.2500427, -0.005460387)
+shape = SubResource("CapsuleShape3D_huaai")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftShin" type="BoneAttachment3D" parent="." unique_id=1536587690]
+transform = Transform3D(0.9988317, -0.039258853, -0.02817637, -0.0072016963, -0.69749737, 0.71655035, -0.047784165, -0.7155068, -0.69696474, 0.10523189, -0.4453143, 0.13246785)
+bone_name = "shin.L"
+bone_idx = 58
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftShin" unique_id=1475805049]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="LeftShin/Area3D" unique_id=1902414393]
+transform = Transform3D(1, -0.0001391508, 6.4091204e-05, 0.00014137194, 0.9993493, -0.036068957, -5.903048e-05, 0.036068965, 0.9993493, -3.5479665e-05, 0.19848108, 0.0006350428)
+shape = SubResource("CapsuleShape3D_l7yma")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftFoot" type="BoneAttachment3D" parent="." unique_id=489319857]
+transform = Transform3D(-0.99799216, -0.022644205, 0.05915142, 0.04685054, -0.8923875, 0.44883034, 0.042622775, 0.45070124, 0.8916532, 0.08211279, -0.85965955, -0.19487017)
+bone_name = "toe.L"
+bone_idx = 60
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftFoot" unique_id=867182]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftFoot/Area3D" unique_id=210662651]
+transform = Transform3D(1, 1.2630955e-17, -1.6555644e-12, -1.3010426e-18, 1, 0, 1.6555648e-12, 0, 1, -0.005393967, -0.04104436, 0.03348571)
+shape = SubResource("BoxShape3D_ve5ew")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightThigh" type="BoneAttachment3D" parent="." unique_id=506350952]
+transform = Transform3D(0.9999637, 0.0008139305, -0.008478936, -0.0006690358, -0.9848436, -0.173441, -0.008491627, 0.17344098, -0.98480386, -0.080000006, -0.03079769, -0.0070620067)
+bone_name = "thigh.R"
+bone_idx = 62
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightThigh" unique_id=757104875]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightThigh/Area3D" unique_id=486768668]
+transform = Transform3D(0.99885017, 0.047213204, 0.008325006, -0.04721659, 0.9988847, 0.00021073195, -0.008305771, -0.00060356804, 0.99996537, -3.3132732e-05, 0.2500427, -0.005460387)
+shape = SubResource("CapsuleShape3D_ocaux")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightShin" type="BoneAttachment3D" parent="." unique_id=382528286]
+transform = Transform3D(0.99999094, 0.0017063266, 0.0038887411, 0.0013612715, -0.9962013, 0.08706525, 0.004022455, -0.087057695, -0.9961914, -0.07964343, -0.46225506, 0.06892203)
+bone_name = "shin.R"
+bone_idx = 63
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightShin" unique_id=134581368]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightShin/Area3D" unique_id=1968679846]
+transform = Transform3D(1, -0.0001391508, 6.4091204e-05, 0.00014137194, 0.9993493, -0.036068957, -5.903048e-05, 0.036068965, 0.9993493, -3.5479665e-05, 0.19848108, 0.0006350428)
+shape = SubResource("CapsuleShape3D_oiyrg")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightFoot" type="BoneAttachment3D" parent="." unique_id=39845189]
+transform = Transform3D(-0.99994135, -0.00831257, -0.0069396347, -0.006938096, -0.00021204352, 0.9999757, -0.008313739, 0.99996203, 0.00015315413, -0.079202674, -0.9598571, 0.12527992)
+bone_name = "toe.R"
+bone_idx = 65
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightFoot" unique_id=1077234960]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightFoot/Area3D" unique_id=902922856]
+transform = Transform3D(1, 1.3010426e-18, -1.6555648e-12, -1.3010426e-18, 1, 2.0911365e-29, 1.6555648e-12, -1.8757405e-29, 1, 0.005, -0.041, 0.033)
+shape = SubResource("BoxShape3D_uvh40")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightUpperArm" type="BoneAttachment3D" parent="." unique_id=632971363]
+transform = Transform3D(-0.9161149, -0.08439542, 0.39193255, 0.046229795, -0.9933087, -0.105831906, 0.39824173, -0.078835264, 0.9138865, -0.19205558, 0.42935836, -0.0085163005)
+bone_name = "upper_arm.R"
+bone_idx = 31
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightUpperArm" unique_id=1421209511]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightUpperArm/Area3D" unique_id=2116513060]
+transform = Transform3D(1, 0, 0, 1.937151e-07, 1, 0, 1.4901161e-07, -4.4703484e-08, 1, -0.00081305206, 0.13218692, -0.0043767244)
+shape = SubResource("CapsuleShape3D_aahd8")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightForearm" type="BoneAttachment3D" parent="." unique_id=658567832]
+transform = Transform3D(-0.89852315, 0.028259411, 0.43801567, 0.03695763, -0.9895105, 0.13965297, 0.43736762, 0.14166944, 0.8880536, -0.21603955, 0.14707479, -0.03092009)
+bone_name = "forearm.R"
+bone_idx = 32
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightForearm" unique_id=1822212716]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightForearm/Area3D" unique_id=112875680]
+transform = Transform3D(1.0000002, 1.4528632e-07, 0, 1.8253922e-07, 1, 7.1525574e-07, 1.1920929e-07, -8.940697e-08, 1.0000004, -0.0026454777, 0.110015586, 0.0012895912)
+shape = SubResource("CapsuleShape3D_s6yqu")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="RightHand" type="BoneAttachment3D" parent="." unique_id=911288946]
+transform = Transform3D(-0.9044341, 0.06289709, 0.42195153, -0.015454954, -0.9932533, 0.11492951, 0.4263335, 0.09742492, 0.8993041, -0.20922533, -0.091526955, 0.0032408219)
+bone_name = "hand.R"
+bone_idx = 33
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="RightHand" unique_id=699763635]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightHand/Area3D" unique_id=694431527]
+transform = Transform3D(1, 3.7252876e-09, -2.0861611e-07, -3.7252876e-09, 1, -7.771557e-16, 2.0861611e-07, 1.5543108e-15, 1, 1.3394971e-08, 0.05469328, 0.009725318)
+shape = SubResource("SphereShape3D_aahd8")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftUpperArm" type="BoneAttachment3D" parent="." unique_id=11517048]
+transform = Transform3D(-0.9161151, 0.084395126, -0.39193228, -0.046229586, -0.9933089, -0.10583155, -0.39824158, -0.078834936, 0.9138866, 0.19205558, 0.42935827, -0.008516291)
+bone_name = "upper_arm.L"
+bone_idx = 8
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftUpperArm" unique_id=719463615]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftUpperArm/Area3D" unique_id=1224753]
+transform = Transform3D(1, 0, 0, 1.937151e-07, 1, 0, 1.4901161e-07, -4.4703484e-08, 1, 0.001, 0.132, -0.004)
+shape = SubResource("CapsuleShape3D_f3nrc")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftForearm" type="BoneAttachment3D" parent="." unique_id=1378973142]
+transform = Transform3D(-0.8985233, -0.028259866, -0.43801543, -0.036957122, -0.98951054, 0.13965325, -0.43736756, 0.14166953, 0.8880536, 0.2160394, 0.14707467, -0.030920016)
+bone_name = "forearm.L"
+bone_idx = 9
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftForearm" unique_id=1561249832]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftForearm/Area3D" unique_id=1423478385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003, 0.11, 0.001)
+shape = SubResource("CapsuleShape3D_ve5ew")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="LeftHand" type="BoneAttachment3D" parent="." unique_id=1401033762]
+transform = Transform3D(-0.9044341, -0.06289747, -0.42195126, 0.015455364, -0.99325323, 0.114929795, -0.4263334, 0.09742507, 0.89930403, 0.20922504, -0.09152709, 0.0032409)
+bone_name = "hand.L"
+bone_idx = 10
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="LeftHand" unique_id=1441376881]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/Area3D" unique_id=916279106]
+transform = Transform3D(1, 3.7252876e-09, -2.0861611e-07, -3.7252876e-09, 1, -7.771557e-16, 2.0861611e-07, 1.5543108e-15, 1, 1.3394971e-08, 0.05469328, 0.009725318)
+shape = SubResource("SphereShape3D_uvh40")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="Neck" type="BoneAttachment3D" parent="." unique_id=1115188037]
+transform = Transform3D(1, -4.2632564e-14, 9.5367403e-07, 2.4616315e-07, 0.96611243, -0.25812083, -9.2135633e-07, 0.2581209, 0.96611243, -5.801907e-06, 0.5363325, -0.019592088)
+bone_name = "spine.005"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="Neck" unique_id=1426554144]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/Area3D" unique_id=1940711267]
+transform = Transform3D(1, 2.7813734e-08, -2.0678844e-07, -3.725333e-09, 0.99330235, 0.11554395, 2.0861586e-07, -0.11554395, 0.99330235, 8.9107116e-10, 0.010448147, -0.0040843124)
+shape = SubResource("CapsuleShape3D_rbku5")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="Head" type="BoneAttachment3D" parent="." unique_id=1245120985]
+transform = Transform3D(0.8392359, -0.076258905, 0.5383936, -1.4901161e-07, 0.9901171, 0.14024194, -0.54376745, -0.11769608, 0.8309418, -5.8019064e-06, 0.5626688, -0.012555682)
+bone_name = "spine.006"
+bone_idx = 6
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="Head" unique_id=1015078717]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Area3D" unique_id=811068695]
+transform = Transform3D(1, -2.9802322e-08, 3.8743028e-07, 2.980233e-08, 1, -1.4901161e-08, -3.8743028e-07, 1.4901174e-08, 1, 2.3283059e-10, 0.10746515, 0.014393302)
+shape = SubResource("CapsuleShape3D_uvh40")
+debug_color = Color(1, 0, 0, 1)

@@ -1,6 +1,9 @@
 using Godot;
+using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -68,14 +71,19 @@ public partial class State : Node
         return DefaultLifecycle(input);
     }
 
-    public virtual void Update(InputPackage input, float delta)
+    public virtual async Task Update(InputPackage input, float delta)
     {
+        Animator.UpdateAnimations();
+
         if (TracksLookDirection())
         {
             TrackLookDirection(input, delta);
         }
+        if (RightWeaponHurts())
+        {
+            await RightWeaponHitScan();
+        }
 
-        Animator.UpdateAnimations();
         OnUpdate(input, delta);
     }
     public virtual void OnUpdate(InputPackage input, float delta) { }
@@ -103,7 +111,7 @@ public partial class State : Node
         // Character.RotateY(Mathf.Clamp(angle, BodyRotationSpeed * delta, BodyRotationSpeed * delta));
 
         Vector3 characterRotation = Humanoid.GlobalRotation;
-        float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
+        float targetAngle = Humanoid.LookAtReference.GlobalRotation.Y;
         float currentAngle = characterRotation.Y;
         float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta);
 
@@ -167,6 +175,25 @@ public partial class State : Node
                 _queuedState = (childState as State).NextState;
             }
         }
+    }
+
+    public virtual async Task<HitInfo> RightWeaponHitScan()
+    {
+        HitInfo hitInfo = await Combat.ScanForHitsSlash();
+
+        if (hitInfo.HitNode is not null)
+        {
+            if (hitInfo.HitNode.GetParent() is BoneAttachment3D hitBone)
+            {
+                var parent = hitBone.GetParent();
+
+                if (parent is DamageModel damageModel)
+                {
+                    damageModel.Hit(hitInfo);
+                }
+            }
+        }
+        return hitInfo;
     }
 
     public bool ExceedsTimeLength(float time) => ElapsedTimeSeconds > time;

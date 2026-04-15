@@ -22,9 +22,9 @@ public partial class Idle : State
 		return FindFirstValidState(input);
 	}
 
-    public override void OnUpdate(InputPackage input, float delta)
-    {
-        Animation = "idle" + Animator.GetAnimationWeaponModifier();
+	public override void OnUpdate(InputPackage input, float delta)
+	{
+		Animation = "idle" + Animator.GetAnimationWeaponModifier();
 
 		Vector3 velocity = Character.Velocity;
 
@@ -32,15 +32,15 @@ public partial class Idle : State
 		velocity.Z = Mathf.MoveToward(Character.Velocity.Z, 0, AccelerationTime);
 
 		Character.Velocity = velocity;
-    }
+	}
 
-    public override void TrackLookDirection(InputPackage input, float delta)
+	public override void TrackLookDirection(InputPackage input, float delta)
 	{
 		if (Humanoid.CurrentState is not IPartialBodyState)
 		{
 
 			Vector3 characterRotation = Humanoid.GlobalRotation;
-			float targetAngle = Character.GetNode<Node3D>("CameraPivot").GlobalRotation.Y;
+			float targetAngle = Humanoid.LookAtReference.GlobalRotation.Y;
 			float currentAngle = characterRotation.Y;
 			float angleDifference = Mathf.AngleDifference(currentAngle, targetAngle);
 

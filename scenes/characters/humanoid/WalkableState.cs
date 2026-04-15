@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;
 

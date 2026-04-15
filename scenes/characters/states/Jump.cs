@@ -6,7 +6,7 @@ namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class Jump : State
 {
-	private const float JUMP_IMPULSE = 4;
+	private const float JUMP_IMPULSE = 10f;
 
 	public override State ChangeState(InputPackage input)
 	{
@@ -25,6 +25,6 @@ public partial class Jump : State
 
 	public override void OnEnter()
 	{
-		Character.Velocity *= new Vector3(JUMP_IMPULSE, 1, JUMP_IMPULSE);
+		Character.Velocity = Character.Velocity.Normalized() * new Vector3(JUMP_IMPULSE, 1, JUMP_IMPULSE);
 	}
 }

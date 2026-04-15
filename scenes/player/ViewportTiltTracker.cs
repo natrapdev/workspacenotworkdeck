@@ -8,11 +8,11 @@ public partial class ViewportTiltTracker : Node3D
 {
     [Export] public ViewportModel Viewport { get; set; }
     [Export] public Node3D TiltSubject { get; set; }
-    [Export] float TiltSensitivityHorizontal { get; set; } = 8f;
-    [Export] float TiltSensitivityVertical { get; set; } = 6f;
-    [Export] float TiltSpeed { get; set; } = 5f;
-    [Export] float MaxTiltAngleHorizontal { get; set; } = 40f;
-    [Export] float MaxTiltAngleVertical { get; set; } = 45f;
+    [Export] public float TiltSensitivityHorizontal { get; set; } = 8f;
+    [Export] public float TiltSensitivityVertical { get; set; } = 6f;
+    [Export] public float TiltSpeed { get; set; } = 5f;
+    [Export] public float MaxTiltAngleHorizontal { get; set; } = 45f;
+    [Export] public float MaxTiltAngleVertical { get; set; } = 45f;
 
     private bool _isTracking = false;
 

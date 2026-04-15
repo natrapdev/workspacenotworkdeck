@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b11hvvl7kaefi" path="res://scenes/items/arming_sword.tscn" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c0uw5k0lhdgjn" path="res://scenes/player.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cewk5nxumfedt" path="res://scenes/characters/enemy.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://c5ig7mrgbjp1x" path="res://scenes/human.tscn" id="4_jyhfs"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -55,6 +56,7 @@ environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=880158058]
 transform = Transform3D(1, 0, 0, 0, -0.5410038, 0.8410201, 0, -0.8410201, -0.5410038, 0, 13.107447, -5.137328)
+layers = 3
 light_bake_mode = 1
 shadow_enabled = true
 directional_shadow_mode = 0
@@ -146,3 +148,7 @@ mesh = SubResource("BoxMesh_h2yge")
 
 [node name="Player" parent="." unique_id=1102152615 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4349694, 0)
+
+[node name="Human" parent="." unique_id=739696353 node_paths=PackedStringArray("Player") instance=ExtResource("4_jyhfs")]
+transform = Transform3D(-0.93516, 0, 0.35422572, 0, 1, 0, -0.35422572, 0, -0.93516, -4.105447, 1.0018371, 2.2535436)
+Player = NodePath("../Player")

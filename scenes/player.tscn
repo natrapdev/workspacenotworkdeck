@@ -1,15 +1,1102 @@
 [gd_scene format=3 uid="uid://c0uw5k0lhdgjn"]
 
 [ext_resource type="Script" uid="uid://bo4kydkm8578t" path="res://scenes/Player.cs" id="1_d2wvv"]
+[ext_resource type="Script" uid="uid://hstdx4pvihxo" path="res://scenes/characters/humanoid/HumanoidModel.cs" id="2_487ah"]
+[ext_resource type="PackedScene" uid="uid://c70lg52u24yqn" path="res://scenes/characters/humanoid/humanoid_skeleton.tscn" id="3_md1ol"]
 [ext_resource type="Script" uid="uid://ce88sqbb8bvjl" path="res://scenes/characters/states/InputGatherer.cs" id="3_ur7pv"]
+[ext_resource type="Script" uid="uid://bs57h78xfc50r" path="res://scenes/characters/states/HumanoidCombat.cs" id="4_bj30b"]
+[ext_resource type="Script" uid="uid://cv7ia4ybeovtx" path="res://scenes/characters/humanoid/DamageModel.cs" id="5_jc3p3"]
 [ext_resource type="Script" uid="uid://cmf08qfairhyi" path="res://scenes/characters/humanoid/IkController.cs" id="5_tuyoq"]
+[ext_resource type="Script" uid="uid://noe1jkg8jfrl" path="res://scenes/characters/states/HumanoidResource.cs" id="6_hax0n"]
+[ext_resource type="Script" uid="uid://buq8o5wmomdff" path="res://scenes/characters/humanoid/WeaponInventory.cs" id="7_t4otl"]
+[ext_resource type="Script" uid="uid://oalu3xufwwia" path="res://scenes/characters/humanoid/Animator.cs" id="8_j2b1d"]
 [ext_resource type="PackedScene" uid="uid://ccfi3sqc0x6fg" path="res://scenes/player/viewport_model.tscn" id="8_smehm"]
+[ext_resource type="AnimationLibrary" uid="uid://c51fuobpqhqqm" path="res://assets/animations/human/legs/human_legs_animation_library.tres" id="9_cs1tg"]
 [ext_resource type="Script" uid="uid://b582aa1vhaevg" path="res://scenes/player/CameraController.cs" id="9_ur7pv"]
-[ext_resource type="PackedScene" uid="uid://peuxdvd6cyuo" path="res://scenes/characters/humanoid/humanoid_model.tscn" id="10_y4r1p"]
+[ext_resource type="Animation" uid="uid://c4aybcj2bfagk" path="res://assets/animations/human/RESET.res" id="10_2dvfe"]
 [ext_resource type="PackedScene" uid="uid://beu6ff0tpxtip" path="res://scenes/character_appearance.tscn" id="11_d2wvv"]
+[ext_resource type="AnimationLibrary" uid="uid://di0hlyt4anoer" path="res://assets/animations/human/body/human_body_animation_library.tres" id="11_giy8y"]
+[ext_resource type="Script" uid="uid://bcsctelgdnjvo" path="res://scenes/characters/humanoid/HumanoidLegStates.cs" id="12_fdfoy"]
+[ext_resource type="Script" uid="uid://cfvu1b10n2uyq" path="res://scenes/characters/humanoid/WalkableState.cs" id="13_hhpqf"]
+[ext_resource type="Script" uid="uid://c4fmvd3digfyd" path="res://scenes/characters/humanoid/HumanoidStates.cs" id="14_g5jhy"]
+[ext_resource type="Script" uid="uid://8rabbn7dd05m" path="res://scenes/characters/humanoid/StateData.cs" id="15_holxr"]
+[ext_resource type="Script" uid="uid://bglobyaj4a14p" path="res://scenes/characters/humanoid/StateDatabase.cs" id="16_mx1m4"]
+[ext_resource type="Script" uid="uid://dx2bp5kkihf0c" path="res://scenes/characters/states/Airborne.cs" id="17_4gjji"]
+[ext_resource type="Script" uid="uid://dumwyrnc2wtiu" path="res://scenes/characters/states/Idle.cs" id="18_u2ulf"]
+[ext_resource type="Script" uid="uid://bej5g06gn3l6a" path="res://scenes/characters/states/Walk.cs" id="19_6e8lb"]
+[ext_resource type="Script" uid="uid://cv4acahqd1g8v" path="res://scenes/characters/states/Jump.cs" id="20_2gdjj"]
+[ext_resource type="Script" uid="uid://oin8jhikj5jf" path="res://scenes/characters/states/InteractWithItem.cs" id="21_sc3ue"]
+[ext_resource type="Script" uid="uid://co5rehsif1xl" path="res://scenes/characters/states/UnsheathePrimary.cs" id="22_lxlsd"]
+[ext_resource type="Script" uid="uid://g5n030vv84jr" path="res://scenes/characters/humanoid/RaiseSwordOneHanded.cs" id="23_ha2mi"]
+[ext_resource type="Script" uid="uid://dsf0h1vk8lqaa" path="res://scenes/characters/humanoid/OneHandedSlashLeft.cs" id="24_apa73"]
+[ext_resource type="Script" uid="uid://dd57eha75ms0f" path="res://scenes/characters/humanoid/OneHandedSlashRight.cs" id="25_74r1k"]
+[ext_resource type="Script" uid="uid://bubyl6xh00f46" path="res://scenes/characters/humanoid/OneHandedSlashDown.cs" id="26_8svfe"]
+[ext_resource type="Script" uid="uid://b04tcsscypt47" path="res://scenes/characters/humanoid/OneHandedThrust.cs" id="27_2a3c5"]
+[ext_resource type="Script" uid="uid://b8p0dn5qsw4gc" path="res://scenes/characters/states/Dead.cs" id="28_42b1b"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
-radius = 0.26708984
+[sub_resource type="BoxShape3D" id="BoxShape3D_l7yma"]
+size = Vector3(0.30358887, 0.29224396, 0.21189499)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s6yqu"]
+size = Vector3(0.27017212, 0.17298126, 0.18928051)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oiyrg"]
+size = Vector3(0.31205177, 0.17384434, 0.17531085)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_huaai"]
+radius = 0.076171875
+height = 0.45516205
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l7yma"]
+radius = 0.060058594
+height = 0.52838135
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_huaai"]
+size = Vector3(0.111312866, 0.24563694, 0.079251766)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ocaux"]
+radius = 0.076171875
+height = 0.45516205
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oiyrg"]
+radius = 0.060058594
+height = 0.52838135
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ocaux"]
+size = Vector3(0.111312866, 0.24563694, 0.079251766)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wwr6l"]
+radius = 0.048828125
+height = 0.35406494
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s6yqu"]
+radius = 0.041503906
+height = 0.3168335
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_oiyrg"]
+radius = 0.04706837
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f3nrc"]
+radius = 0.048828125
+height = 0.35406494
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ve5ew"]
+radius = 0.041503906
+height = 0.3168335
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_s6yqu"]
+radius = 0.04706837
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uvh40"]
+radius = 0.053710938
+height = 0.15808105
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rbku5"]
+radius = 0.099121094
+height = 0.2581005
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a6b7o"]
+_data = {
+&"RESET": ExtResource("10_2dvfe")
+}
+
+[sub_resource type="Animation" id="Animation_7oclm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xv1dk"]
+resource_name = "idle_params"
+length = 2.5417
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xufbo"]
+resource_name = "slash1_one_handed_params"
+length = 1.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2, 0.55),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_r4xbn"]
+resource_name = "slash2_one_handed_params"
+length = 1.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.85, 1.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.15, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_aahd8"]
+resource_name = "slash3_one_handed_params"
+length = 1.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.25, 0.525),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_kddb3"]
+resource_name = "slash_prepare_one_handed_params"
+length = 0.75
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.74),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_s6yqu"]
+resource_name = "thrust_one_handed_params"
+length = 1.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.05, 1.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 1.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.45, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.45, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_5i03e"]
+resource_name = "unsheathe_one_handed_params"
+length = 1.8333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.7, 0.72),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_mwisw"]
+resource_name = "walk_params"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7oclm"]
+_data = {
+&"RESET": SubResource("Animation_7oclm"),
+&"idle_params": SubResource("Animation_xv1dk"),
+&"slash1_one_handed_params": SubResource("Animation_xufbo"),
+&"slash2_one_handed_params": SubResource("Animation_r4xbn"),
+&"slash3_one_handed_params": SubResource("Animation_aahd8"),
+&"slash_prepare_one_handed_params": SubResource("Animation_kddb3"),
+&"thrust_one_handed_params": SubResource("Animation_s6yqu"),
+&"unsheathe_one_handed_params": SubResource("Animation_5i03e"),
+&"walk_params": SubResource("Animation_mwisw")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h7ic4"]
+radius = 0.17333984
 height = 1.8180542
 
 [node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport") groups=["player"]]
@@ -20,7 +1107,511 @@ InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
 Viewport = NodePath("ViewportModel")
 
-[node name="HumanoidModel" parent="." unique_id=728337583 instance=ExtResource("10_y4r1p")]
+[node name="HumanoidModel" type="Node3D" parent="." unique_id=728337583 node_paths=PackedStringArray("Skeleton", "Animator", "Combat", "Resource", "HeadLookAtTarget", "HumanoidLegs", "StateContainer", "WeaponInventory")]
+script = ExtResource("2_487ah")
+Skeleton = NodePath("rig/Skeleton3D")
+Animator = NodePath("Animator")
+Combat = NodePath("Combat")
+Resource = NodePath("Resource")
+HeadLookAtTarget = NodePath("HeadLookAtTarget")
+HumanoidLegs = NodePath("LegStates")
+StateContainer = NodePath("States")
+WeaponInventory = NodePath("WeaponInventory")
+
+[node name="rig" type="Node3D" parent="HumanoidModel" unique_id=816010286]
+
+[node name="Skeleton3D" parent="HumanoidModel/rig" unique_id=1037971143 node_paths=PackedStringArray("Humanoid") instance=ExtResource("3_md1ol")]
+bones/0/position = Vector3(-5.8019073e-06, -0.09731233, -0.034448422)
+bones/0/rotation = Quaternion(0.11646309, 1.18397914e-07, 1.3883468e-08, 0.99319506)
+bones/1/position = Vector3(0, 0.147, 0)
+bones/1/rotation = Quaternion(-0.09456411, 1.2579925e-13, -2.2545823e-08, 0.9955188)
+bones/2/rotation = Quaternion(-0.06915102, -1.4856775e-14, -1.648688e-08, 0.9976062)
+bones/3/rotation = Quaternion(-0.014007757, 2.948003e-14, -3.3397118e-09, 0.9999019)
+bones/4/rotation = Quaternion(0.2619419, 2.3009363e-07, 1.2490355e-07, 0.96508366)
+bones/6/rotation = Quaternion(-0.13016805, -3.5458515e-07, -7.7586186e-08, 0.991492)
+bones/7/rotation = Quaternion(-0.56882095, -0.39897865, -0.5145672, 0.5024733)
+bones/8/rotation = Quaternion(-0.3289029, 0.7203575, -0.49854398, 0.35265)
+bones/9/rotation = Quaternion(0.12372111, 0.021366697, -0.005003798, 0.99207443)
+bones/10/rotation = Quaternion(-0.012567138, -0.009541327, -0.025197282, 0.999558)
+bones/12/rotation = Quaternion(0.19596067, 0.082607396, -0.032871976, 0.9765731)
+bones/13/rotation = Quaternion(0.2350933, -0.10396223, 0.039059795, 0.9656072)
+bones/14/rotation = Quaternion(0.23182659, 0.05772809, -0.011514232, 0.97097445)
+bones/15/rotation = Quaternion(0.102834314, 0.026894975, 0.23583888, 0.96596164)
+bones/16/rotation = Quaternion(0.021689765, -0.2737894, -0.29273957, 0.9158998)
+bones/17/rotation = Quaternion(0.04989556, -0.0879745, -0.05301041, 0.9934591)
+bones/19/rotation = Quaternion(0.19841862, 0.06103726, 0.0058056954, 0.9781978)
+bones/20/rotation = Quaternion(0.21642303, -0.07318745, 0.017560346, 0.9733942)
+bones/21/rotation = Quaternion(0.19842574, -0.015992835, -0.0016093922, 0.9799841)
+bones/23/rotation = Quaternion(0.16393068, 0.05053655, -0.0021264185, 0.9851743)
+bones/24/rotation = Quaternion(0.18700176, -0.021287473, 0.01771254, 0.98196924)
+bones/25/rotation = Quaternion(0.22342253, -0.040280905, 0.030288616, 0.97341794)
+bones/27/rotation = Quaternion(0.21816093, 0.036383133, -0.003883039, 0.9752267)
+bones/28/rotation = Quaternion(0.16505171, 0.027785381, 0.0086048525, 0.98585594)
+bones/29/rotation = Quaternion(0.28261128, 0.014197539, 0.005883461, 0.95911145)
+bones/30/rotation = Quaternion(-0.5688211, 0.39897856, 0.5145671, 0.5024734)
+bones/31/rotation = Quaternion(-0.32890284, -0.7203576, 0.49854386, 0.35264984)
+bones/32/rotation = Quaternion(0.12372118, -0.021366635, 0.0050036446, 0.9920744)
+bones/33/rotation = Quaternion(-0.012567151, 0.009541331, 0.025197333, 0.999558)
+bones/34/rotation = Quaternion(-0.0067929495, -0.7298443, -0.09515669, 0.6769242)
+bones/35/rotation = Quaternion(0.19596078, -0.08260706, 0.032871954, 0.9765731)
+bones/36/rotation = Quaternion(0.23509338, 0.10396186, -0.0390597, 0.96560735)
+bones/37/rotation = Quaternion(0.23182668, -0.057728108, 0.011514204, 0.97097445)
+bones/38/rotation = Quaternion(0.10283441, -0.026894646, -0.23583879, 0.96596164)
+bones/39/rotation = Quaternion(0.021689756, 0.27378944, 0.29273963, 0.91589975)
+bones/40/rotation = Quaternion(0.049895536, 0.08797434, 0.053010453, 0.9934591)
+bones/41/rotation = Quaternion(-0.004672285, -0.71977377, -0.06599125, 0.69104916)
+bones/42/rotation = Quaternion(0.19841859, -0.061037287, -0.005805671, 0.9781978)
+bones/43/rotation = Quaternion(0.2164231, 0.073187366, -0.017560337, 0.9733943)
+bones/44/rotation = Quaternion(0.19842586, 0.015992781, 0.0016093613, 0.9799841)
+bones/45/rotation = Quaternion(0.020795, -0.70971954, -0.01544005, 0.70400804)
+bones/46/rotation = Quaternion(0.16393071, -0.05053669, 0.0021263077, 0.9851743)
+bones/47/rotation = Quaternion(0.18700172, 0.021287695, -0.017712524, 0.98196924)
+bones/48/rotation = Quaternion(0.22342262, 0.04028083, -0.03028858, 0.9734179)
+bones/49/rotation = Quaternion(0.0012901205, -0.6800086, -0.041085906, 0.73205096)
+bones/50/rotation = Quaternion(0.21816112, -0.0363835, 0.0038831208, 0.9752266)
+bones/51/rotation = Quaternion(0.16505156, -0.027785175, -0.008604975, 0.98585594)
+bones/52/rotation = Quaternion(0.28261137, -0.014197486, -0.005883386, 0.95911145)
+bones/53/rotation = Quaternion(-1.3353572e-07, 0.66254103, 0.74902564, 5.0020464e-08)
+bones/54/rotation = Quaternion(-1.3353572e-07, 0.66254103, 0.74902564, 5.0020464e-08)
+bones/57/rotation = Quaternion(0.9602348, 0.019376028, -0.03691745, 0.27606297)
+bones/58/rotation = Quaternion(0.5336589, 0.018470768, 0.017394662, 0.8453191)
+bones/59/rotation = Quaternion(-0.30552492, 0.011563167, 0.016313782, 0.95197415)
+bones/60/rotation = Quaternion(5.1235723e-08, 0.94866234, -0.31629074, 7.103299e-08)
+bones/62/rotation = Quaternion(0.9792773, -0.00045990897, -0.0042339927, 0.20247945)
+bones/63/rotation = Quaternion(0.13037224, 0.006295364, -0.00074161444, 0.9914449)
+bones/64/rotation = Quaternion(-0.48561677, 0.0030960194, -0.0016714546, 0.87416476)
+bones/65/rotation = Quaternion(-5.159327e-08, 0.94866234, -0.3162907, -7.184162e-08)
+Humanoid = NodePath("../..")
+
+[node name="HeadLookAtTarget" type="Marker3D" parent="HumanoidModel" unique_id=1933786852]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3742694, 0.6601608, 0.5650905)
+
+[node name="Combat" type="Node3D" parent="HumanoidModel" unique_id=1718054833]
+script = ExtResource("4_bj30b")
+
+[node name="DamageModel" type="Node3D" parent="HumanoidModel" unique_id=1396485719 node_paths=PackedStringArray("Skeleton", "Resource", "Humanoid")]
+script = ExtResource("5_jc3p3")
+Skeleton = NodePath("../rig/Skeleton3D")
+Resource = NodePath("../Resource")
+Humanoid = NodePath("..")
+
+[node name="Thorax" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=313658433]
+transform = Transform3D(1, 1.5099033e-14, 2.3841847e-07, -2.9105859e-08, 0.9925201, 0.122078896, -2.3663524e-07, -0.12207887, 0.99252015, -5.8019073e-06, 0.3265559, -0.0071295663)
+bone_name = "spine.003"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/Thorax" unique_id=1319672850]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Thorax/Area3D" unique_id=930492013]
+transform = Transform3D(1, -2.6369587e-08, 1.462732e-09, 2.6369586e-08, 0.9938648, -0.1106018, 1.4627659e-09, 0.1106018, 0.9938648, -3.4619916e-09, 0.021715611, 0.015522543)
+shape = SubResource("BoxShape3D_l7yma")
+
+[node name="Abdomen" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=990486161]
+transform = Transform3D(1, 7.1054274e-15, 2.3841842e-07, -2.2465619e-08, 0.9955505, 0.09422776, -2.3735767e-07, -0.094227746, 0.9955505, -5.8019073e-06, 0.18911196, 0.0058793514)
+bone_name = "spine.002"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/Abdomen" unique_id=2126914731]
+transform = Transform3D(1, -2.4949957e-08, -2.3710936e-07, -1.7763572e-14, 0.99450934, -0.104647815, 2.3841851e-07, 0.104647785, 0.99450934, 3.1832315e-12, -0.066, -0.0007681865)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Abdomen/Area3D" unique_id=823484371]
+shape = SubResource("BoxShape3D_s6yqu")
+
+[node name="Pelvis" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=375031583]
+transform = Transform3D(1, -8.881783e-15, 2.3841821e-07, 5.515595e-08, 0.9728726, -0.23134106, -2.319506e-07, 0.23134108, 0.97287256, -5.8019073e-06, -0.09731233, -0.034448422)
+bone_name = "spine"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/Pelvis" unique_id=726699622]
+transform = Transform3D(1, 5.5155947e-08, -2.3195058e-07, -1.4210856e-14, 0.9728727, 0.23134108, 2.3841827e-07, -0.23134111, 0.9728727, 2.7894203e-09, 0.06220542, 0.02129851)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Pelvis/Area3D" unique_id=108443432]
+shape = SubResource("BoxShape3D_oiyrg")
+
+[node name="LeftThigh" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=2066645077]
+transform = Transform3D(0.9965233, 0.05759428, -0.06020082, 0.03524825, -0.94617456, -0.32172996, -0.075490564, 0.31849048, -0.9449117, 0.07999999, -0.04049196, -0.0070620105)
+bone_name = "thigh.L"
+bone_idx = 57
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftThigh" unique_id=1851234121]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftThigh/Area3D" unique_id=647025445]
+transform = Transform3D(0.99885184, -0.047104657, 0.008726535, 0.047106452, 0.99888986, 0, -0.008716848, 0.00041107612, 0.9999619, -3.3132732e-05, 0.2500427, -0.005460387)
+shape = SubResource("CapsuleShape3D_huaai")
+
+[node name="LeftShin" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1360806178]
+transform = Transform3D(0.9988317, -0.039258853, -0.02817637, -0.0072016967, -0.6974973, 0.71655035, -0.04778416, -0.7155068, -0.6969647, 0.10523189, -0.45500854, 0.13246784)
+bone_name = "shin.L"
+bone_idx = 58
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftShin" unique_id=1491595543]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftShin/Area3D" unique_id=75394372]
+transform = Transform3D(1, -0.0001391508, 6.4091204e-05, 0.00014137194, 0.9993493, -0.036068957, -5.903048e-05, 0.036068965, 0.9993493, -3.5479665e-05, 0.19848108, 0.0006350428)
+shape = SubResource("CapsuleShape3D_l7yma")
+
+[node name="LeftFoot" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1524470300]
+transform = Transform3D(-0.99799216, -0.022644205, 0.05915142, 0.04685054, -0.8923875, 0.44883025, 0.042622775, 0.45070112, 0.89165306, 0.08211279, -0.8693538, -0.19487019)
+bone_name = "toe.L"
+bone_idx = 60
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftFoot" unique_id=1055570804]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftFoot/Area3D" unique_id=1894612815]
+transform = Transform3D(1, 1.2630955e-17, -1.6555644e-12, -1.3010426e-18, 1, 0, 1.6555648e-12, 0, 1, -0.005393967, -0.04104436, 0.03348571)
+shape = SubResource("BoxShape3D_huaai")
+
+[node name="RightThigh" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1029547444]
+transform = Transform3D(0.9999637, 0.0008139305, -0.008478936, -0.0006690358, -0.98484355, -0.17344098, -0.008491627, 0.17344096, -0.9848038, -0.080000006, -0.040491957, -0.0070620086)
+bone_name = "thigh.R"
+bone_idx = 62
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightThigh" unique_id=1381020097]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightThigh/Area3D" unique_id=512466234]
+transform = Transform3D(0.99885017, 0.047213204, 0.008325006, -0.04721659, 0.9988847, 0.00021073195, -0.008305771, -0.00060356804, 0.99996537, -3.3132732e-05, 0.2500427, -0.005460387)
+shape = SubResource("CapsuleShape3D_ocaux")
+
+[node name="RightShin" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=302083241]
+transform = Transform3D(0.99999094, 0.0017063266, 0.0038887411, 0.0013612714, -0.9962012, 0.087065265, 0.004022454, -0.08705771, -0.9961913, -0.07964343, -0.47194934, 0.06892202)
+bone_name = "shin.R"
+bone_idx = 63
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightShin" unique_id=1567686973]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightShin/Area3D" unique_id=308865082]
+transform = Transform3D(1, -0.0001391508, 6.4091204e-05, 0.00014137194, 0.9993493, -0.036068957, -5.903048e-05, 0.036068965, 0.9993493, -3.5479665e-05, 0.19848108, 0.0006350428)
+shape = SubResource("CapsuleShape3D_oiyrg")
+
+[node name="RightFoot" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1800189009]
+transform = Transform3D(-0.99994135, -0.00831257, -0.0069396347, -0.006938096, -0.00021210313, 0.99997556, -0.008313738, 0.999962, 0.00015315413, -0.079202674, -0.96955144, 0.1252799)
+bone_name = "toe.R"
+bone_idx = 65
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightFoot" unique_id=474802580]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightFoot/Area3D" unique_id=1085084273]
+transform = Transform3D(1, 1.3010426e-18, -1.6555648e-12, -1.3010426e-18, 1, 2.0911365e-29, 1.6555648e-12, -1.8757405e-29, 1, 0.005, -0.041, 0.033)
+shape = SubResource("BoxShape3D_ocaux")
+
+[node name="RightUpperArm" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1880192476]
+transform = Transform3D(-0.9161149, -0.08439542, 0.39193255, 0.04622978, -0.99330866, -0.10583189, 0.39824167, -0.078835264, 0.9138864, -0.19205558, 0.41966408, -0.008516302)
+bone_name = "upper_arm.R"
+bone_idx = 31
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightUpperArm" unique_id=1894690442]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightUpperArm/Area3D" unique_id=884504196]
+transform = Transform3D(1, 0, 0, 1.937151e-07, 1, 0, 1.4901161e-07, -4.4703484e-08, 1, -0.00081305206, 0.13218692, -0.0043767244)
+shape = SubResource("CapsuleShape3D_wwr6l")
+
+[node name="RightForearm" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=590570503]
+transform = Transform3D(-0.89852315, 0.028259411, 0.43801567, 0.036957614, -0.9895104, 0.13965297, 0.43736756, 0.14166942, 0.88805354, -0.21603955, 0.13738051, -0.030920092)
+bone_name = "forearm.R"
+bone_idx = 32
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightForearm" unique_id=1896335603]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightForearm/Area3D" unique_id=208374229]
+transform = Transform3D(1.0000002, 1.4528632e-07, 0, 1.8253922e-07, 1, 7.1525574e-07, 1.1920929e-07, -8.940697e-08, 1.0000004, -0.0026454777, 0.110015586, 0.0012895912)
+shape = SubResource("CapsuleShape3D_s6yqu")
+
+[node name="RightHand" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1312861829]
+transform = Transform3D(-0.9044341, 0.06289709, 0.42195153, -0.015454965, -0.99325323, 0.11492951, 0.42633343, 0.0974249, 0.89930403, -0.20922533, -0.10122122, 0.0032408163)
+bone_name = "hand.R"
+bone_idx = 33
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/RightHand" unique_id=2117683203]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/RightHand/Area3D" unique_id=1468628922]
+transform = Transform3D(1, 3.7252876e-09, -2.0861611e-07, -3.7252876e-09, 1, -7.771557e-16, 2.0861611e-07, 1.5543108e-15, 1, 1.3394971e-08, 0.05469328, 0.009725318)
+shape = SubResource("SphereShape3D_oiyrg")
+
+[node name="LeftUpperArm" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1751539535]
+transform = Transform3D(-0.9161151, 0.084395126, -0.39193228, -0.04622957, -0.9933089, -0.10583155, -0.39824158, -0.078834936, 0.9138866, 0.19205558, 0.41966397, -0.008516297)
+bone_name = "upper_arm.L"
+bone_idx = 8
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftUpperArm" unique_id=1366540381]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftUpperArm/Area3D" unique_id=475243246]
+transform = Transform3D(1, 0, 0, 1.937151e-07, 1, 0, 1.4901161e-07, -4.4703484e-08, 1, 0.001, 0.132, -0.004)
+shape = SubResource("CapsuleShape3D_f3nrc")
+debug_color = Color(1, 1, 0, 0)
+
+[node name="LeftForearm" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1516998119]
+transform = Transform3D(-0.8985233, -0.028259866, -0.43801543, -0.036957107, -0.98951054, 0.13965325, -0.43736756, 0.14166953, 0.8880536, 0.2160394, 0.13738036, -0.030920021)
+bone_name = "forearm.L"
+bone_idx = 9
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftForearm" unique_id=1019797295]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftForearm/Area3D" unique_id=1255948702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003, 0.11, 0.001)
+shape = SubResource("CapsuleShape3D_ve5ew")
+
+[node name="LeftHand" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1715673243]
+transform = Transform3D(-0.9044341, -0.06289747, -0.42195126, 0.015455379, -0.99325323, 0.114929795, -0.4263334, 0.09742507, 0.89930403, 0.20922504, -0.1012214, 0.0032408945)
+bone_name = "hand.L"
+bone_idx = 10
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/LeftHand" unique_id=1214125491]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/LeftHand/Area3D" unique_id=1114804647]
+transform = Transform3D(1, 3.7252876e-09, -2.0861611e-07, -3.7252876e-09, 1, -7.771557e-16, 2.0861611e-07, 1.5543108e-15, 1, 1.3394971e-08, 0.05469328, 0.009725318)
+shape = SubResource("SphereShape3D_s6yqu")
+
+[node name="Neck" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=70927310]
+transform = Transform3D(1, -2.842171e-14, 9.5367403e-07, 2.461632e-07, 0.9661124, -0.25812083, -9.2135633e-07, 0.2581209, 0.9661124, -5.8019073e-06, 0.5266382, -0.019592091)
+bone_name = "spine.005"
+bone_idx = 5
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/Neck" unique_id=2072804831]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Neck/Area3D" unique_id=755182397]
+transform = Transform3D(1, 2.7813734e-08, -2.0678844e-07, -3.725333e-09, 0.99330235, 0.11554395, 2.0861586e-07, -0.11554395, 0.99330235, 8.9107116e-10, 0.010448147, -0.0040843124)
+shape = SubResource("CapsuleShape3D_uvh40")
+
+[node name="Head" type="BoneAttachment3D" parent="HumanoidModel/DamageModel" unique_id=1249345924]
+transform = Transform3D(0.83923596, -1.5195468e-08, 0.54376745, -1.3411045e-07, 0.9999997, 2.2351742e-07, -0.54376733, -2.0861626e-07, 0.8392357, -5.801907e-06, 0.5529745, -0.012555686)
+bone_name = "spine.006"
+bone_idx = 6
+use_external_skeleton = true
+external_skeleton = NodePath("../../rig/Skeleton3D")
+
+[node name="Area3D" type="Area3D" parent="HumanoidModel/DamageModel/Head" unique_id=2095278861]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Head/Area3D" unique_id=2051435098]
+transform = Transform3D(1, -2.9802322e-08, 3.8743028e-07, 2.980233e-08, 1, -1.4901161e-08, -3.8743028e-07, 1.4901174e-08, 1, 2.3283059e-10, 0.10746515, 0.014393302)
+shape = SubResource("CapsuleShape3D_rbku5")
+
+[node name="Resource" type="Node" parent="HumanoidModel" unique_id=1574197015 node_paths=PackedStringArray("DamageModel")]
+script = ExtResource("6_hax0n")
+DamageModel = NodePath("../DamageModel")
+
+[node name="Inventory" type="Node" parent="HumanoidModel" unique_id=252558865]
+
+[node name="WeaponInventory" type="Node" parent="HumanoidModel" unique_id=335920660 node_paths=PackedStringArray("Skeleton", "Humanoid")]
+script = ExtResource("7_t4otl")
+Skeleton = NodePath("../rig/Skeleton3D")
+Humanoid = NodePath("..")
+
+[node name="Animator" type="Node" parent="HumanoidModel" unique_id=596787115 node_paths=PackedStringArray("Humanoid", "Skeleton", "BodyAnimator", "LegsAnimator")]
+script = ExtResource("8_j2b1d")
+Humanoid = NodePath("..")
+Skeleton = NodePath("../rig/Skeleton3D")
+BodyAnimator = NodePath("Body")
+LegsAnimator = NodePath("Legs")
+
+[node name="Legs" type="AnimationPlayer" parent="HumanoidModel/Animator" unique_id=1760280280]
+root_node = NodePath("../..")
+libraries/human_legs_animation_library = ExtResource("9_cs1tg")
+
+[node name="Body" type="AnimationPlayer" parent="HumanoidModel/Animator" unique_id=1102484806]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_a6b7o")
+libraries/human_body_animation_library = ExtResource("11_giy8y")
+
+[node name="LegStates" type="Node" parent="HumanoidModel" unique_id=1262238226 node_paths=PackedStringArray("Humanoid")]
+script = ExtResource("12_fdfoy")
+Humanoid = NodePath("..")
+
+[node name="Walkable" type="Node" parent="HumanoidModel/LegStates" unique_id=1688279545]
+script = ExtResource("13_hhpqf")
+
+[node name="States" type="Node" parent="HumanoidModel" unique_id=1456898653 node_paths=PackedStringArray("Humanoid", "Skeleton", "Animator", "Combat", "Resource", "StateData", "HumanoidLegs")]
+script = ExtResource("14_g5jhy")
+Humanoid = NodePath("..")
+Skeleton = NodePath("../rig/Skeleton3D")
+Animator = NodePath("../Animator")
+Combat = NodePath("../Combat")
+Resource = NodePath("../Resource")
+StateData = NodePath("StateData")
+HumanoidLegs = NodePath("../LegStates")
+
+[node name="StateData" type="Node" parent="HumanoidModel/States" unique_id=700265282 node_paths=PackedStringArray("StateDatabase")]
+script = ExtResource("15_holxr")
+StateDatabase = NodePath("StateDatabase")
+
+[node name="StateDatabase" type="AnimationPlayer" parent="HumanoidModel/States/StateData" unique_id=1439768977 node_paths=PackedStringArray("Humanoid")]
+libraries/ = SubResource("AnimationLibrary_7oclm")
+script = ExtResource("16_mx1m4")
+Humanoid = NodePath("../../..")
+
+[node name="Airborne" type="Node" parent="HumanoidModel/States" unique_id=815679036]
+script = ExtResource("17_4gjji")
+Priority = 10
+Animation = "idle"
+BackendAnimation = "idle_params"
+StateName = "airborne"
+CanBeLongerThanAnimation = true
+
+[node name="Idle" type="Node" parent="HumanoidModel/States" unique_id=1511416919]
+script = ExtResource("18_u2ulf")
+Priority = 1
+Animation = "idle"
+BackendAnimation = "idle_params"
+StateName = "idle"
+BodyRotationSpeed = 2.0
+
+[node name="Walk" type="Node" parent="HumanoidModel/States" unique_id=2034418787]
+script = ExtResource("19_6e8lb")
+AccelerationSpeed = 0.4
+Priority = 2
+Animation = "walk_front"
+BackendAnimation = "walk_params"
+StateName = "walk"
+BodyRotationSpeed = 8.0
+
+[node name="Jump" type="Node" parent="HumanoidModel/States" unique_id=1200976357]
+script = ExtResource("20_2gdjj")
+Priority = 3
+Animation = "idle"
+BackendAnimation = "idle_params"
+StateName = "jump"
+CanBeLongerThanAnimation = true
+StaminaCost = 11.0
+FatigueCost = 0.5
+
+[node name="Interact" type="Node" parent="HumanoidModel/States" unique_id=1412447246]
+script = ExtResource("21_sc3ue")
+Priority = 2
+Animation = "idle"
+BackendAnimation = "idle_params"
+StateName = "interact"
+
+[node name="UnsheatheOneHandedPrimary" type="Node" parent="HumanoidModel/States" unique_id=679022054]
+script = ExtResource("22_lxlsd")
+Priority = 3
+Animation = "unsheathe_one_handed"
+BackendAnimation = "unsheathe_one_handed_params"
+StateName = "unsheathe_one_handed"
+
+[node name="RaiseSwordOneHanded" type="Node" parent="HumanoidModel/States" unique_id=1573301427 node_paths=PackedStringArray("LegBehaviour")]
+script = ExtResource("23_ha2mi")
+LegBehaviour = NodePath("../../LegStates/Walkable")
+Priority = 3
+AnimateFullBody = false
+Animation = "slash_prepare_one_handed"
+BackendAnimation = "slash_prepare_one_handed_params"
+StateName = "slash_prepare_one_handed"
+BodyRotationSpeed = 10.0
+CanBeLongerThanAnimation = true
+
+[node name="OneHandedSlashLeft" type="Node" parent="HumanoidModel/States" unique_id=1884399518 node_paths=PackedStringArray("LegBehaviour")]
+script = ExtResource("24_apa73")
+LegBehaviour = NodePath("../../LegStates/Walkable")
+Priority = 4
+AnimateFullBody = false
+Animation = "slash1_one_handed"
+BackendAnimation = "slash1_one_handed_params"
+StateName = "slash1_one_handed"
+BodyRotationSpeed = 10.0
+
+[node name="OneHandedSlashRight" type="Node" parent="HumanoidModel/States/OneHandedSlashLeft" unique_id=1804846095 node_paths=PackedStringArray("LegBehaviour", "BaseState")]
+script = ExtResource("25_74r1k")
+LegBehaviour = NodePath("../../../LegStates/Walkable")
+BaseState = NodePath("..")
+Priority = 4
+AnimateFullBody = false
+Animation = "slash2_one_handed"
+BackendAnimation = "slash2_one_handed_params"
+StateName = "slash2_one_handed"
+BodyRotationSpeed = 10.0
+
+[node name="OneHandedSlashDown" type="Node" parent="HumanoidModel/States" unique_id=92033248 node_paths=PackedStringArray("LegBehaviour")]
+script = ExtResource("26_8svfe")
+LegBehaviour = NodePath("../../LegStates/Walkable")
+Priority = 5
+AnimateFullBody = false
+Animation = "slash3_one_handed"
+BackendAnimation = "slash3_one_handed_params"
+StateName = "slash3_one_handed"
+BodyRotationSpeed = 10.0
+
+[node name="OneHandedThrust" type="Node" parent="HumanoidModel/States" unique_id=1696307601 node_paths=PackedStringArray("LegBehaviour")]
+script = ExtResource("27_2a3c5")
+LegBehaviour = NodePath("../../LegStates/Walkable")
+Priority = 4
+AnimateFullBody = false
+Animation = "thrust_one_handed"
+BackendAnimation = "thrust_one_handed_params"
+StateName = "thrust_one_handed"
+BodyRotationSpeed = 10.0
+
+[node name="Dead" type="Node" parent="HumanoidModel/States" unique_id=1056900791]
+script = ExtResource("28_42b1b")
+Priority = 500
+Animation = "idle"
+BackendAnimation = "idle_params"
+StateName = "dead"
+CanBeLongerThanAnimation = true
 
 [node name="CharacterModel" parent="HumanoidModel" unique_id=410224754 node_paths=PackedStringArray("Humanoid") instance=ExtResource("11_d2wvv")]
 Humanoid = NodePath("..")
@@ -35,7 +1626,7 @@ Humanoid = NodePath("../HumanoidModel")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=1065742567 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.088412255, 0)
-shape = SubResource("CapsuleShape3D_g2els")
+shape = SubResource("CapsuleShape3D_h7ic4")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=86233353 node_paths=PackedStringArray("Player", "CharacterNode", "Camera", "Humanoid") groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63, 0)
@@ -52,7 +1643,6 @@ Humanoid = NodePath("../HumanoidModel")
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
 cull_mask = 1048573
 fov = 60.0
-near = 0.15
 
 [node name="ViewportModel" parent="." unique_id=1597764046 node_paths=PackedStringArray("Humanoid", "Player", "MainCamera") instance=ExtResource("8_smehm")]
 Humanoid = NodePath("../HumanoidModel")

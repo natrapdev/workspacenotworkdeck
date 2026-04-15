@@ -25,25 +25,47 @@ public partial class InputGatherer : Node
 		base._Ready();
 	}
 
-	public InputPackage GatherInput()
+	protected List<string> _actions = new(5);
+	protected List<string> _combatActions = new(5);
+	protected Vector2 _inputDirection;
+
+	public virtual InputPackage GatherInput()
 	{
-		List<string> actions = [];
-		List<string> combatActions = [];
+		_actions.Clear();
+		_combatActions.Clear();
 
-		actions.Add("idle");
+		GetInputs();
 
-		Vector2 inputDirection = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
+		return OnInputGathered();
+	}
 
-		if (inputDirection != Vector2.Zero)
+	private InputPackage OnInputGathered()
+	{
+		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
+		PriorityQueue<string, int> sortedCombatActions = new(new DescendingComparer());
+
+		SortActions(_actions, sortedActions);
+		SortCombatActions(_combatActions, sortedCombatActions);
+
+		return new InputPackage(sortedActions, sortedCombatActions, _inputDirection);
+	}
+
+	protected virtual void GetInputs()
+	{
+		_actions.Add("idle");
+
+		_inputDirection = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
+
+		if (_inputDirection != Vector2.Zero)
 		{
-			actions.Add("walk");
+			_actions.Add("walk");
 		}
 
 		if (Input.IsActionJustPressed("jump"))
 		{
-			if (actions.Contains("walk"))
+			if (_actions.Contains("walk"))
 			{
-				actions.Add("jump");
+				_actions.Add("jump");
 			}
 		}
 
@@ -51,51 +73,43 @@ public partial class InputGatherer : Node
 		{
 			if (Humanoid.Resource.ItemFocus is not null)
 			{
-				actions.Add("interact");
+				_actions.Add("interact");
 			}
 		}
 
 		if (Input.IsActionJustPressed("unsheathe1"))
 		{
-			combatActions.Add("unsheathe1");
+			_combatActions.Add("unsheathe1");
 		}
 
 		if (Input.IsActionPressed("attack1"))
 		{
 			if (Humanoid.CurrentState.StateName.Contains("slash1"))
 			{
-				combatActions.Add("attack1");
+				_combatActions.Add("attack1");
 			}
 			else
 			{
-				combatActions.Add("slash_prepare");
+				_combatActions.Add("slash_prepare");
 			}
 		}
 
 		if (Input.IsActionJustReleased("attack1"))
 		{
-			combatActions.Add("attack1");
+			_combatActions.Add("attack1");
 		}
 
 		if (Input.IsActionJustPressed("attack2"))
 		{
-			if (Humanoid.CurrentState.StateName.Contains("prepare") || combatActions.Contains("slash_prepare"))
+			if (Humanoid.CurrentState.StateName.Contains("prepare") || _combatActions.Contains("slash_prepare"))
 			{
-				combatActions.Add("attack3");
+				_combatActions.Add("attack3");
 			}
 			else
 			{
-				combatActions.Add("attack2");
+				_combatActions.Add("attack2");
 			}
 		}
-
-		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
-		PriorityQueue<string, int> sortedCombatActions = new(new DescendingComparer());
-
-		SortActions(actions, sortedActions);
-		SortCombatActions(combatActions, sortedCombatActions);
-
-		return new InputPackage(sortedActions, sortedCombatActions, inputDirection);
 	}
 
 	private void SortActions(List<string> actionNames, PriorityQueue<State, int> sorted)

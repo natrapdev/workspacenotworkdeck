@@ -75,7 +75,7 @@ public partial class HumanoidStates : Node
 		if (state.NextState is not null)
 		{
 			GD.Print($"{state.StateName}'s next state: {state.NextState.StateName}");
-			SetProperties(baseState, state.NextState, count++);
+			SetProperties(baseState, state.NextState, ++count);
 		}
 	}
 

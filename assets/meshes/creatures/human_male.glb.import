@@ -22,26 +22,26 @@ nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
-meshes/generate_lods=true
+meshes/generate_lods=false
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
 meshes/force_disable_compression=false
 skins/use_named_skins=true
-animation/import=true
+animation/import=false
 animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 materials/extract=0
-materials/extract_format=0
+materials/extract_format=1
 materials/extract_path=""
 _subresources={
 "animations": {
 "idle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/idle.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/idle.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://bpw5blnfv36mo",
 "settings/loop_mode": 1,
@@ -4153,7 +4153,7 @@ _subresources={
 },
 "slash1_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/slash1_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/slash1_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://dw6k00y3l4otg",
 "settings/loop_mode": 0,
@@ -6209,7 +6209,7 @@ _subresources={
 },
 "slash2_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://slash2_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/slash2_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://dohr5ultohfs6",
 "settings/loop_mode": 0,
@@ -8265,7 +8265,7 @@ _subresources={
 },
 "slash_prepare_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/slash_prepare_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/slash_prepare_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://cd62638u2l2xx",
 "settings/loop_mode": 0,
@@ -10321,7 +10321,7 @@ _subresources={
 },
 "strafe_left": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/strafe_left.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/strafe_left.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://dy1gxme3y6fc1",
 "settings/loop_mode": 1,
@@ -12377,7 +12377,7 @@ _subresources={
 },
 "strafe_left_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/strafe_left_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/strafe_left_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://rnp000ww0m1x",
 "settings/loop_mode": 1,
@@ -14433,7 +14433,7 @@ _subresources={
 },
 "strafe_right": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/strafe_right.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/strafe_right.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://btuqb1yhnpcn6",
 "settings/loop_mode": 1,
@@ -16489,7 +16489,7 @@ _subresources={
 },
 "strafe_right_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/strafe_right_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/strafe_right_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://d2yljcs1w0o3k",
 "settings/loop_mode": 1,
@@ -18545,7 +18545,7 @@ _subresources={
 },
 "thrust_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/thrust_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/thrust_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://djpu0vq4grm6w",
 "settings/loop_mode": 1,
@@ -20601,7 +20601,7 @@ _subresources={
 },
 "unsheathe_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/unsheathe_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/unsheathe_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://b10qa2yhcg7c6",
 "settings/loop_mode": 0,
@@ -22657,7 +22657,7 @@ _subresources={
 },
 "walk_back": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/walk_back.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/walk_back.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://djt5cd62kyakj",
 "settings/loop_mode": 1,
@@ -24713,7 +24713,7 @@ _subresources={
 },
 "walk_back_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/walk_back_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/walk_back_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://k7m3kxb8xcfo",
 "settings/loop_mode": 1,
@@ -26769,7 +26769,7 @@ _subresources={
 },
 "walk_front": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/walk_front.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/walk_front.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://dcsqisdcdmgx1",
 "settings/loop_mode": 1,
@@ -28825,7 +28825,7 @@ _subresources={
 },
 "walk_front_one_handed": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/walk_front_one_handed.res",
+"save_to_file/fallback_path": "res://assets/animations/human/body/walk_front_one_handed.res",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://cn0l3xw2l77up",
 "settings/loop_mode": 0,

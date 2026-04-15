@@ -37,6 +37,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8168747, 0)
 
 [node name="Fake" type="RigidBody3D" parent="." index="3" unique_id=1825555479]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
+collision_layer = 16
 mass = 2.5
 
 [node name="FakeMesh" type="MeshInstance3D" parent="Fake" index="0" unique_id=1395879281]

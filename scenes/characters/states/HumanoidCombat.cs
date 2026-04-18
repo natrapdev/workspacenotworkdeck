@@ -1,6 +1,8 @@
 using Godot;
 using MyFirst3DGame.Items;
 using MyFirst3DGame.scenes.characters.humanoid;
+using MyFirst3DGame.scenes.characters.humanoid.injury;
+using MyFirst3DGame.scenes.characters.humanoid.injury.data;
 using System.Threading.Tasks;
 using Godot.Collections;
 
@@ -13,11 +15,14 @@ public partial class HumanoidCombat : Node3D
 
     private Array<Rid> _exclusionList;
     private Array<Rid> _tempExclusionList;
+    
+    private InjurySystemManager _injurySystem;
 
     public override void _Ready()
     {
         Humanoid = GetParent<HumanoidModel>();
         _physicsSpaceState = GetWorld3D().DirectSpaceState;
+        _injurySystem = Humanoid.InjurySystem;
         BuildExclusionList();
     }
 
@@ -127,15 +132,31 @@ public partial class HumanoidCombat : Node3D
 
             if (result.Count > 0)
             {
-                // Return immediately on first hit
-                return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                // Collect hit information
+                HitInfo hitInfo = CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                
+                // Process damage through injury system if available
+                if (_injurySystem != null && _injurySystem.IsInitialized)
+                {
+                    DamageProcessingResult damageResult = await _injurySystem.ProcessDamageAsync(hitInfo);
+                    
+                    // Determine if animation should continue based on damage result
+                    if (damageResult.AnimationControl == AnimationControlResult.Stop)
+                    {
+                        // Stop the attack animation
+                        // This would need to be implemented in the state system
+                        GD.Print($"Attack stopped - insufficient cut depth on {damageResult.DamageResult.LimbName}");
+                    }
+                }
+                
+                return hitInfo;
             }
         }
 
         return new HitInfo();
     }
 
-    public HitInfo ScanForHitsStab()
+    public async Task<HitInfo> ScanForHitsStab()
     {
         Weapon currentWeapon = Humanoid.CurrentWeapon;
         if (currentWeapon == null) return new HitInfo();
@@ -155,7 +176,28 @@ public partial class HumanoidCombat : Node3D
 
         var result = _physicsSpaceState.IntersectRay(queryParams);
 
-        return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+        if (result.Count > 0)
+        {
+            // Collect hit information
+            HitInfo hitInfo = CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+            
+            // Process damage through injury system if available
+            if (_injurySystem != null && _injurySystem.IsInitialized)
+            {
+                DamageProcessingResult damageResult = await _injurySystem.ProcessDamageAsync(hitInfo);
+                
+                // Determine if animation should continue based on damage result
+                if (damageResult.AnimationControl == AnimationControlResult.Stop)
+                {
+                    // Stop the attack animation
+                    GD.Print($"Attack stopped - insufficient cut depth on {damageResult.DamageResult.LimbName}");
+                }
+            }
+            
+            return hitInfo;
+        }
+
+        return new HitInfo();
     }
 
     private static HitInfo CollectHitInformation(

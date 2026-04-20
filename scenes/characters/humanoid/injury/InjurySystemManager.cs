@@ -109,8 +109,8 @@ public partial class InjurySystemManager : Node, IDamageReceiver
         
         // Get references
         _damageModel = humanoid.GetNode<DamageModel>("DamageModel");
-        _skeleton = humanoid.GetNode<HumanoidSkeleton>("Skeleton");
-        _resource = humanoid.GetNode<HumanoidResource>("Resource");
+        _skeleton = (HumanoidSkeleton)humanoid.Skeleton;
+        _resource = humanoid.Resource;
         
         if (_damageModel == null || _skeleton == null || _resource == null)
         {

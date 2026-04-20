@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Godot;
 
 namespace MyFirst3DGame.scenes.characters.humanoid.injury.data;
 
@@ -6,33 +7,21 @@ namespace MyFirst3DGame.scenes.characters.humanoid.injury.data;
 /// Represents a node in the blood circulation graph.
 /// Each limb is a node, connected to parent and child limbs.
 /// </summary>
-public struct CirculationNode
+public struct CirculationNode(
+    string limbName,
+    int parentIndex,
+    float bloodVolume,
+    float maxBloodVolume,
+    int distanceFromHeart)
 {
-    public string LimbName;
-    public int ParentIndex; // -1 for root (thorax)
-    public int ChildCount;
-    public float BloodVolume;
-    public float MaxBloodVolume;
-    public float BleedRate;
-    public int DistanceFromHeart; // In circulation path steps
-    public float BloodFlowRate; // Blood flow through this node
-    
-    public CirculationNode(
-        string limbName,
-        int parentIndex,
-        float bloodVolume,
-        float maxBloodVolume,
-        int distanceFromHeart)
-    {
-        LimbName = limbName;
-        ParentIndex = parentIndex;
-        ChildCount = 0;
-        BloodVolume = bloodVolume;
-        MaxBloodVolume = maxBloodVolume;
-        BleedRate = 0f;
-        DistanceFromHeart = distanceFromHeart;
-        BloodFlowRate = 0f;
-    }
+    public string LimbName = limbName;
+    public int ParentIndex = parentIndex; // -1 for root (thorax)
+    public int ChildCount = 0;
+    public float BloodVolume = bloodVolume;
+    public float MaxBloodVolume = maxBloodVolume;
+    public float BleedRate = 0f;
+    public int DistanceFromHeart = distanceFromHeart; // In circulation path steps
+    public float BloodFlowRate = 0f; // Blood flow through this node
 }
 
 /// <summary>

@@ -25,7 +25,7 @@ public struct DamageRequest
         TargetLimb = targetLimb;
         LimbIndex = limbIndex;
         Token = token;
-        RequestTime = Time.GetUnixTimeFromSystem();
+        RequestTime = (float)Time.GetUnixTimeFromSystem();
     }
 }
 

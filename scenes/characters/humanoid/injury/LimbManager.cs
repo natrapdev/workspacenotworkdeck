@@ -160,7 +160,7 @@ public partial class LimbManager : Node
             return new DismembermentResult(false, request.LimbName, null, Vector3.Zero);
         }
         
-        ref LimbData limb = ref _limbData[limbIndex];
+        LimbData limb = _limbData[limbIndex];
         
         if (!limb.IsAttached)
         {
@@ -187,7 +187,7 @@ public partial class LimbManager : Node
         // Update limb state
         limb.IsAttached = false;
         limb.PhysicsBody = detachedBody;
-        limb.DetachTime = Time.GetUnixTimeFromSystem();
+        limb.DetachTime = (float)Time.GetUnixTimeFromSystem();
         _limbData[limbIndex] = limb;
         
         // Add to detached limbs list for cleanup
@@ -225,7 +225,7 @@ public partial class LimbManager : Node
         int index = GetLimbIndex(limbName);
         if (index < 0) return false;
         
-        ref LimbData limb = ref _limbData[index];
+        LimbData limb = _limbData[index];
         
         // Cannot dismember thorax (it's the core)
         if (limb.Name.Equals("thorax", StringComparison.OrdinalIgnoreCase)) return false;
@@ -244,20 +244,17 @@ public partial class LimbManager : Node
         if (limb.VisualNode == null) return null;
         
         DismembermentConfig config = DismembermentConfigs.GetConfigForLimb(limb.Name);
-        
+
         // Create rigid body
         RigidBody3D rigidBody = new RigidBody3D
         {
             Name = $"Detached_{limb.Name}",
             Mass = config.DetachedLimbMass,
-            Friction = config.DetachedLimbFriction,
-            Bounce = config.DetachedLimbBounce
+            // Set initial position and rotation
+            GlobalPosition = request.DetachPoint,
+            GlobalRotation = limb.VisualNode.GlobalRotation
         };
-        
-        // Set initial position and rotation
-        rigidBody.GlobalPosition = request.DetachPoint;
-        rigidBody.GlobalRotation = limb.VisualNode.GlobalRotation;
-        
+
         // Create collision shape
         if (limb.VisualNode.GetChild(0) is Node3D childNode && childNode.GetChild(0) is CollisionShape3D collisionShape)
         {
@@ -269,13 +266,13 @@ public partial class LimbManager : Node
         }
         
         // Create visual mesh
-        if (limb.VisualNode.GetChild(0) is Node3D childNode)
+        if (limb.VisualNode.GetChild(0) is Node3D childNode3d)
         {
-            foreach (Node child in childNode.GetChildren())
+            foreach (Node child in childNode3d.GetChildren())
             {
                 if (child is MeshInstance3D meshInstance)
                 {
-                    MeshInstance3D newMesh = new MeshInstance3D
+                    MeshInstance3D newMesh = new()
                     {
                         Mesh = meshInstance.Mesh,
                         MaterialOverride = meshInstance.MaterialOverride
@@ -321,7 +318,8 @@ public partial class LimbManager : Node
         if (_skeleton3D != null && limb.BoneIndex >= 0)
         {
             // Scale bone to zero to hide it
-            _skeleton3D.SetBoneScale(limb.BoneIndex, Vector3.Zero);
+            // _skeleton3D.SetBoneScale(limb.BoneIndex, Vector3.Zero);
+            _skeleton3D.SetBoneEnabled(limb.BoneIndex, false);
         }
     }
     
@@ -332,7 +330,7 @@ public partial class LimbManager : Node
     {
         for (int i = 0; i < _detachedLimbs.Count; i++)
         {
-            ref DetachedLimbState state = ref _detachedLimbs[i];
+            DetachedLimbState state = _detachedLimbs[i];
             
             if (state.PhysicsBody != null)
             {
@@ -349,7 +347,7 @@ public partial class LimbManager : Node
     {
         for (int i = _detachedLimbs.Count - 1; i >= 0; i--)
         {
-            ref DetachedLimbState state = ref _detachedLimbs[i];
+            DetachedLimbState state = _detachedLimbs[i];
             
             if (state.ShouldRemove())
             {
@@ -375,13 +373,13 @@ public partial class LimbManager : Node
         if (boneIndex >= 0) return boneIndex;
         
         // Try with common variations
-        string[] variations = {
+        string[] variations = [
             limbName,
             limbName.Replace(" ", "."),
             limbName.Replace(" ", "_"),
             $"mixamorig:{limbName}",
             $"mixamorig:{limbName.Replace(" ", ".")}"
-        };
+        ];
         
         foreach (string variation in variations)
         {

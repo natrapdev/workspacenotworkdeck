@@ -1,6 +1,9 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.humanoid.injury.data;
+using MyFirst3DGame.scenes.characters.humanoid;
+using MyFirst3DGame.scenes.characters.states;
 using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MyFirst3DGame.scenes.characters.humanoid.injury;
 
@@ -138,7 +141,7 @@ public partial class DeathSystem : Node
         // Update death state
         _deathState.IsDead = true;
         _deathState.CauseOfDeath = cause;
-        _deathState.TimeOfDeath = Time.GetUnixTimeFromSystem();
+        _deathState.TimeOfDeath = (float)Time.GetUnixTimeFromSystem();
         
         // Trigger ragdoll
         if (_skeleton != null)
@@ -203,7 +206,7 @@ public partial class DeathSystem : Node
 public struct DeathState
 {
     public bool IsDead;
-    public DeathCondition? CauseOfDeath;
+    public DeathSystem.DeathCondition? CauseOfDeath;
     public float TimeOfDeath;
     
     public DeathState()

@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cv7ia4ybeovtx" path="res://scenes/characters/humanoid/DamageModel.cs" id="5_jc3p3"]
 [ext_resource type="Script" uid="uid://cmf08qfairhyi" path="res://scenes/characters/humanoid/IkController.cs" id="5_tuyoq"]
 [ext_resource type="Script" uid="uid://noe1jkg8jfrl" path="res://scenes/characters/states/HumanoidResource.cs" id="6_hax0n"]
+[ext_resource type="Script" uid="uid://d37uohbcg1vle" path="res://scenes/characters/humanoid/injury/InjurySystemManager.cs" id="6_md1ol"]
 [ext_resource type="Script" uid="uid://buq8o5wmomdff" path="res://scenes/characters/humanoid/WeaponInventory.cs" id="7_t4otl"]
 [ext_resource type="Script" uid="uid://oalu3xufwwia" path="res://scenes/characters/humanoid/Animator.cs" id="8_j2b1d"]
 [ext_resource type="PackedScene" uid="uid://ccfi3sqc0x6fg" path="res://scenes/player/viewport_model.tscn" id="8_smehm"]
@@ -1107,7 +1108,7 @@ InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
 Viewport = NodePath("ViewportModel")
 
-[node name="HumanoidModel" type="Node3D" parent="." unique_id=728337583 node_paths=PackedStringArray("Skeleton", "Animator", "Combat", "Resource", "HeadLookAtTarget", "HumanoidLegs", "StateContainer", "WeaponInventory")]
+[node name="HumanoidModel" type="Node3D" parent="." unique_id=728337583 node_paths=PackedStringArray("Skeleton", "Animator", "Combat", "Resource", "HeadLookAtTarget", "HumanoidLegs", "InjurySystem", "StateContainer", "WeaponInventory")]
 script = ExtResource("2_487ah")
 Skeleton = NodePath("rig/Skeleton3D")
 Animator = NodePath("Animator")
@@ -1115,6 +1116,7 @@ Combat = NodePath("Combat")
 Resource = NodePath("Resource")
 HeadLookAtTarget = NodePath("HeadLookAtTarget")
 HumanoidLegs = NodePath("LegStates")
+InjurySystem = NodePath("InjurySystemManager")
 StateContainer = NodePath("States")
 WeaponInventory = NodePath("WeaponInventory")
 
@@ -1450,6 +1452,9 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HumanoidModel/DamageModel/Head/Area3D" unique_id=2051435098]
 transform = Transform3D(1, -2.9802322e-08, 3.8743028e-07, 2.980233e-08, 1, -1.4901161e-08, -3.8743028e-07, 1.4901174e-08, 1, 2.3283059e-10, 0.10746515, 0.014393302)
 shape = SubResource("CapsuleShape3D_rbku5")
+
+[node name="InjurySystemManager" type="Node" parent="HumanoidModel" unique_id=18263524]
+script = ExtResource("6_md1ol")
 
 [node name="Resource" type="Node" parent="HumanoidModel" unique_id=1574197015 node_paths=PackedStringArray("DamageModel")]
 script = ExtResource("6_hax0n")

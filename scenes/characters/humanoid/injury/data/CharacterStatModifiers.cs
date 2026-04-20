@@ -1,3 +1,6 @@
+using System;
+using Godot;
+
 namespace MyFirst3DGame.scenes.characters.humanoid.injury.data;
 
 /// <summary>
@@ -117,7 +120,7 @@ public struct CharacterStatModifiers
     /// </summary>
     public void Clamp(float min = 0.1f, float max = 2.0f)
     {
-        WalkSpeedMultiplier = Mathf.Clamp(WalkSpeedMultiplier, min, max);
+        WalkSpeedMultiplier = Math.Clamp(WalkSpeedMultiplier, min, max);
         AttackSpeedMultiplier = Mathf.Clamp(AttackSpeedMultiplier, min, max);
         AttackStrengthMultiplier = Mathf.Clamp(AttackStrengthMultiplier, min, max);
         StaminaRegenMultiplier = Mathf.Clamp(StaminaRegenMultiplier, min, max);

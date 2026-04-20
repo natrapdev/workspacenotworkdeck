@@ -32,7 +32,7 @@ public struct InjuryData
         HitPosition = hitPosition;
         HitNormal = hitNormal;
         CutDepth = cutDepth;
-        TimeOfInjury = Time.GetUnixTimeFromSystem();
+        TimeOfInjury = (float)Time.GetUnixTimeFromSystem();
     }
 }
 

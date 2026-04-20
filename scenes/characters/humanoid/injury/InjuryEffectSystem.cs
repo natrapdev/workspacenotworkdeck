@@ -1,6 +1,8 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.humanoid.injury.data;
 using MyFirst3DGame.scenes.characters.humanoid.injury.interfaces;
+using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.characters.humanoid;
 using System;
 using System.Collections.Generic;
 
@@ -82,7 +84,7 @@ public partial class InjuryEffectSystem : Node
     /// <summary>
     /// Updates stat modifiers based on current injuries.
     /// </summary>
-    private void UpdateStatModifiers()
+    public void UpdateStatModifiers()
     {
         // Start with fresh modifiers
         CharacterStatModifiers modifiers = new CharacterStatModifiers();

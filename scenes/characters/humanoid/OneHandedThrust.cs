@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using MyFirst3DGame.scenes.characters.humanoid;
 using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;
@@ -16,9 +17,29 @@ public partial class OneHandedThrust : State, IPartialBodyState
         LegsUpdate(input, delta);
     }
 
+    // public override async Task<HitInfo> RightWeaponHitScan()
+    // {
+    //     HitInfo hitInfo = await Combat.ScanForHitsStab();
+    //     return hitInfo;
+    // }
+
     public override async Task<HitInfo> RightWeaponHitScan()
     {
-        return await Task.FromResult(Combat.ScanForHitsStab());
+        HitInfo hitInfo = await Combat.ScanForHitsStab();
+
+        if (hitInfo.HitNode is not null)
+        {
+            if (hitInfo.HitNode.GetParent() is BoneAttachment3D hitBone)
+            {
+                var parent = hitBone.GetParent();
+
+                if (parent is DamageModel damageModel)
+                {
+                    damageModel.Hit(hitInfo);
+                }
+            }
+        }
+        return hitInfo;
     }
 
     public override void OnEnter()

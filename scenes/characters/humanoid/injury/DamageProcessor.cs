@@ -1,8 +1,10 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.humanoid.injury.data;
 using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.Items;
 using System;
 using System.Collections.Generic;
+using Godot.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@ namespace MyFirst3DGame.scenes.characters.humanoid.injury;
 public partial class DamageProcessor : Node
 {
     private readonly Queue<DamageRequest> _damageRequestQueue = new();
-    private readonly List<Task<DamageResult>> _activeTasks = new();
+    private readonly List<Task<DamageResult>> _activeTasks = [];
     private readonly object _queueLock = new();
     
     private CirculationSystem _circulationSystem;
@@ -131,9 +133,9 @@ public partial class DamageProcessor : Node
     /// <summary>
     /// Processes a single damage request.
     /// </summary>
-    private async Task<DamageResult> ProcessDamageRequest(DamageRequest request)
+    public async Task<DamageResult> ProcessDamageRequest(DamageRequest request)
     {
-        float startTime = Time.GetUnixTimeFromSystem();
+        float startTime = (float)Time.GetUnixTimeFromSystem();
         
         if (request.Token.IsCancellationRequested)
         {
@@ -179,7 +181,7 @@ public partial class DamageProcessor : Node
             // Apply injury to circulation system
             _circulationSystem.AddInjury(request.TargetLimb.Name, injury);
             
-            float processingTime = Time.GetUnixTimeFromSystem() - startTime;
+            float processingTime = (float)Time.GetUnixTimeFromSystem() - startTime;
             
             DamageResult result = new DamageResult(
                 success: true,
@@ -375,7 +377,7 @@ public partial class DamageProcessor : Node
         return Mathf.Abs(impactVelocity * Mathf.Cos(impactAngle));
     }
     
-    private static float GetPeriforation(float workingLength, float workingDensity, float targetDensity)
+    private static float GetPerforation(float workingLength, float workingDensity, float targetDensity)
     {
         return workingLength * (workingDensity / targetDensity);
     }

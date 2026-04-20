@@ -5,80 +5,52 @@ namespace MyFirst3DGame.scenes.characters.humanoid.injury.data;
 /// <summary>
 /// Dismemberment request data.
 /// </summary>
-public struct DismembermentRequest
+public struct DismembermentRequest(
+    string limbName,
+    Vector3 detachPoint,
+    Vector3 detachForce,
+    Vector3 detachTorque)
 {
-    public string LimbName;
-    public Vector3 DetachPoint;
-    public Vector3 DetachForce;
-    public Vector3 DetachTorque;
-    public float DetachTime;
-    
-    public DismembermentRequest(
-        string limbName,
-        Vector3 detachPoint,
-        Vector3 detachForce,
-        Vector3 detachTorque)
-    {
-        LimbName = limbName;
-        DetachPoint = detachPoint;
-        DetachForce = detachForce;
-        DetachTorque = detachTorque;
-        DetachTime = Time.GetUnixTimeFromSystem();
-    }
+    public string LimbName = limbName;
+    public Vector3 DetachPoint = detachPoint;
+    public Vector3 DetachForce = detachForce;
+    public Vector3 DetachTorque = detachTorque;
+    public float DetachTime = (float)Time.GetUnixTimeFromSystem();
 }
 
 /// <summary>
 /// Dismemberment result data.
 /// </summary>
-public struct DismembermentResult
+public struct DismembermentResult(
+    bool success,
+    string limbName,
+    RigidBody3D detachedBody,
+    Vector3 detachPosition)
 {
-    public bool Success;
-    public string LimbName;
-    public RigidBody3D DetachedBody;
-    public Vector3 DetachPosition;
-    public float DetachTime;
-    
-    public DismembermentResult(
-        bool success,
-        string limbName,
-        RigidBody3D detachedBody,
-        Vector3 detachPosition)
-    {
-        Success = success;
-        LimbName = limbName;
-        DetachedBody = detachedBody;
-        DetachPosition = detachPosition;
-        DetachTime = Time.GetUnixTimeFromSystem();
-    }
+    public bool Success = success;
+    public string LimbName = limbName;
+    public RigidBody3D DetachedBody = detachedBody;
+    public Vector3 DetachPosition = detachPosition;
+    public float DetachTime = (float)Time.GetUnixTimeFromSystem();
 }
 
 /// <summary>
 /// Dismemberment configuration for a limb type.
 /// </summary>
-public struct DismembermentConfig
+public struct DismembermentConfig(
+    float minimumCutDepthRatio = 0.8f,
+    float detachForceMultiplier = 1.0f,
+    float detachTorqueMultiplier = 1.0f,
+    float detachedLimbMass = 1.0f,
+    float detachedLimbFriction = 0.5f,
+    float detachedLimbBounce = 0.1f)
 {
-    public float MinimumCutDepthRatio; // Ratio of limb thickness required to dismember
-    public float DetachForceMultiplier;
-    public float DetachTorqueMultiplier;
-    public float DetachedLimbMass;
-    public float DetachedLimbFriction;
-    public float DetachedLimbBounce;
-    
-    public DismembermentConfig(
-        float minimumCutDepthRatio = 0.8f,
-        float detachForceMultiplier = 1.0f,
-        float detachTorqueMultiplier = 1.0f,
-        float detachedLimbMass = 1.0f,
-        float detachedLimbFriction = 0.5f,
-        float detachedLimbBounce = 0.1f)
-    {
-        MinimumCutDepthRatio = minimumCutDepthRatio;
-        DetachForceMultiplier = detachForceMultiplier;
-        DetachTorqueMultiplier = detachTorqueMultiplier;
-        DetachedLimbMass = detachedLimbMass;
-        DetachedLimbFriction = detachedLimbFriction;
-        DetachedLimbBounce = detachedLimbBounce;
-    }
+    public float MinimumCutDepthRatio = minimumCutDepthRatio; // Ratio of limb thickness required to dismember
+    public float DetachForceMultiplier = detachForceMultiplier;
+    public float DetachTorqueMultiplier = detachTorqueMultiplier;
+    public float DetachedLimbMass = detachedLimbMass;
+    public float DetachedLimbFriction = detachedLimbFriction;
+    public float DetachedLimbBounce = detachedLimbBounce;
 }
 
 /// <summary>
@@ -142,29 +114,20 @@ public static class DismembermentConfigs
 /// <summary>
 /// Detached limb state for cleanup tracking.
 /// </summary>
-public struct DetachedLimbState
+public struct DetachedLimbState(
+    string originalLimbName,
+    RigidBody3D physicsBody,
+    float lifetime = 30f)
 {
-    public string OriginalLimbName;
-    public RigidBody3D PhysicsBody;
-    public float DetachTime;
-    public float Lifetime; // How long the detached limb should exist
-    public bool ShouldCleanup;
-    
-    public DetachedLimbState(
-        string originalLimbName,
-        RigidBody3D physicsBody,
-        float lifetime = 30f)
-    {
-        OriginalLimbName = originalLimbName;
-        PhysicsBody = physicsBody;
-        DetachTime = Time.GetUnixTimeFromSystem();
-        Lifetime = lifetime;
-        ShouldCleanup = false;
-    }
-    
+    public string OriginalLimbName = originalLimbName;
+    public RigidBody3D PhysicsBody = physicsBody;
+    public float DetachTime = (float)Time.GetUnixTimeFromSystem();
+    public float Lifetime = lifetime; // How long the detached limb should exist
+    public bool ShouldCleanup = false;
+
     public bool ShouldRemove()
     {
-        float age = Time.GetUnixTimeFromSystem() - DetachTime;
+        float age = (float)Time.GetUnixTimeFromSystem() - DetachTime;
         return age >= Lifetime;
     }
 }

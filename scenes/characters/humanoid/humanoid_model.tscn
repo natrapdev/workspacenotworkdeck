@@ -10,6 +10,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://di0hlyt4anoer" path="res://assets/animations/human/body/human_body_animation_library.tres" id="3_ifdrq"]
 [ext_resource type="Script" uid="uid://buq8o5wmomdff" path="res://scenes/characters/humanoid/WeaponInventory.cs" id="4_37pv0"]
 [ext_resource type="Script" uid="uid://cv7ia4ybeovtx" path="res://scenes/characters/humanoid/DamageModel.cs" id="4_aahd8"]
+[ext_resource type="Script" uid="uid://d37uohbcg1vle" path="res://scenes/characters/humanoid/injury/InjurySystemManager.cs" id="5_oiyrg"]
 [ext_resource type="Script" uid="uid://dx2bp5kkihf0c" path="res://scenes/characters/states/Airborne.cs" id="7_2t1re"]
 [ext_resource type="Script" uid="uid://bcsctelgdnjvo" path="res://scenes/characters/humanoid/HumanoidLegStates.cs" id="7_nmdge"]
 [ext_resource type="Script" uid="uid://cfvu1b10n2uyq" path="res://scenes/characters/humanoid/WalkableState.cs" id="8_mrjil"]
@@ -1089,7 +1090,7 @@ _data = {
 &"walk_params": SubResource("Animation_mwisw")
 }
 
-[node name="HumanoidModel" type="Node3D" unique_id=728337583 node_paths=PackedStringArray("Skeleton", "Animator", "Combat", "Resource", "HeadLookAtTarget", "HumanoidLegs", "StateContainer", "WeaponInventory")]
+[node name="HumanoidModel" type="Node3D" unique_id=728337583 node_paths=PackedStringArray("Skeleton", "Animator", "Combat", "Resource", "HeadLookAtTarget", "HumanoidLegs", "InjurySystem", "StateContainer", "WeaponInventory")]
 script = ExtResource("1_6u1cx")
 Skeleton = NodePath("rig/Skeleton3D")
 Animator = NodePath("Animator")
@@ -1097,6 +1098,8 @@ Combat = NodePath("Combat")
 Resource = NodePath("Resource")
 HeadLookAtTarget = NodePath("HeadLookAtTarget")
 HumanoidLegs = NodePath("LegStates")
+Debug = true
+InjurySystem = NodePath("InjurySystemManager")
 StateContainer = NodePath("States")
 WeaponInventory = NodePath("WeaponInventory")
 
@@ -1448,6 +1451,9 @@ collision_mask = 2
 transform = Transform3D(1, -2.9802322e-08, 3.8743028e-07, 2.980233e-08, 1, -1.4901161e-08, -3.8743028e-07, 1.4901174e-08, 1, 2.3283059e-10, 0.10746515, 0.014393302)
 shape = SubResource("CapsuleShape3D_rbku5")
 debug_color = Color(0, 1, 0, 1)
+
+[node name="InjurySystemManager" type="Node" parent="." unique_id=1273603142]
+script = ExtResource("5_oiyrg")
 
 [node name="Resource" type="Node" parent="." unique_id=1574197015 node_paths=PackedStringArray("DamageModel")]
 script = ExtResource("3_8ka1p")

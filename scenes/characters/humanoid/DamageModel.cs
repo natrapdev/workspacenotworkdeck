@@ -7,38 +7,42 @@ using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using MyFirst3DGame.Items;
 using Godot.Collections;
+using System.Xml.Schema;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class DamageModel : Node3D
 {
-    [Export] public HumanoidSkeleton Skeleton { get; set; }
-    [Export] public HumanoidResource Resource { get; set; }
     [Export] public HumanoidModel Humanoid { get; set; }
+    [Export] public CirculationSystem CirculationSystem { get; set; }
+    [Export] public float BodyMass { get; set; } = 68f;
 
-    public enum Severity
+    public readonly System.Collections.Generic.Dictionary<string, float> BodyPartMassCoefficients = new()
     {
-        Negligable = 1,
-        Minimal = 2,
-        Moderate = 3,
-        Critical = 4,
-        Catastrophic = 5
-    }
-
-    public readonly System.Collections.Generic.Dictionary<string, float> Severities = new()
-    {
-        {"negligable", 0f},
-        {"minimal", 0.2f},
-        {"moderate", 0.4f},
-        {"severe", 0.6f},
-        {"critical", 0.8f},
-        {"catastrophic", 1f}
+        {"head", 0.0726f},
+        {"neck", 0.02f}, // .01kg taken from the head
+        {"thorax", 0.2010f},
+        {"abdomen", 0.1310f},
+        {"pelvis", 0.1370f},
+        {"upper arm", 0.0325f}, // We usually have two of these so multiply by 2 for total
+        {"forearm", 0.0187f - 0.0006f}, // All body parts add up to 1.0006 so this is to make it consitent
+        {"hand", 0.0065f},
+        {"thigh", 0.1050f},
+        {"shin", 0.0475f},
+        {"foot", 0.0143f}
     };
 
-    public readonly List<float> SeverityThresholds =
-    [.05f, .2f, .4f, .6f, .8f, 1f];
-    public readonly List<string> SeverityNames =
-    ["catastrophic", "critical", "severe", "moderate", "minimal", "none"];
+    public HumanoidSkeleton Skeleton;
+    public HumanoidResource Resource;
+
+    public readonly List<InjurySeverity> Severities =
+    [
+        new("negligible", 1),
+        new("minimal", 0.8f),
+        new("moderate", 0.6f, 1.1f),
+        new("serious", 0.4f, 1.3f),
+        new("critical", 0.2f, 1.5f)
+    ];
 
     public List<DamageModule> DamageModules { get; set; } = new(16);
     public System.Collections.Generic.Dictionary<string, float> BodyPartBleedMultiplier { get; } = new()
@@ -59,39 +63,12 @@ public partial class DamageModel : Node3D
     private Node _materials;
     private Dictionary _materialData;
 
-    private HitInfo _lastHitInfo;
-    private DamageModule _lastHitLimb;
     private BoneAttachment3D _collider;
 
     public void OnReady()
     {
-        float bodyMass = Resource.BodyMass;
-        float totalBloodVolume = Resource.TotalBloodVolume;
-
-        foreach (BoneAttachment3D child in GetChildren().Cast<BoneAttachment3D>())
-        {
-            string bodyPartName = child.Name;
-            string translatedName = TranslateName(bodyPartName);
-            float shapeVolume = GetNodeVolume(child.GetChild(0).GetChild(0) as Node3D);
-            float bloodVolume = totalBloodVolume * Resource.BodyPartMassCoefficients.GetValueOrDefault(translatedName, 0f);
-            float bleedRateMult = BodyPartBleedMultiplier.GetValueOrDefault(translatedName, 1f);
-
-            DamageModule dm = new(
-                name: bodyPartName,
-                parent: child,
-                material: "flesh",
-                thickness: .5f,
-                bloodVolume: bloodVolume,
-                currentBleedRate: 0,
-                maxBleedRate: bleedRateMult,
-                volume: shapeVolume
-            );
-
-            DamageModules.Add(dm);
-        }
-
         _materials = GetNode<Node>("/root/Materials");
-        _materialData = (Godot.Collections.Dictionary)_materials.Get("material_data");
+        _materialData = (Dictionary)_materials.Get("material_data");
     }
 
     private int FindLimbIndex(string limbName)
@@ -124,30 +101,25 @@ public partial class DamageModel : Node3D
     private int GetSeverityIndex(DamageModule damageModule)
     {
         float remainingBloodFactor = damageModule.BloodVolume / damageModule.MaxBloodVolume;
-        return SeverityThresholds.FindLastIndex(x => x >= remainingBloodFactor);
+        return Severities.FindLastIndex(x => x.Treshold >= remainingBloodFactor);
     }
 
     private string GetSeverityName(DamageModule damageModule)
     {
-        int level = GetSeverityIndex(damageModule);
-
-        KeyValuePair<string, float> severityAtLevel = Severities.ElementAt(level);
-        return severityAtLevel.Key;
+        int index = GetSeverityIndex(damageModule);
+        return Severities[index].Name;
     }
 
     private float GetSeverityMultiplier(DamageModule damageModule)
     {
-        int level = GetSeverityIndex(damageModule);
+        int index = GetSeverityIndex(damageModule);
 
-        KeyValuePair<string, float> severityAtLevel = Severities.ElementAt(level);
-        return severityAtLevel.Value;
+        return Severities[index].Multiplier;
     }
 
     private void CheckForEffect(in DamageModule damageModule)
     {
         float remainingBloodFactor = damageModule.BloodVolume / damageModule.MaxBloodVolume;
-
-        int level = SeverityThresholds.FindLastIndex(x => x >= remainingBloodFactor);
 
         string label = GetSeverityName(damageModule);
         float multiplier = GetSeverityMultiplier(damageModule);
@@ -186,68 +158,32 @@ public partial class DamageModel : Node3D
         }
     }
 
-    private void UpdateInfo(HitInfo hitInfo)
-    {
-        _lastHitInfo = hitInfo;
-        var hitParent = _lastHitInfo.HitNode.GetParent();
-        string hitName = hitParent.Name.ToString();
-        _lastHitLimb = DamageModules[FindLimbIndex(hitName)];
-    }
-
-    public void Hit(HitInfo hitInfo)
-    {
-        UpdateInfo(hitInfo);
-
-        (float impactDepth, float kineticEnergy) = GetHitEffects();
-
-        // yo im pretty sure i'm just making up some straight nonsense but i'll fix it later
-
-        float cutTime = impactDepth / _lastHitInfo.WeaponVelocity.Length();
-        float cutArea = cutTime * _lastHitInfo.WeaponVelocity.Length() * impactDepth;
-        float cutVolume = cutArea * cutTime * impactDepth;
-        float bloodLossFactor = cutVolume / _lastHitLimb.Volume;
-
-        GD.Print($"\nCut area: {cutArea} m^2\nCut volume: {cutVolume} m^3\nBlood loss factor: {bloodLossFactor * 100}%");
-
-        float immediateBloodLoss = _lastHitLimb.MaxBloodVolume * (bloodLossFactor + GetImpactDepth());
-
-        _lastHitLimb.BloodVolume -= immediateBloodLoss;
-
-        _lastHitLimb.BleedRate += _lastHitLimb.MaxBloodVolume * bloodLossFactor;
-
-        DamageModules[FindLimbIndex(_lastHitLimb.Name)] = _lastHitLimb;
-
-        // Skeleton.Ragdoll();
-        // HumanoidModel humanoid = (HumanoidModel)Skeleton.GetParent().GetParent();
-        // humanoid.SwitchTo("dead");
-    }
-
-    private (float, float) GetHitEffects()
+    public (float, float) GetHitEffects(HitInfo hitInfo, Limb hitLimb)
     {
         return (
-            GetImpactDepth(),
-            GetKineticEnergyTransfer()
+            GetImpactDepth(hitInfo, hitLimb),
+            GetKineticEnergyTransfer(hitInfo, hitLimb)
         );
     }
 
-    private float GetKineticEnergyTransfer()
+    public float GetKineticEnergyTransfer(HitInfo hitInfo, Limb hitLimb)
     {
-        Vector3 hitDirection = (_lastHitInfo.HitPosition - _lastHitInfo.WeaponHitSource).Normalized();
-        Weapon weapon = _lastHitInfo.WeaponNode;
+        Vector3 hitDirection = (hitInfo.HitPosition - hitInfo.WeaponHitSource).Normalized();
+        Weapon weapon = hitInfo.WeaponNode;
 
-        float impactAngle = GetImpactAngleRadians(hitDirection, _lastHitInfo.HitNormal);
+        float impactAngle = GetImpactAngleRadians(hitDirection, hitInfo.HitNormal);
 
         float weaponSharpnessDivisor = weapon.Sharpness * 1.2f + 1;
 
         float effectiveEnergyAbsorption = GetEffectiveEnergyAbsorption(
-            GetEnergyAbsorption(_lastHitLimb.Material),
-            GetImpactDepth(),
-            GetThicknessInLineOfSight(impactAngle, _lastHitLimb.Thickness)
+            GetEnergyAbsorption(hitLimb.Material),
+            GetImpactDepth(hitInfo, hitLimb),
+            GetThicknessInLineOfSight(impactAngle, hitLimb.Thickness)
         );
 
         float inflictedKineticEnergy = GetInflictedKineticEnergy(
             weapon.Mass,
-            GetVelocityAtImpactAngle(_lastHitInfo.WeaponVelocity.Length(), impactAngle),
+            GetVelocityAtImpactAngle(hitInfo.WeaponVelocity.Length(), impactAngle),
             weaponSharpnessDivisor,
             effectiveEnergyAbsorption
         );
@@ -260,24 +196,24 @@ public partial class DamageModel : Node3D
         return inflictedKineticEnergy;
     }
 
-    private float GetImpactDepth()
+    public float GetImpactDepth(HitInfo hitInfo, Limb hitLimb)
     {
-        float impactDepth = GetPeriforation(
-            _lastHitInfo.EffectiveWeaponLength,
-            GetDensity(_lastHitInfo.WeaponNode.Material),
-            GetDensity(_lastHitLimb.Material, _lastHitLimb.Thickness)
+        float impactDepth = GetPerforation(
+            hitInfo.EffectiveWeaponLength,
+            GetDensity(hitInfo.WeaponNode.Material),
+            GetDensity(hitLimb.Material, hitLimb.Thickness)
         );
 
         return impactDepth;
     }
 
-    private float GetImpactDepthRatio()
+    public float GetImpactDepthRatio(HitInfo hitInfo, Limb hitLimb)
     {
-        Vector3 hitDirection = (_lastHitInfo.HitPosition - _lastHitInfo.WeaponHitSource).Normalized();
-        float depth = GetImpactDepth();
+        Vector3 hitDirection = (hitInfo.HitPosition - hitInfo.WeaponHitSource).Normalized();
+        float depth = GetImpactDepth(hitInfo, hitLimb);
         float thickness = GetThicknessInLineOfSight(
-            GetImpactAngleRadians(hitDirection, _lastHitInfo.HitNormal),
-            _lastHitLimb.Thickness
+            GetImpactAngleRadians(hitDirection, hitInfo.HitNormal),
+            hitLimb.Thickness
         );
 
         return depth / thickness;
@@ -303,14 +239,14 @@ public partial class DamageModel : Node3D
         return Mathf.Abs(impactVelocity * Mathf.Cos(impactAngle));
     }
 
-    private static float GetPeriforation(float workingLength, float workingDensity, float targetDensity)
+    private static float GetPerforation(float workingLength, float workingDensity, float targetDensity)
     {
         return workingLength * (workingDensity / targetDensity);
     }
 
     private float GetEnergyAbsorption(string material)
     {
-        return (float)((Godot.Collections.Dictionary)_materialData[material])["absorption"];
+        return (float)((Dictionary)_materialData[material])["absorption"];
     }
 
     private static float GetImpactAngleDegrees(Vector3 hitDirection, Vector3 hitNormal)
@@ -333,99 +269,11 @@ public partial class DamageModel : Node3D
 
     private float GetDensity(string material)
     {
-        return (float)((Godot.Collections.Dictionary)_materialData[material])["density"];
+        return (float)((Dictionary)_materialData[material])["density"];
     }
 
     private static float GetThicknessInLineOfSight(float impactAngle, float thickness)
     {
         return Mathf.Abs(thickness / Mathf.Cos(impactAngle));
-    }
-
-    [GeneratedRegex("(?<!^)(?=[A-Z])", RegexOptions.Compiled)]
-    private static partial Regex PascalCaseSplitRegex();
-
-    private static string TranslateName(string nodeName)
-    {
-        RemoveLeftRightPrefix(ref nodeName);
-        return PascalCaseSplitRegex().Replace(nodeName, " ").ToLower().Trim();
-    }
-
-    private static void RemoveLeftRightPrefix(ref string name)
-    {
-        string toRemove = "Left";
-        int index = name.IndexOf(toRemove, StringComparison.OrdinalIgnoreCase);
-
-        if (index != -1)
-        {
-            name = name.Remove(index, toRemove.Length);
-        }
-
-        toRemove = "Right";
-        index = name.IndexOf(toRemove, StringComparison.OrdinalIgnoreCase);
-
-        if (index != -1)
-        {
-            name = name.Remove(index, toRemove.Length);
-        }
-    }
-
-    public static float GetNodeVolume(Node3D node)
-    {
-        if (node is CollisionShape3D collisionShape)
-        {
-            return CollisionShapeVolume(collisionShape);
-        }
-
-        if (node is MeshInstance3D meshInstance && meshInstance.Mesh is ArrayMesh arrayMesh)
-        {
-            float volume = 0f;
-
-            for (int i = 0; i < arrayMesh.GetSurfaceCount(); i++)
-            {
-                var arrays = arrayMesh.SurfaceGetArrays(i);
-                var vertices = (Vector3[])arrays[(int)ArrayMesh.ArrayType.Vertex];
-                var indices = (int[])arrays[(int)ArrayMesh.ArrayType.Index];
-
-                for (int j = 0; j < indices.Length; j += 3)
-                {
-                    Vector3 v0 = vertices[indices[j]];
-                    Vector3 v1 = vertices[indices[j + 1]];
-                    Vector3 v2 = vertices[indices[j + 2]];
-
-                    volume += Math.Abs(v0.Dot(v1.Cross(v2))) / 6f;
-                }
-            }
-
-            return volume;
-        }
-
-        return 0f;
-    }
-
-    private static float CollisionShapeVolume(CollisionShape3D collisionShape)
-    {
-        Shape3D shape = collisionShape.Shape;
-
-        if (shape is BoxShape3D box)
-        {
-            Vector3 extents = box.Size;
-            return extents.X * extents.Y * extents.Z;
-        }
-        else if (shape is SphereShape3D sphere)
-        {
-            float radius = sphere.Radius;
-            return 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
-        }
-        else if (shape is CapsuleShape3D capsule)
-        {
-            float radius = capsule.Radius;
-            float height = capsule.Height;
-
-            float cylinderVolume = Mathf.Pi * Mathf.Pow(radius, 2) * height;
-            float sphereVolume = 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
-
-            return cylinderVolume + sphereVolume;
-        }
-        return 0f;
     }
 }

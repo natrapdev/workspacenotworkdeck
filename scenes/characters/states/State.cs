@@ -183,14 +183,9 @@ public partial class State : Node
 
         if (hitInfo.HitNode is not null)
         {
-            if (hitInfo.HitNode.GetParent() is BoneAttachment3D hitBone)
+            if (hitInfo.HitNode.GetParent() is Limb hitLimb)
             {
-                var parent = hitBone.GetParent();
-
-                if (parent is DamageModel damageModel)
-                {
-                    damageModel.Hit(hitInfo);
-                }
+                hitLimb.Hit(hitInfo);
             }
         }
         return hitInfo;

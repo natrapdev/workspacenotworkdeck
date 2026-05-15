@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MyFirst3DGame.scenes.characters.humanoid;
+using System.Text;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -31,8 +32,8 @@ public partial class State : Node
     public State NextState { get; set; }
     public HumanoidLegStates HumanoidLegs { get; set; }
 
-    public float ElapsedTimeMilliseconds { get { return _stopwatch.ElapsedMilliseconds; } }
-    public float ElapsedTimeSeconds { get { return ElapsedTimeMilliseconds / 1000; } }
+    private float ElapsedTimeMilliseconds { get { return _stopwatch.ElapsedMilliseconds; } }
+    protected float ElapsedTimeSeconds { get { return ElapsedTimeMilliseconds / 1000; } }
 
     public float Duration { get; set; } = 0f;
     private readonly Stopwatch _stopwatch = new();
@@ -42,9 +43,11 @@ public partial class State : Node
 
     private bool _canQueue = false;
     private State _queuedState;
+    
+    protected readonly StringBuilder StringBuilder = new();
 
-    public List<State> FollowUpStates = [];
-    public static readonly float Gravity = ProjectSettings.GetSetting(
+    public readonly List<State> FollowUpStates = new(3);
+    protected static readonly float Gravity = ProjectSettings.GetSetting(
         "physics/3d/default_gravity").As<float>();
 
     public virtual State ChangeState(InputPackage input)
@@ -80,13 +83,13 @@ public partial class State : Node
             TrackLookDirection(input, delta);
         }
         if (RightWeaponHurts())
-        {
+        { 
             await RightWeaponHitScan();
         }
 
         OnUpdate(input, delta);
     }
-    public virtual void OnUpdate(InputPackage input, float delta) { }
+    protected virtual void OnUpdate(InputPackage input, float delta) { }
 
     public virtual void Enter()
     {
@@ -95,13 +98,13 @@ public partial class State : Node
 
         OnEnter();
     }
-    public virtual void OnEnter() { }
+    protected virtual void OnEnter() { }
 
     public virtual void Exit()
     {
         OnExit();
     }
-    public virtual void OnExit() { }
+    protected virtual void OnExit() { }
 
     public virtual void TrackLookDirection(InputPackage input, float delta)
     {
@@ -118,7 +121,7 @@ public partial class State : Node
         Humanoid.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
     }
 
-    public virtual State FindFirstValidState(InputPackage input)
+    protected virtual State FindFirstValidState(InputPackage input)
     {
         while (input.Actions.Count > 0)
         {
@@ -135,7 +138,7 @@ public partial class State : Node
         return null;
     }
 
-    public void ForceState(State forcedState)
+    private void ForceState(State forcedState)
     {
         _forcedState = forcedState;
         _canForceState = true;
@@ -143,7 +146,7 @@ public partial class State : Node
 
     public virtual void UpdateResource(float delta) => Resource.Update(delta);
 
-    public virtual State DefaultLifecycle(InputPackage input)
+    protected virtual State DefaultLifecycle(InputPackage input)
     {
         if (ExceedsTimeLength(Duration) && !CanBeLongerThanAnimation)
         {
@@ -153,7 +156,7 @@ public partial class State : Node
         return this;
     }
 
-    public void CheckFollowUps(InputPackage input)
+    private void CheckFollowUps(InputPackage input)
     {
         State followUp = input.Actions.Peek();
 
@@ -162,47 +165,50 @@ public partial class State : Node
             _canQueue = true;
             _queuedState = followUp;
         }
-        else if (followUp == this && NextState is not null && Resource.HasEnoughStamina(NextState))
+        else if (followUp == this && NextState is not null && Resource.HasEnoughStamina(NextState) 
+                 || followUp == this && NextState is null && Resource.HasEnoughStamina(this))
         {
             _canQueue = true;
             _queuedState = NextState;
         }
         else if (Humanoid.CurrentState is IChildState childState) // Find the base state
         {
-            if (childState.BaseState == followUp && (childState as State).NextState is not null && (childState as State).NextState.Priority >= Humanoid.CurrentState.Priority)
+            if (childState.BaseState == followUp
+                && ((State)childState).NextState is not null
+                && ((State)childState).NextState.Priority >= Humanoid.CurrentState.Priority)
             {
                 _canQueue = true;
-                _queuedState = (childState as State).NextState;
+                _queuedState = ((State)childState).NextState;
             }
         }
     }
 
-    public virtual async Task<HitInfo> RightWeaponHitScan()
+    protected virtual async Task<HitInfo> RightWeaponHitScan()
     {
         HitInfo hitInfo = await Combat.ScanForHitsSlash();
-
-        if (hitInfo.HitNode is not null)
+        
+        if (hitInfo.HitNode is null) return hitInfo;
+        
+        if (hitInfo.HitNode.GetParent() is Limb hitLimb)
         {
-            if (hitInfo.HitNode.GetParent() is Limb hitLimb)
-            {
-                hitLimb.Hit(hitInfo);
-            }
+            hitLimb.Hit(hitInfo);
         }
+        
         return hitInfo;
     }
 
-    public bool ExceedsTimeLength(float time) => ElapsedTimeSeconds > time;
-    public bool ElapsedTimeIsBetween(float start, float end) => ElapsedTimeSeconds >= start && ElapsedTimeSeconds <= end;
-    public void StartTimer() => _stopwatch.Restart();
-    public void StopTimer() => _stopwatch.Stop();
+    private bool ExceedsTimeLength(float time) => ElapsedTimeSeconds > time;
+    private bool ElapsedTimeIsBetween(float start, float end) => ElapsedTimeSeconds >= start && ElapsedTimeSeconds <= end;
+    private void StartTimer() => _stopwatch.Restart();
+    private void StopTimer() => _stopwatch.Stop();
 
-    public bool TransitionsToQueued() => StateData.GetTransitionsToQueued(BackendAnimation, ElapsedTimeSeconds);
-    public bool AcceptsQueueing() => StateData.GetAcceptsQueueing(BackendAnimation, ElapsedTimeSeconds);
-    public bool TracksLookDirection() => StateData.GetTracksLookDirection(BackendAnimation, ElapsedTimeSeconds);
-    public bool IsVulnerable() => StateData.GetVulnerable(BackendAnimation, ElapsedTimeSeconds);
-    public bool IsInterruptable() => StateData.GetInterruptable(BackendAnimation, ElapsedTimeSeconds);
-    public bool IsParryable() => StateData.GetParryable(BackendAnimation, ElapsedTimeSeconds);
+    private bool TransitionsToQueued() => StateData.GetTransitionsToQueued(BackendAnimation, ElapsedTimeSeconds);
+    private bool AcceptsQueueing() => StateData.GetAcceptsQueueing(BackendAnimation, ElapsedTimeSeconds);
+    private bool TracksLookDirection() => StateData.GetTracksLookDirection(BackendAnimation, ElapsedTimeSeconds);
+    private bool IsVulnerable() => StateData.GetVulnerable(BackendAnimation, ElapsedTimeSeconds);
+    private bool CanBeInterrupted() => StateData.GetInterruptable(BackendAnimation, ElapsedTimeSeconds);
+    private bool CanBeParried() => StateData.GetParryable(BackendAnimation, ElapsedTimeSeconds);
     public bool RightWeaponHurts() => StateData.GetRightWeaponHurts(BackendAnimation, ElapsedTimeSeconds);
-    public bool CanMoveHeldItem() => StateData.GetCanMoveHeldItem(BackendAnimation, ElapsedTimeSeconds);
-    public bool IsMovementLocked() => StateData.GetIsMovementLocked(BackendAnimation, ElapsedTimeSeconds);
+    protected bool CanMoveHeldItem() => StateData.GetCanMoveHeldItem(BackendAnimation, ElapsedTimeSeconds);
+    private bool IsMovementLocked() => StateData.GetIsMovementLocked(BackendAnimation, ElapsedTimeSeconds);
 }

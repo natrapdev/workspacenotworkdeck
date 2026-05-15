@@ -18,12 +18,12 @@ public partial class Jump : State
 		return FindFirstValidState(input);
 	}
 
-	public override void OnUpdate(InputPackage input, float delta)
+	protected override void OnUpdate(InputPackage input, float delta)
 	{
 		Character.Velocity -= new Vector3(0, Gravity * delta, 0);
 	}
 
-	public override void OnEnter()
+	protected override void OnEnter()
 	{
 		Character.Velocity = Character.Velocity.Normalized() * new Vector3(JUMP_IMPULSE, 1, JUMP_IMPULSE);
 	}

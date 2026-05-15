@@ -13,43 +13,44 @@
 radius = 0.17333984
 height = 1.8180542
 
-[node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport") groups=["player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport", "DamageModel") groups=["player"]]
 script = ExtResource("1_d2wvv")
-CharacterModel = NodePath("")
-Humanoid = NodePath("")
+CharacterModel = NodePath("HumanoidModel/CharacterModel")
+Humanoid = NodePath("HumanoidModel")
 InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
 Viewport = NodePath("ViewportModel")
+DamageModel = NodePath("DamageModel")
 
 [node name="DamageModel" parent="." unique_id=1876319864 node_paths=PackedStringArray("Humanoid") instance=ExtResource("2_smehm")]
 Humanoid = NodePath("../HumanoidModel")
 
-[node name="HumanoidModel" parent="." unique_id=728337583 instance=ExtResource("2_fjrip")]
+[node name="HumanoidModel" parent="." unique_id=728337583 node_paths=PackedStringArray("DamageModel") instance=ExtResource("2_fjrip")]
+DamageModel = NodePath("../DamageModel")
 
-[node name="CharacterModel" parent="HumanoidModel" unique_id=1564308067 instance=ExtResource("11_d2wvv")]
+[node name="CharacterModel" parent="HumanoidModel" unique_id=1564308067 node_paths=PackedStringArray("Humanoid") instance=ExtResource("11_d2wvv")]
+Humanoid = NodePath("..")
 
 [node name="PlayerInput" type="Node" parent="." unique_id=58419796 node_paths=PackedStringArray("Humanoid")]
 script = ExtResource("3_ur7pv")
-Humanoid = NodePath("")
+Humanoid = NodePath("../HumanoidModel")
 
 [node name="IKController" type="Node" parent="." unique_id=618922584 node_paths=PackedStringArray("Humanoid")]
 script = ExtResource("5_tuyoq")
-Humanoid = NodePath("")
+Humanoid = NodePath("../HumanoidModel")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=1065742567 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.088412255, 0)
 shape = SubResource("CapsuleShape3D_h7ic4")
 
-[node name="CameraPivot" type="Node3D" parent="." unique_id=86233353 node_paths=PackedStringArray("Player", "CharacterNode", "Camera", "Humanoid") groups=["player"]]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=86233353 node_paths=PackedStringArray("Player", "Camera") groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63, 0)
 script = ExtResource("9_ur7pv")
 Player = NodePath("..")
-CharacterNode = NodePath("")
 CameraPanSpeed = 0.75
 Camera = NodePath("Camera3D")
 HorizontalLimit = 110.0
 VerticalLimit = 80.0
-Humanoid = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=302098219 groups=["player"]]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
@@ -57,6 +58,6 @@ cull_mask = 1048573
 fov = 60.0
 
 [node name="ViewportModel" parent="." unique_id=1597764046 node_paths=PackedStringArray("Humanoid", "Player", "MainCamera") instance=ExtResource("8_smehm")]
-Humanoid = NodePath("")
+Humanoid = NodePath("../HumanoidModel")
 Player = NodePath("..")
 MainCamera = NodePath("../CameraPivot/Camera3D")

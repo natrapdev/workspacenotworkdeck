@@ -18,14 +18,13 @@ public partial class WeaponInventory : Node
 
     public void AddWeaponToInventory(Node3D item)
     {
-        if (item is Weapon weapon)
+        if (item is not Weapon weapon) return;
+        
+        switch (weapon.WeaponSlot)
         {
-            switch (weapon.WeaponSlot)
-            {
-                case 1: GrabPrimaryWeapon(weapon); break;
-                // case 2: SecondaryWeapon ??= weapon; break;
-                default: GD.PushWarning("Invalid weapon type"); break;
-            }
+            case 1: GrabPrimaryWeapon(weapon); break;
+            // case 2: SecondaryWeapon ??= weapon; break;
+            default: GD.PushWarning("Invalid weapon type"); break;
         }
     }
 
@@ -72,11 +71,10 @@ public partial class WeaponInventory : Node
 
     private void GrabPrimaryWeapon(Weapon weapon)
     {
-        if (PrimaryWeapon is null)
-        {
-            PrimaryWeapon = weapon;
-            MoveWeaponToPrimarySlot();
-        }
+        if (PrimaryWeapon is not null) return;
+        
+        PrimaryWeapon = weapon;
+        MoveWeaponToPrimarySlot();
     }
 
     private void MoveWeaponToPrimarySlot() => MoveWeaponToSlot(PrimaryWeapon, PrimaryWeaponContainerPath);
@@ -85,7 +83,7 @@ public partial class WeaponInventory : Node
 
     private void MoveWeaponToSlot(Weapon weapon, string path)
     {
-        var parent = weapon.GetParent();
+        Node parent = weapon.GetParent();
         parent.RemoveChild(weapon);
         parent = GetItemContainer(path);
         parent.AddChild(weapon);

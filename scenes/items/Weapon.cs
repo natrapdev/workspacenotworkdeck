@@ -29,7 +29,7 @@ public partial class Weapon : PickableItem
 
 	private readonly char[] _trailingChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-	public Dictionary<string, string> Moves = [];
+	public readonly Dictionary<string, string> Moves = [];
 
 	public float Sharpness { get; private set; }
 	public string Material { get; private set; }
@@ -50,7 +50,7 @@ public partial class Weapon : PickableItem
 		file.Close();
 
 		var json = new Json();
-		var error = json.Parse(jsonString);
+		Error error = json.Parse(jsonString);
 
 		string nameString = Name.ToString();
 		string weaponName = (char.ToLower(nameString[0]) + nameString[1..]).TrimEnd(_trailingChars);

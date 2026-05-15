@@ -10,7 +10,7 @@ public partial class OneHandedSlashLeft : State, IPartialBodyState
     public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
     public Task LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
-    public override void OnUpdate(InputPackage input, float delta)
+    protected override void OnUpdate(InputPackage input, float delta)
     {
         LegsUpdate(input, delta);
     }

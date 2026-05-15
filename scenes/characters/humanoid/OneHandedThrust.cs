@@ -11,17 +11,17 @@ public partial class OneHandedThrust : State, IPartialBodyState
     public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
     public Task LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
-    public override void OnUpdate(InputPackage input, float delta)
+    protected override void OnUpdate(InputPackage input, float delta)
     {
         LegsUpdate(input, delta);
     }
 
-    public override async Task<HitInfo> RightWeaponHitScan()
+    protected override async Task<HitInfo> RightWeaponHitScan()
     {
         return await Task.FromResult(Combat.ScanForHitsStab());
     }
 
-    public override void OnEnter()
+    protected override void OnEnter()
     {
         if (!FollowUpStates.Contains(Parent.GetStateByName("slash_prepare_one_handed")))
         {
@@ -37,7 +37,7 @@ public partial class OneHandedThrust : State, IPartialBodyState
         }
     }
 
-    public override State DefaultLifecycle(InputPackage input)
+    protected override State DefaultLifecycle(InputPackage input)
     {
         if (Mathf.Abs(Animator.BodyAnimator.CurrentAnimationPosition - Duration) < .35)
         {

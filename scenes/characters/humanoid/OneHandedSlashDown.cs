@@ -10,12 +10,12 @@ public partial class OneHandedSlashDown : State, IPartialBodyState
     public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
     public Task LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
-    public override void OnUpdate(InputPackage input, float delta)
+    protected override void OnUpdate(InputPackage input, float delta)
     {
         LegsUpdate(input, delta);
     }
 
-    public override void OnEnter()
+    protected override void OnEnter()
     {
         if (!FollowUpStates.Contains(Parent.GetStateByName("thrust_one_handed")))
         {

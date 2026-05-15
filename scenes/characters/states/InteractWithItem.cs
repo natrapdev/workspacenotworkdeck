@@ -15,12 +15,13 @@ public partial class InteractWithItem : State
         return FindFirstValidState(input);
     }
 
-    public override void OnEnter()
+    protected override void OnEnter()
     {
         InteractableItem item = Resource.ItemFocus;
 
         if (item is Weapon weapon && Humanoid.WeaponInventory.PrimaryWeapon is null)
         {
+            GD.Print(Humanoid.GetParent().Name + " is picking up something");
             weapon.PickedUp(Humanoid);
         }
     }

@@ -6,8 +6,8 @@ public partial class CirculationSystem : Node
 {
     [Export] public DamageModel Model { get; set; }
     [Export] public HumanoidLimbs LimbsParent { get; set; }
-    public const float BLOOD_PER_BODY_MASS_KILOGRAM = 75f;
-    public float TotalBloodVolume { get { return Model.BodyMass * BLOOD_PER_BODY_MASS_KILOGRAM; } }
+    private const float BloodPerBodyMassKilogram = 75f;
+    public float TotalBloodVolume { get { return Model.BodyMass * BloodPerBodyMassKilogram; } }
     public float CurrentBloodVolume { get; set; }
 
     public void Update(float delta)
@@ -15,7 +15,7 @@ public partial class CirculationSystem : Node
         LoseBloodIfPossible(delta);
     }
 
-    public void LoseBloodIfPossible(float delta)
+    private void LoseBloodIfPossible(float delta)
     {
         foreach (Limb limb in LimbsParent.Limbs.Values)
         {
@@ -29,7 +29,7 @@ public partial class CirculationSystem : Node
         }
     }
 
-    public void LoseBloodInLimb(Limb limb, float bloodLost)
+    private void LoseBloodInLimb(Limb limb, float bloodLost)
     {
         limb.CurrentBloodVolume -= bloodLost;
         CurrentBloodVolume -= bloodLost;

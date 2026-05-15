@@ -22,7 +22,7 @@ public partial class Idle : State
 		return FindFirstValidState(input);
 	}
 
-	public override void OnUpdate(InputPackage input, float delta)
+	protected override void OnUpdate(InputPackage input, float delta)
 	{
 		Animation = "idle" + Animator.GetAnimationWeaponModifier();
 

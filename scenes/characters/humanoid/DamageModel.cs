@@ -1,20 +1,16 @@
 using Godot;
-using System;
 using MyFirst3DGame.scenes.characters.states;
 using System.Collections.Generic;
-using System.Linq;
-using System.Collections.Immutable;
-using System.Text.RegularExpressions;
 using MyFirst3DGame.Items;
 using Godot.Collections;
-using System.Xml.Schema;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class DamageModel : Node3D
 {
     [Export] public HumanoidModel Humanoid { get; set; }
-    [Export] public CirculationSystem CirculationSystem { get; set; }
+    [Export] public CirculationSystem Circulation { get; set; }
+    [Export] public HumanoidLimbs Limbs { get; set; }
     [Export] public float BodyMass { get; set; } = 68f;
 
     public readonly System.Collections.Generic.Dictionary<string, float> BodyPartMassCoefficients = new()
@@ -32,7 +28,7 @@ public partial class DamageModel : Node3D
         {"foot", 0.0143f}
     };
 
-    public HumanoidSkeleton Skeleton;
+    public Skeleton3D Skeleton;
     public HumanoidResource Resource;
 
     public readonly List<InjurySeverity> Severities =
@@ -44,7 +40,7 @@ public partial class DamageModel : Node3D
         new("critical", 0.2f, 1.5f)
     ];
 
-    public List<DamageModule> DamageModules { get; set; } = new(16);
+    public List<DamageModule> DamageModules { get; } = new(16);
     public System.Collections.Generic.Dictionary<string, float> BodyPartBleedMultiplier { get; } = new()
     {
         {"hand", 0.45f},
@@ -67,8 +63,17 @@ public partial class DamageModel : Node3D
 
     public void OnReady()
     {
+        Skeleton = Humanoid.Skeleton;
+        Resource = Humanoid.Resource;
         _materials = GetNode<Node>("/root/Materials");
         _materialData = (Dictionary)_materials.Get("material_data");
+        
+        Limbs.Initialize();
+    }
+
+    public void Update(float delta)
+    {
+        Circulation.Update(delta);
     }
 
     private int FindLimbIndex(string limbName)
@@ -86,16 +91,16 @@ public partial class DamageModel : Node3D
 
     public override void _Process(double delta)
     {
-        for (int i = 0; i < DamageModules.Count; i++)
-        {
-            DamageModule limb = DamageModules[i];
-            float bleedMultiplier = BodyPartBleedMultiplier.GetValueOrDefault(limb.Name, 1);
-            float lostBlood = limb.BleedRate * bleedMultiplier * (float)delta;
-            limb.BloodVolume = Mathf.Clamp(limb.BloodVolume - lostBlood, 0, limb.MaxBloodVolume);
-            DamageModules[i] = limb;
-
-            if (!limb.Name.Equals("Neck")) CheckForEffect(DamageModules[i]);
-        }
+        // for (int i = 0; i < DamageModules.Count; i++)
+        // {
+        //     DamageModule limb = DamageModules[i];
+        //     float bleedMultiplier = BodyPartBleedMultiplier.GetValueOrDefault(limb.Name, 1);
+        //     float lostBlood = limb.BleedRate * bleedMultiplier * (float)delta;
+        //     limb.BloodVolume = Mathf.Clamp(limb.BloodVolume - lostBlood, 0, limb.MaxBloodVolume);
+        //     DamageModules[i] = limb;
+        //
+        //     if (!limb.Name.Equals("Neck")) CheckForEffect(DamageModules[i]);
+        // }
     }
 
     private int GetSeverityIndex(DamageModule damageModule)
@@ -166,15 +171,18 @@ public partial class DamageModel : Node3D
         );
     }
 
-    public float GetKineticEnergyTransfer(HitInfo hitInfo, Limb hitLimb)
+    private float GetKineticEnergyTransfer(HitInfo hitInfo, Limb hitLimb)
     {
         Vector3 hitDirection = (hitInfo.HitPosition - hitInfo.WeaponHitSource).Normalized();
         Weapon weapon = hitInfo.WeaponNode;
 
         float impactAngle = GetImpactAngleRadians(hitDirection, hitInfo.HitNormal);
 
-        float weaponSharpnessDivisor = weapon.Sharpness * 1.2f + 1;
+        float weaponSharpnessDivisor = weapon.Sharpness * 1.25f + 1;
 
+        float impactDepth = GetImpactDepth(hitInfo, hitLimb);
+        float effectiveThickness = GetThicknessInLineOfSight(impactAngle, hitLimb.Thickness);
+        
         float effectiveEnergyAbsorption = GetEffectiveEnergyAbsorption(
             GetEnergyAbsorption(hitLimb.Material),
             GetImpactDepth(hitInfo, hitLimb),
@@ -196,7 +204,7 @@ public partial class DamageModel : Node3D
         return inflictedKineticEnergy;
     }
 
-    public float GetImpactDepth(HitInfo hitInfo, Limb hitLimb)
+    private float GetImpactDepth(HitInfo hitInfo, Limb hitLimb)
     {
         float impactDepth = GetPerforation(
             hitInfo.EffectiveWeaponLength,
@@ -232,6 +240,13 @@ public partial class DamageModel : Node3D
     private static float GetImpactKineticEnergy(float workingMass, float impactVelocity, float sharpnessFactor)
     {
         return workingMass / 2 * Mathf.Pow(impactVelocity / sharpnessFactor, 2);
+    }
+
+    private static float KineticEnergyAfterCutThrough()
+    {
+        // E = 0.5 * weaponMass * (initialVelocity^2 - finalVelocity^2);
+        // This assumes an immediate stop, i think. consider the depth of the limb that was cut through
+        return 1;
     }
 
     private static float GetVelocityAtImpactAngle(float impactVelocity, float impactAngle)

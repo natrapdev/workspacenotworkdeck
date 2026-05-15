@@ -21,16 +21,16 @@ public partial class Airborne : State
 		return this;
 	}
 
-	public override void OnUpdate(InputPackage input, float delta)
+	protected override void OnUpdate(InputPackage input, float delta)
 	{
 		Character.Velocity -= new Vector3(0, GRAVITY * delta, 0);
 	}
 
-	public override void OnEnter()
+	protected override void OnEnter()
 	{
 		_enterPos = Character.GlobalPosition;
 	}
-	public override void OnExit()
+	protected override void OnExit()
 	{
 		_landPos = Character.GlobalPosition;
 

@@ -32,7 +32,7 @@ public partial class ViewportModel : Node3D
 		armModel.SetLayerMaskValue(1, false);
 		armModel.SetLayerMaskValue(2, true);
 
-		if ((Player as Player).AppearanceSet == 1) // wok alert (1 = male, 0 = female)
+		if (((Player)Player).AppearanceSet == 1) // wok alert (1 = male, 0 = female)
 		{
 			armModel.Mesh = GD.Load<ArrayMesh>("res://assets/meshes/viewport/man_arms.res");
 		}

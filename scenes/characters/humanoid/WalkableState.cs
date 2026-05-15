@@ -7,16 +7,7 @@ public partial class WalkableState : LegState
 {
     public override void UpdateLegsState(InputPackage input, float delta)
     {
-        string targetState;
-
-        if (input.Direction != Vector2.Zero)
-        {
-            targetState = "walk";
-        }
-        else
-        {
-            targetState = "idle";
-        }
+        string targetState = input.Direction != Vector2.Zero ? "walk" : "idle";
 
         if (!targetState.Equals(Humanoid.HumanoidLegs.CurrentState.StateName))
         {

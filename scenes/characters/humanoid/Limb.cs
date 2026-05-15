@@ -2,6 +2,7 @@ using Godot;
 using MyFirst3DGame.scenes.characters.states;
 using System;
 using System.Collections.Generic;
+using System.Transactions;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
@@ -20,7 +21,7 @@ public partial class Limb : BoneAttachment3D
 	public float Mass { get; set; }
 	public float CurrentBleedRate { get { return _currentBleedRate * BleedMultiplier; } }
 	public float Thickness { get; set; }
-	public string Material { get; set; } = "flesh";
+	public string Material { get; private set; } = "flesh";
 	public float RemainingBloodRatio { get { return _currentBleedRate / MaxBloodVolume; } }
 
 	public float CurrentBloodVolume { get; set; }
@@ -51,12 +52,15 @@ public partial class Limb : BoneAttachment3D
 		CurrentBloodVolume -= immediateBloodLoss;
 		CirculationSystem.CurrentBloodVolume -= immediateBloodLoss;
 		_currentBleedRate += MaxBloodVolume * bloodLossFactor;
-
+		
+		GD.Print(($"\nHit {LimbName} ({BoneStrength}) with energy of {impactEnergy}."));
+		
 		if (impactEnergy > BoneStrength) BreakBone();
 	}
 
-	public void BreakBone()
+	private void BreakBone()
 	{
+		GD.Print($"Broke bone of {LimbName}");
 		_isBoneBroken = true;
 	}
 }

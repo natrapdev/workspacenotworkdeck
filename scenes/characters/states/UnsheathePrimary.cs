@@ -20,7 +20,7 @@ public partial class UnsheathePrimary : State
 		return DefaultLifecycle(input);
 	}
 
-	public override void OnUpdate(InputPackage input, float delta)
+	protected override void OnUpdate(InputPackage input, float delta)
 	{
 		if (CanMoveHeldItem()
       		&& Humanoid.WeaponInventory.GetEquippedWeapon() is null
@@ -37,7 +37,7 @@ public partial class UnsheathePrimary : State
 	}
 
 
-	public override void OnEnter()
+	protected override void OnEnter()
 	{
 		Character.Velocity = Vector3.Zero;
 		// animPlayback = Animator?.PlayUnsheatheAnimation(CharacterHumanoid.WeaponInventory.PrimaryWeapon);
@@ -65,7 +65,7 @@ public partial class UnsheathePrimary : State
 		}
 	}
 
-	public override void OnExit()
+	protected override void OnExit()
 	{
 
 		// BodyLookAt.Active = Humanoid.CurrentWeapon is null;

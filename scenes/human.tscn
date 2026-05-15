@@ -4,23 +4,32 @@
 [ext_resource type="PackedScene" uid="uid://dscvamw8ugsb8" path="res://scenes/characters/humanoid/humanoid_damage_model.tscn" id="2_mayv3"]
 [ext_resource type="Script" uid="uid://bxxbd3wraas1" path="res://scenes/characters/HumanAi.cs" id="3_4otcn"]
 [ext_resource type="PackedScene" uid="uid://peuxdvd6cyuo" path="res://scenes/characters/humanoid/humanoid_model.tscn" id="3_denma"]
+[ext_resource type="PackedScene" uid="uid://beu6ff0tpxtip" path="res://scenes/character_appearance.tscn" id="4_denma"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cwf78"]
 radius = 0.17333984
 height = 1.8180542
 
-[node name="Human" type="CharacterBody3D" unique_id=739696353 node_paths=PackedStringArray("InputSource")]
+[node name="Human" type="CharacterBody3D" unique_id=739696353 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "DamageModel")]
 script = ExtResource("1_mayv3")
+CharacterModel = NodePath("HumanoidModel/CharacterModel")
+Humanoid = NodePath("HumanoidModel")
 InputSource = NodePath("HumanAI")
+DamageModel = NodePath("DamageModel")
 
 [node name="DamageModel" parent="." unique_id=1876319864 node_paths=PackedStringArray("Humanoid") instance=ExtResource("2_mayv3")]
 Humanoid = NodePath("../HumanoidModel")
 
-[node name="HumanoidModel" parent="." unique_id=728337583 instance=ExtResource("3_denma")]
+[node name="HumanoidModel" parent="." unique_id=728337583 node_paths=PackedStringArray("DamageModel") instance=ExtResource("3_denma")]
+DamageModel = NodePath("../DamageModel")
+
+[node name="CharacterModel" parent="HumanoidModel" unique_id=1564308067 node_paths=PackedStringArray("Humanoid") instance=ExtResource("4_denma")]
+Humanoid = NodePath("..")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=867865548 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.088412255, 0)
 shape = SubResource("CapsuleShape3D_cwf78")
 
-[node name="HumanAI" type="Node" parent="." unique_id=369578243]
+[node name="HumanAI" type="Node" parent="." unique_id=369578243 node_paths=PackedStringArray("Humanoid")]
 script = ExtResource("3_4otcn")
+Humanoid = NodePath("../HumanoidModel")

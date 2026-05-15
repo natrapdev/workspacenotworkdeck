@@ -12,20 +12,16 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
 
     public override State ChangeState(InputPackage input)
     {
-        if (!Character.IsOnFloor())
-        {
-            return Parent.GetStateByName("airborne");
-        }
-        return base.ChangeState(input);
+        return !Character.IsOnFloor() ? Parent.GetStateByName("airborne") : base.ChangeState(input);
     }
 
-    public override void OnUpdate(InputPackage input, float delta)
+    protected override void OnUpdate(InputPackage input, float delta)
     {
         // if (LegBehaviour.CurrentState.TracksLookDirection() && !TracksLookDirection()) LegsTrackLookDirection(input, delta);
         LegsUpdate(input, delta);
     }
 
-    public override void OnEnter()
+    protected override void OnEnter()
     {
         // NextState??=Parent.GetStateByName("slash1_one_handed");
         if (!FollowUpStates.Contains(Parent.GetStateByName("slash1_one_handed")))

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Array = Godot.Collections.Array;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
@@ -10,7 +11,7 @@ public partial class HumanoidLimbs : Node
 {
     [Export] public DamageModel Model { get; set; }
     [Export] public CirculationSystem CirculationSystem { get; set; }
-    public Dictionary<string, Limb> Limbs { get; set; } = new(16);
+    public Dictionary<string, Limb> Limbs { get; } = new(17);
 
     public List<List<string>> LimbLayout = [
         ["thorax", "neck", "head"],
@@ -18,14 +19,14 @@ public partial class HumanoidLimbs : Node
         ["thorax", "upper arm", "forearm", "hand"]
     ];
 
-    public void Intialize()
+    public void Initialize()
     {
-
+        AcceptSkeleton();
     }
 
-    public void AcceptSkeleton()
+    private void AcceptSkeleton()
     {
-        foreach (var child in GetChildren())
+        foreach (Node child in GetChildren())
         {
             if (child is Limb limb)
             {
@@ -35,7 +36,7 @@ public partial class HumanoidLimbs : Node
         GraphLimbs();
     }
 
-    public void GraphLimbs()
+    private void GraphLimbs()
     {
         foreach (Limb limb in Limbs.Values)
         {
@@ -68,14 +69,19 @@ public partial class HumanoidLimbs : Node
 
     private void SetProperties(Limb limb)
     {
+        limb.Model = Model;
         limb.Skeleton = Model.Skeleton;
-        limb.LimbName = TranslateName(limb.Name);
+        limb.UseExternalSkeleton = true;
+        limb.SetExternalSkeleton(limb.GetPathTo(Model.Skeleton));
+        limb.LimbName ??= TranslateName(limb.Name);
         limb.DetectionArea = limb.GetChild<Area3D>(0);
         limb.PhysicalVolume = GetNodeVolume(limb.DetectionArea.GetChild(0) as Node3D);
         limb.Mass = Model.BodyMass * Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
         limb.MaxBloodVolume = CirculationSystem.TotalBloodVolume * Model.BodyPartMassCoefficients.GetValueOrDefault(limb.LimbName, 0f);
         limb.BleedMultiplier = Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
         limb.Thickness = GetCollisionShapeThickness(limb.DetectionArea.GetChild(0) as CollisionShape3D);
+        limb.CirculationSystem = CirculationSystem;
+        limb.Initialize();
     }
 
     /// <summary>
@@ -94,7 +100,7 @@ public partial class HumanoidLimbs : Node
             return 0;
 
         // BFS end find shortest path
-        Queue<(Limb limb, int distance)> queue = new();
+        Queue<(Limb limb, int distance)> queue = new(8);
         HashSet<Limb> visited = [];
 
         queue.Enqueue((start, 0));
@@ -102,7 +108,7 @@ public partial class HumanoidLimbs : Node
 
         while (queue.Count > 0)
         {
-            var (currentLimb, distance) = queue.Dequeue();
+            (Limb currentLimb, int distance) = queue.Dequeue();
 
             foreach (Limb neighbour in currentLimb.Neighbours)
             {
@@ -112,11 +118,8 @@ public partial class HumanoidLimbs : Node
                 if (neighbour == end)
                     return distance + 1;
 
-                if (!visited.Contains(neighbour))
-                {
-                    visited.Add(neighbour);
-                    queue.Enqueue((neighbour, distance + 1));
-                }
+                if (!visited.Add(neighbour)) continue;
+                queue.Enqueue((neighbour, distance + 1));
             }
         }
 
@@ -126,62 +129,63 @@ public partial class HumanoidLimbs : Node
 
     public static float GetNodeVolume(Node3D node)
     {
-        if (node is CollisionShape3D collisionShape)
+        switch (node)
         {
-            return GetCollisionShapeVolume(collisionShape);
-        }
-
-        if (node is MeshInstance3D meshInstance && meshInstance.Mesh is ArrayMesh arrayMesh)
-        {
-            float volume = 0f;
-
-            for (int i = 0; i < arrayMesh.GetSurfaceCount(); i++)
+            case CollisionShape3D collisionShape: return GetCollisionShapeVolume(collisionShape);
+            case MeshInstance3D {Mesh: ArrayMesh arrayMesh}:
             {
-                var arrays = arrayMesh.SurfaceGetArrays(i);
-                var vertices = (Vector3[])arrays[(int)ArrayMesh.ArrayType.Vertex];
-                var indices = (int[])arrays[(int)ArrayMesh.ArrayType.Index];
+                float volume = 0f;
 
-                for (int j = 0; j < indices.Length; j += 3)
+                for (int i = 0; i < arrayMesh.GetSurfaceCount(); i++)
                 {
-                    Vector3 v0 = vertices[indices[j]];
-                    Vector3 v1 = vertices[indices[j + 1]];
-                    Vector3 v2 = vertices[indices[j + 2]];
+                    Array arrays = arrayMesh.SurfaceGetArrays(i);
+                    var vertices = (Vector3[])arrays[(int)Mesh.ArrayType.Vertex];
+                    int[] indices = (int[])arrays[(int)Mesh.ArrayType.Index];
 
-                    volume += Math.Abs(v0.Dot(v1.Cross(v2))) / 6f;
+                    for (int j = 0; j < indices.Length; j += 3)
+                    {
+                        Vector3 v0 = vertices[indices[j]];
+                        Vector3 v1 = vertices[indices[j + 1]];
+                        Vector3 v2 = vertices[indices[j + 2]];
+
+                        volume += Math.Abs(v0.Dot(v1.Cross(v2))) / 6f;
+                    }
                 }
+
+                return volume;
             }
-
-            return volume;
+            default: return 0f;
         }
-
-        return 0f;
     }
 
     private static float GetCollisionShapeVolume(CollisionShape3D collisionShape)
     {
         Shape3D shape = collisionShape.Shape;
 
-        if (shape is BoxShape3D box)
+        switch (shape)
         {
-            Vector3 extents = box.Size;
-            return extents.X * extents.Y * extents.Z;
-        }
-        else if (shape is SphereShape3D sphere)
-        {
-            float radius = sphere.Radius;
-            return 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
-        }
-        else if (shape is CapsuleShape3D capsule)
-        {
-            float radius = capsule.Radius;
-            float height = capsule.Height;
+            case BoxShape3D box:
+            {
+                Vector3 extents = box.Size;
+                return extents.X * extents.Y * extents.Z;
+            }
+            case SphereShape3D sphere:
+            {
+                float radius = sphere.Radius;
+                return 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
+            }
+            case CapsuleShape3D capsule:
+            {
+                float radius = capsule.Radius;
+                float height = capsule.Height;
 
-            float cylinderVolume = Mathf.Pi * Mathf.Pow(radius, 2) * height;
-            float sphereVolume = 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
+                float cylinderVolume = Mathf.Pi * Mathf.Pow(radius, 2) * height;
+                float sphereVolume = 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
 
-            return cylinderVolume + sphereVolume;
+                return cylinderVolume + sphereVolume;
+            }
+            default: return 0f;
         }
-        return 0f;
     }
 
     private static float GetCollisionShapeThickness(CollisionShape3D shape)

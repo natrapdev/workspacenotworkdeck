@@ -8,7 +8,7 @@ namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class HumanoidCombat : Node3D
 {
-    public HumanoidModel Humanoid { get; set; }
+    public HumanoidModel Humanoid { get; private set; }
     private PhysicsDirectSpaceState3D _physicsSpaceState;
 
     private Array<Rid> _exclusionList;
@@ -88,10 +88,10 @@ public partial class HumanoidCombat : Node3D
         );
     }
 
-    public async Task<HitInfo> ScanForHitsSlash()
+    public Task<HitInfo> ScanForHitsSlash()
     {
         Weapon currentWeapon = Humanoid.CurrentWeapon;
-        if (currentWeapon == null) return new HitInfo();
+        if (currentWeapon == null) return Task.FromResult(new HitInfo());
 
         int rayAmount = currentWeapon.RaycastAmount;
         Marker3D bladeStart = currentWeapon.BladeStartMarker;
@@ -123,16 +123,16 @@ public partial class HumanoidCombat : Node3D
             queryParams.From = origin;
             queryParams.To = target;
 
-            var result = _physicsSpaceState.IntersectRay(queryParams);
+            Dictionary result = _physicsSpaceState.IntersectRay(queryParams);
 
             if (result.Count > 0)
             {
                 // Return immediately on first hit
-                return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                return Task.FromResult(CollectHitInformation(result, currentWeapon, origin, weaponVelocity));
             }
         }
 
-        return new HitInfo();
+        return Task.FromResult(new HitInfo());
     }
 
     public HitInfo ScanForHitsStab()
@@ -153,7 +153,7 @@ public partial class HumanoidCombat : Node3D
         queryParams.CollisionMask = 2;
         queryParams.Exclude = _exclusionList;
 
-        var result = _physicsSpaceState.IntersectRay(queryParams);
+        Dictionary result = _physicsSpaceState.IntersectRay(queryParams);
 
         return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
     }
@@ -166,9 +166,9 @@ public partial class HumanoidCombat : Node3D
     {
         if (result.Count <= 0) return new HitInfo();
 
-        Node3D hitNode = (Node3D)(GodotObject)result["collider"];
-        Vector3 hitPosition = (Vector3)result["position"];
-        Vector3 hitNormal = (Vector3)result["normal"];
+        var hitNode = (Node3D)(GodotObject)result["collider"];
+        var hitPosition = (Vector3)result["position"];
+        var hitNormal = (Vector3)result["normal"];
         //TODO: include velocity of hit targets.
         Vector3 hitVelocity = hitNode is RigidBody3D rb ? rb.LinearVelocity : Vector3.Zero;
 

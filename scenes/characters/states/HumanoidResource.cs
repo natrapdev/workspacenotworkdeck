@@ -16,7 +16,6 @@ public partial class HumanoidResource : Node
     [Export] public float StaminaGain { get; set; } = 3f;
     [Export] public float FatigueGain { get; set; } = .1f;
     [Export] public int InventorySpace { get; set; } = 3;
-    [Export] public DamageModel DamageModel { get; set; }
 
     public CharacterBody3D Character { get; set; }
     public HumanoidModel Humanoid { get; set; }
@@ -25,7 +24,6 @@ public partial class HumanoidResource : Node
 
     private Skeleton3D _characterSkeleton;
     private int _characterSkeletonHeadIndex;
-    private readonly List<string> _statuses = [];
     private float _totalBloodVolume;
     private float _heartRate; // beats per minute
     private float _strokeVolume;
@@ -97,8 +95,6 @@ public partial class HumanoidResource : Node
         _characterSkeletonHeadIndex = _characterSkeleton.FindBone("spine.006");
 
         // CameraPivot = Humanoid.GetParent().GetNode<Node3D>("CameraPivot");
-
-        DamageModel.OnReady();
     }
 
     public void Update(float delta)
@@ -148,7 +144,6 @@ public partial class HumanoidResource : Node
     private Node FindWorldItemContainer()
     {
         Node mainSceneNode = null;
-        Node itemContainer;
 
         foreach (Node node in GetTree().Root.GetChildren())
         {
@@ -164,7 +159,7 @@ public partial class HumanoidResource : Node
             GD.PrintErr("Could not find a main scene.");
         }
 
-        itemContainer = mainSceneNode.GetNodeOrNull<Node>("ItemCollection");
+        var itemContainer = mainSceneNode.GetNodeOrNull<Node>("ItemCollection");
 
         if (itemContainer == null)
         {
@@ -209,16 +204,14 @@ public partial class HumanoidResource : Node
 
         foreach (Node3D item in items)
         {
-            PickableItem pickableItem = item as PickableItem;
-            float angle = pickableItem.LookDifference(Humanoid.Character, Humanoid.LookAtReference);
+            var pickableItem = item as PickableItem;
+            float angle = pickableItem!.LookDifference(Humanoid.Character, Humanoid.LookAtReference);
             float distance = pickableItem.DistanceBetween(Humanoid.Character);
 
-            float score = angle;
-
-            if (score < bestScore)
+            if (angle < bestScore)
             {
                 selectedPickableItem = pickableItem;
-                bestScore = score;
+                bestScore = angle;
             }
         }
 

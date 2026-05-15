@@ -5,21 +5,19 @@ namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class HumanoidLegStates : Node
 {
-    [Export] HumanoidModel Humanoid { get; set; }
+    [Export] public HumanoidModel Humanoid { get; set; }
 
     public State CurrentState { get; set; }
 
     public void AcceptStates()
     {
-        foreach (var child in GetChildren())
+        foreach (Node child in GetChildren())
         {
-            if (child is LegState state)
-            {
-                state.Humanoid = Humanoid;
-                state.StateContainer = Humanoid.StateContainer;
-                state.Parent = this;
-                state.CurrentState = CurrentState;
-            }
+            if (child is not LegState state) continue;
+            state.Humanoid = Humanoid;
+            state.StateContainer = Humanoid.StateContainer;
+            state.Parent = this;
+            state.CurrentState = CurrentState;
         }
     }
     

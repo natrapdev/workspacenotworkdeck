@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Viewport;
 
@@ -7,8 +8,10 @@ public partial class ViewportAnimator : Node
 {
     [Export] public ViewportModel Viewport { get; set; }
     [Export] public AnimationPlayer AnimationPlayer { get; set; }
+    
+    private readonly StringBuilder _stringBuilder = new();
 
-    private readonly Dictionary<string, float> AnimationBlendTimes = new()
+    private readonly Dictionary<string, float> _animationBlendTimes = new()
     {
         {"slash_prepare_one_handed", 0.2f},
         {"slash1_one_handed", 0.3f},
@@ -30,28 +33,25 @@ public partial class ViewportAnimator : Node
     {
         if (!AnimationPlayer.HasAnimation("viewport_animation_library/" + animation))
         {
-            if (_currentAnimation is not null)
-            {
-                SetAnimation(_currentAnimation);
-            }
-            else
+            if (_currentAnimation is null)
             {
                 Viewport.Skeleton.ResetBonePoses();
             }
-
+            
             return;
         }
 
-        if (animation != _currentAnimation)
-        {
-            AnimationPlayer.Play(
-                   name: "viewport_animation_library/" + animation,
-                   customBlend: AnimationBlendTimes.TryGetValue(animation, out float value) ? value : 0.2,
-                   customSpeed: PlaySpeed,
-                   fromEnd: PlaySpeed < 0
-            );
+        if (animation == _currentAnimation) return;
+        
+        AnimationPlayer.Play(
+            name: _stringBuilder.Append("viewport_animation_library/").Append(animation).ToString(),
+            customBlend: _animationBlendTimes.TryGetValue(animation, out float value) ? value : 0.2,
+            customSpeed: PlaySpeed,
+            fromEnd: PlaySpeed < 0
+        );
 
-            _currentAnimation = animation;
-        }
+        _stringBuilder.Clear();
+
+        _currentAnimation = animation;
     }
 }

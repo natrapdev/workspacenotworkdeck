@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class Inventory : Node
+public sealed partial class Inventory : Node
 {
     [Export] public int InventorySpace { get; set; } = 3;
-    public Node3D[] InventoryContent { get; set; }
+    private Node3D[] InventoryContent { get; set; }
 
     public override void _Ready()
     {
@@ -20,29 +20,26 @@ public partial class Inventory : Node
         return InventoryContent[index];
     }
 
-    public virtual void AddItemToInventory(Node3D item)
+    public void AddItemToInventory(Node3D item)
     {
         for (int i = 0; i < InventoryContent.Length; i++)
         {
-            if (InventoryContent[i] is null)
-            {
-                AddItemToInventory(item, i);
-                return;
-            }
+            if (InventoryContent[i] is not null) continue;
+            
+            AddItemToInventory(item, i);
+            return;
         }
     }
 
-    public virtual void AddItemToInventory(Node3D item, int index)
+    public void AddItemToInventory(Node3D item, int index)
     {
         if (InventoryContent[index] is null)
         {
             InventoryContent[index] = item;
 
-            if (item is PickableItem)
-            {
-                PickableItem pickedItem = item as PickableItem;
-                pickedItem.IsPickedUp = true;
-            }
+            if (item is not PickableItem) return;
+            var pickedItem = (PickableItem)item;
+            pickedItem.IsPickedUp = true;
         }
         else
         {
@@ -50,7 +47,7 @@ public partial class Inventory : Node
         }
     }
 
-    public virtual void RemoveItemFromInventory(int index)
+    public void RemoveItemFromInventory(int index)
     {
         if (InventoryContent[index] is not null)
         {

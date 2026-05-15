@@ -2,10 +2,11 @@ using Godot;
 using MyFirst3DGame.Items;
 using System;
 using System.Threading.Tasks;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class HumanoidModel : Node3D
+public sealed partial class HumanoidModel : Node3D
 {
 	[Export] public int Team { get; set; } = 0;
 	public CharacterBody3D Character { get; set; }
@@ -15,17 +16,18 @@ public partial class HumanoidModel : Node3D
 	[Export] public HumanoidResource Resource { get; set; }
 	[Export] public Marker3D HeadLookAtTarget { get; set; }
 	[Export] public HumanoidLegStates HumanoidLegs { get; set; }
+	[Export] public DamageModel DamageModel { get; set; }
 	[Export] public bool Debug { get; set; } = false;
 
 	public Weapon CurrentWeapon { get; set; }
 
 	[Export] public HumanoidStates StateContainer { get; set; }
-	public State CurrentState { get; set; }
+	public State CurrentState { get; private set; }
 
 	[Export] public WeaponInventory WeaponInventory { get; set; }
 	public Inventory Inventory;
 
-	public Node3D LookAtReference { get; set; }
+	public Node3D LookAtReference { get; private set; }
 
 	public override void _Ready()
 	{
@@ -35,8 +37,10 @@ public partial class HumanoidModel : Node3D
 		CurrentState = StateContainer.States["idle"];
 		HumanoidLegs.CurrentState = CurrentState;
 		HumanoidLegs.AcceptStates();
+		
+		DamageModel.OnReady();
 
-		if (Character.Name.ToString().Contains("Player"))
+		if (Character != null && Character.Name.ToString().Contains("Player"))
 		{
 			LookAtReference = GetParent().GetNode<Node3D>("CameraPivot");
 		}
@@ -46,11 +50,11 @@ public partial class HumanoidModel : Node3D
 		}
 	}
 
-	public virtual async Task Update(InputPackage input, float delta)
+	public async Task Update(InputPackage input, float delta)
 	{
 		input = Combat.Contextualize(input);
 
-		var relevance = CurrentState.ChangeState(input);
+		State relevance = CurrentState.ChangeState(input);
 
 		if (!relevance.Equals(CurrentState))
 		{

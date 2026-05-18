@@ -1,3 +1,4 @@
+using BenchmarkDotNet.Reports;
 using Godot;
 using MyFirst3DGame.scenes.characters.states;
 using System;
@@ -11,6 +12,19 @@ public partial class Limb : BoneAttachment3D
 	[Export] public float BleedMultiplier { get; set; } = 1;
 	[Export] public string LimbName { get; set; }
 	[Export] public float BoneStrength { get; set; } = 400f;
+	
+	/// <summary>
+	/// Defines how much resistance force, in newtons, the <c>Limb</c> will exert on anything trying to pierce it.
+	/// <br />Can be affected by sharpness of object.
+	/// <br /><br /> For reference, see how much resistance force the following materials have:
+	/// </summary>
+	/// <list type="bullet">
+	///	<item><description>Skin = 35-55N</description></item>
+	///	<item><description>Fat/Muscle = 80-140N</description></item>
+	///	<item><description>Bone/Cartilage = 150-550N</description></item>
+	/// </list>
+	[Export] public float CutResistance { get; set; } = 90f;
+	
 	public CirculationSystem CirculationSystem { get; set; }
 	public DamageModel Model { get; set; }
 	public List<Limb> Neighbours { get; set; } = new(4);

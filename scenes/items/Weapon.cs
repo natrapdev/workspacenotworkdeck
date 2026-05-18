@@ -31,9 +31,17 @@ public partial class Weapon : PickableItem
 
 	public readonly Dictionary<string, string> Moves = [];
 
+	/// <summary>
+	/// Where the <c>Weapon</c> is on the sharpness spectrum within the range 0-1.
+	/// </summary>
+	/// <example>
+	/// <br />0 = Completely blunt (clubs, batons, fists, maces)
+	/// <br />0.5 = Partially sharp (worn swords, spiked blunt weapons)
+	/// <br />1 = Completely sharp (swords, knives, axes)
+	/// </example>
 	public float Sharpness { get; private set; }
 	public string Material { get; private set; }
-
+	
 	public override void _Ready()
 	{
 
@@ -64,6 +72,7 @@ public partial class Weapon : PickableItem
 
 			_baseDamage = (double)weaponData["damage"];
 			Mass = (float)weaponData["mass"];
+			Sharpness = (float)weaponData["sharpness"];
 			WeaponType = (bool)weaponData["oneHanded"] ? "one_handed" : "two_handed";
 
 			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {Mass} kg | Type {WeaponType}");

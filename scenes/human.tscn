@@ -10,12 +10,11 @@
 radius = 0.17333984
 height = 1.8180542
 
-[node name="Human" type="CharacterBody3D" unique_id=739696353 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "DamageModel")]
+[node name="Human" type="CharacterBody3D" unique_id=739696353 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource")]
 script = ExtResource("1_mayv3")
 CharacterModel = NodePath("HumanoidModel/CharacterModel")
 Humanoid = NodePath("HumanoidModel")
 InputSource = NodePath("HumanAI")
-DamageModel = NodePath("DamageModel")
 
 [node name="DamageModel" parent="." unique_id=1876319864 node_paths=PackedStringArray("Humanoid") instance=ExtResource("2_mayv3")]
 Humanoid = NodePath("../HumanoidModel")

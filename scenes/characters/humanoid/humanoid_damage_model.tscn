@@ -67,30 +67,26 @@ height = 0.15808105
 radius = 0.099121094
 height = 0.2581005
 
-[node name="DamageModel" type="Node3D" unique_id=1876319864 node_paths=PackedStringArray("Circulation", "Limbs")]
+[node name="DamageModel" type="Node3D" unique_id=1876319864 node_paths=PackedStringArray("Circulation", "LimbCollection")]
 script = ExtResource("1_gq613")
 Circulation = NodePath("CirculationSystem")
-Limbs = NodePath("Limbs")
+LimbCollection = NodePath("Limbs")
 
-[node name="CirculationSystem" type="Node" parent="." unique_id=1064459812 node_paths=PackedStringArray("Model", "LimbsParent")]
+[node name="CirculationSystem" type="Node" parent="." unique_id=1064459812 node_paths=PackedStringArray("Model")]
 script = ExtResource("2_5c2kn")
 Model = NodePath("..")
-LimbsParent = NodePath("../Limbs")
 
 [node name="DamageHandler" type="Node" parent="." unique_id=840410448]
 script = ExtResource("3_apudr")
 
-[node name="Limbs" type="Node" parent="." unique_id=773306044 node_paths=PackedStringArray("Model", "CirculationSystem")]
+[node name="Limbs" type="Node" parent="." unique_id=773306044 node_paths=PackedStringArray("Model")]
 script = ExtResource("4_kt5f5")
 Model = NodePath("..")
-CirculationSystem = NodePath("../CirculationSystem")
 
 [node name="Thorax" type="BoneAttachment3D" parent="Limbs" unique_id=1484580985]
 transform = Transform3D(1, 3.996803e-15, 2.3841848e-07, -2.9105868e-08, 0.99252015, 0.12207891, -2.3663524e-07, -0.12207887, 0.9925202, -5.801907e-06, 0.3362502, -0.007129564)
 bone_name = "spine.003"
 bone_idx = 3
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 LimbName = "thorax"
 
@@ -107,8 +103,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(1, -3.5527137e-15, 2.3841844e-07, -2.2465626e-08, 0.9955506, 0.094227776, -2.3735767e-07, -0.094227746, 0.9955506, -5.801907e-06, 0.19880626, 0.0058793537)
 bone_name = "spine.002"
 bone_idx = 2
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 LimbName = "abdomen"
 
@@ -125,8 +119,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(1, -1.2434498e-14, 2.3841822e-07, 5.515595e-08, 0.9728727, -0.23134108, -2.319506e-07, 0.2313411, 0.9728726, -5.801907e-06, -0.08761807, -0.034448422)
 bone_name = "spine"
 bone_idx = 0
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 LimbName = "pelvis"
 
@@ -143,8 +135,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(0.9965233, 0.05759428, -0.06020082, 0.035248253, -0.9461746, -0.32173002, -0.07549057, 0.3184905, -0.9449117, 0.07999999, -0.030797694, -0.0070620067)
 bone_name = "thigh.L"
 bone_idx = 57
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 LimbName = "thigh"
 
@@ -161,8 +151,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(0.9988317, -0.039258853, -0.02817637, -0.0072016963, -0.69749737, 0.71655035, -0.047784165, -0.7155068, -0.69696474, 0.10523189, -0.4453143, 0.13246785)
 bone_name = "shin.L"
 bone_idx = 58
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 LimbName = "shin"
 
@@ -179,8 +167,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.99799216, -0.022644205, 0.05915142, 0.04685054, -0.8923875, 0.44883034, 0.042622775, 0.45070124, 0.8916532, 0.08211279, -0.85965955, -0.19487017)
 bone_name = "toe.L"
 bone_idx = 60
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftFoot" unique_id=867182]
@@ -196,8 +182,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(0.9999637, 0.0008139305, -0.008478936, -0.0006690358, -0.9848436, -0.173441, -0.008491627, 0.17344098, -0.98480386, -0.080000006, -0.03079769, -0.0070620067)
 bone_name = "thigh.R"
 bone_idx = 62
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightThigh" unique_id=757104875]
@@ -213,8 +197,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(0.99999094, 0.0017063266, 0.0038887411, 0.0013612715, -0.9962013, 0.08706525, 0.004022455, -0.087057695, -0.9961914, -0.07964343, -0.46225506, 0.06892203)
 bone_name = "shin.R"
 bone_idx = 63
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightShin" unique_id=134581368]
@@ -230,8 +212,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.99994135, -0.00831257, -0.0069396347, -0.006938096, -0.00021204352, 0.9999757, -0.008313739, 0.99996203, 0.00015315413, -0.079202674, -0.9598571, 0.12527992)
 bone_name = "toe.R"
 bone_idx = 65
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightFoot" unique_id=1077234960]
@@ -247,8 +227,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.9161149, -0.08439542, 0.39193255, 0.046229795, -0.9933087, -0.105831906, 0.39824173, -0.078835264, 0.9138865, -0.19205558, 0.42935836, -0.0085163005)
 bone_name = "upper_arm.R"
 bone_idx = 31
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightUpperArm" unique_id=1421209511]
@@ -264,8 +242,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.89852315, 0.028259411, 0.43801567, 0.03695763, -0.9895105, 0.13965297, 0.43736762, 0.14166944, 0.8880536, -0.21603955, 0.14707479, -0.03092009)
 bone_name = "forearm.R"
 bone_idx = 32
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightForearm" unique_id=1822212716]
@@ -281,8 +257,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.9044341, 0.06289709, 0.42195153, -0.015454954, -0.9932533, 0.11492951, 0.4263335, 0.09742492, 0.8993041, -0.20922533, -0.091526955, 0.0032408219)
 bone_name = "hand.R"
 bone_idx = 33
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/RightHand" unique_id=699763635]
@@ -298,8 +272,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.9161151, 0.084395126, -0.39193228, -0.046229586, -0.9933089, -0.10583155, -0.39824158, -0.078834936, 0.9138866, 0.19205558, 0.42935827, -0.008516291)
 bone_name = "upper_arm.L"
 bone_idx = 8
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftUpperArm" unique_id=719463615]
@@ -315,8 +287,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.8985233, -0.028259866, -0.43801543, -0.036957122, -0.98951054, 0.13965325, -0.43736756, 0.14166953, 0.8880536, 0.2160394, 0.14707467, -0.030920016)
 bone_name = "forearm.L"
 bone_idx = 9
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftForearm" unique_id=1561249832]
@@ -332,8 +302,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(-0.9044341, -0.06289747, -0.42195126, 0.015455364, -0.99325323, 0.114929795, -0.4263334, 0.09742507, 0.89930403, 0.20922504, -0.09152709, 0.0032409)
 bone_name = "hand.L"
 bone_idx = 10
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftHand" unique_id=1441376881]
@@ -349,8 +317,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(1, -4.2632564e-14, 9.5367403e-07, 2.4616315e-07, 0.96611243, -0.25812083, -9.2135633e-07, 0.2581209, 0.96611243, -5.801907e-06, 0.5363325, -0.019592088)
 bone_name = "spine.005"
 bone_idx = 5
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/Neck" unique_id=1426554144]
@@ -366,8 +332,6 @@ debug_color = Color(1, 0, 0, 1)
 transform = Transform3D(0.8392359, -0.076258905, 0.5383936, -1.4901161e-07, 0.9901171, 0.14024194, -0.54376745, -0.11769608, 0.8309418, -5.8019064e-06, 0.5626688, -0.012555682)
 bone_name = "spine.006"
 bone_idx = 6
-use_external_skeleton = true
-external_skeleton = NodePath("")
 script = ExtResource("5_07ds0")
 
 [node name="Area3D" type="Area3D" parent="Limbs/Head" unique_id=1015078717]

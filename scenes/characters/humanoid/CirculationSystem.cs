@@ -5,7 +5,7 @@ namespace MyFirst3DGame.scenes.characters.humanoid;
 public partial class CirculationSystem : Node
 {
     [Export] public DamageModel Model { get; set; }
-    [Export] public HumanoidLimbs LimbsParent { get; set; }
+    
     private const float BloodPerBodyMassKilogram = 75f;
     public float TotalBloodVolume { get { return Model.BodyMass * BloodPerBodyMassKilogram; } }
     public float CurrentBloodVolume { get; set; }
@@ -17,7 +17,7 @@ public partial class CirculationSystem : Node
 
     private void LoseBloodIfPossible(float delta)
     {
-        foreach (Limb limb in LimbsParent.Limbs.Values)
+        foreach (Limb limb in Model.LimbCollection.Limbs.Values)
         {
             LoseBloodInLimb(limb, limb.CurrentBleedRate * delta);
 

@@ -9,16 +9,16 @@ public partial class OneHandedThrust : State, IPartialBodyState
     [Export] public LegState LegBehaviour { get; set; }
 
     public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
-    public Task LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
+    public void LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
     protected override void OnUpdate(InputPackage input, float delta)
     {
         LegsUpdate(input, delta);
     }
 
-    protected override async Task<HitInfo> RightWeaponHitScan()
+    protected override HitInfo ScanForHitsRightWeapon()
     {
-        return await Task.FromResult(Combat.ScanForHitsStab());
+        return Combat.ScanForHitsStab();
     }
 
     protected override void OnEnter()

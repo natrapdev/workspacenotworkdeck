@@ -10,7 +10,7 @@ public interface ILegState
     HumanoidLegStates Parent { get; set; }
     State CurrentState { get; set; }
 
-    Task Update(InputPackage input, float delta);
+    void Update(InputPackage input, float delta);
     void UpdateLegsState(InputPackage input, float delta);
     void ChangeState(State state);
 }

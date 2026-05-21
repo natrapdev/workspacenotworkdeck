@@ -10,7 +10,6 @@ namespace MyFirst3DGame.scenes.characters.humanoid;
 public partial class HumanoidLimbs : Node
 {
     [Export] public DamageModel Model { get; set; }
-    [Export] public CirculationSystem CirculationSystem { get; set; }
     public Dictionary<string, Limb> Limbs { get; } = new(17);
 
     public List<List<string>> LimbLayout = [
@@ -33,6 +32,7 @@ public partial class HumanoidLimbs : Node
                 SetProperties(limb);
             }
         }
+        GD.Print("\n");
         GraphLimbs();
     }
 
@@ -68,19 +68,18 @@ public partial class HumanoidLimbs : Node
     }
 
     private void SetProperties(Limb limb)
-    {
+    {  
         limb.Model = Model;
-        limb.Skeleton = Model.Skeleton;
-        limb.UseExternalSkeleton = true;
-        limb.SetExternalSkeleton(limb.GetPathTo(Model.Skeleton));
+        limb.ExternalSkeleton = limb.GetPathTo(limb.Model.Skeleton);
         limb.LimbName ??= TranslateName(limb.Name);
         limb.DetectionArea = limb.GetChild<Area3D>(0);
         limb.PhysicalVolume = GetNodeVolume(limb.DetectionArea.GetChild(0) as Node3D);
         limb.Mass = Model.BodyMass * Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
-        limb.MaxBloodVolume = CirculationSystem.TotalBloodVolume * Model.BodyPartMassCoefficients.GetValueOrDefault(limb.LimbName, 0f);
+        limb.MaxBloodVolume = Model.Circulation.TotalBloodVolume * Model.BodyPartMassCoefficients.GetValueOrDefault(limb.LimbName, 0f);
         limb.BleedMultiplier = Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
         limb.Thickness = GetCollisionShapeThickness(limb.DetectionArea.GetChild(0) as CollisionShape3D);
-        limb.CirculationSystem = CirculationSystem;
+        limb.CirculationSystem = Model.Circulation;
+        
         limb.Initialize();
     }
 

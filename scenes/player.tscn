@@ -13,14 +13,13 @@
 radius = 0.17333984
 height = 1.8180542
 
-[node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport", "DamageModel") groups=["player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport") groups=["player"]]
 script = ExtResource("1_d2wvv")
 CharacterModel = NodePath("HumanoidModel/CharacterModel")
 Humanoid = NodePath("HumanoidModel")
 InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
 Viewport = NodePath("ViewportModel")
-DamageModel = NodePath("DamageModel")
 
 [node name="DamageModel" parent="." unique_id=1876319864 node_paths=PackedStringArray("Humanoid") instance=ExtResource("2_smehm")]
 Humanoid = NodePath("../HumanoidModel")

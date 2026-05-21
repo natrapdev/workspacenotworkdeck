@@ -12,7 +12,7 @@ public partial class HumanAi : InputGatherer
 
     protected override void GetInputs()
     {
-        _actions.Add("idle");
+        Actions.Add("idle");
 
         if (CurrentTask == "idle")
         {
@@ -20,13 +20,13 @@ public partial class HumanAi : InputGatherer
         }
         else if (CurrentTask == "patrol")
         {
-            _actions.Add("walk");
+            Actions.Add("walk");
         }
         else if (CurrentTask == "chase")
         {
             Humanoid.HeadLookAtTarget.GlobalPosition = ((Bot)Humanoid.Character).Player.CameraPivot.GlobalPosition;
-            _inputDirection = new Vector2(0, -1);
-            _actions.Add("walk");
+            InputDirection = new Vector2(0, -1);
+            Actions.Add("walk");
         }
     }
 }

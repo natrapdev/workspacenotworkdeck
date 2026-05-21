@@ -64,7 +64,7 @@ public partial class State : Node
             _queuedState = null;
         }
 
-        if (_canForceState)
+        if (_canForceState && _forcedState is not null)
         {
             _canForceState = false;
             Humanoid.SwitchTo(_forcedState);
@@ -74,19 +74,11 @@ public partial class State : Node
         return DefaultLifecycle(input);
     }
 
-    public virtual async Task Update(InputPackage input, float delta)
+    public void Update(InputPackage input, float delta)
     {
         Animator.UpdateAnimations();
-
-        if (TracksLookDirection())
-        {
-            TrackLookDirection(input, delta);
-        }
-        if (RightWeaponHurts())
-        { 
-            await RightWeaponHitScan();
-        }
-
+        if (TracksLookDirection()) TrackLookDirection(input, delta);
+        if (RightWeaponHurts()) ScanForHitsRightWeapon();
         OnUpdate(input, delta);
     }
     protected virtual void OnUpdate(InputPackage input, float delta) { }
@@ -113,12 +105,11 @@ public partial class State : Node
         // float angle = characterForward.SignedAngleTo(direction, Vector3.Up);
         // Character.RotateY(Mathf.Clamp(angle, BodyRotationSpeed * delta, BodyRotationSpeed * delta));
 
-        Vector3 characterRotation = Humanoid.GlobalRotation;
-        float targetAngle = Humanoid.LookAtReference.GlobalRotation.Y;
-        float currentAngle = characterRotation.Y;
-        float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta);
+        (float x, float y, float z) = Humanoid.GlobalRotation;
+        float targetY = Humanoid.LookAtReference.GlobalRotation.Y;
+        float newAngle = Mathf.LerpAngle(y, targetY, BodyRotationSpeed * delta);
 
-        Humanoid.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
+        Humanoid.GlobalRotation = new Vector3(x, newAngle, z);
     }
 
     protected virtual State FindFirstValidState(InputPackage input)
@@ -183,9 +174,9 @@ public partial class State : Node
         }
     }
 
-    protected virtual async Task<HitInfo> RightWeaponHitScan()
+    protected virtual HitInfo ScanForHitsRightWeapon()
     {
-        HitInfo hitInfo = await Combat.ScanForHitsSlash();
+        HitInfo hitInfo = Combat.ScanForHitsSlash();
         
         if (hitInfo.HitNode is null) return hitInfo;
         

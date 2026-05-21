@@ -88,10 +88,10 @@ public partial class HumanoidCombat : Node3D
         );
     }
 
-    public Task<HitInfo> ScanForHitsSlash()
+    public HitInfo ScanForHitsSlash()
     {
         Weapon currentWeapon = Humanoid.CurrentWeapon;
-        if (currentWeapon == null) return Task.FromResult(new HitInfo());
+        if (currentWeapon == null) return new HitInfo();
 
         int rayAmount = currentWeapon.RaycastAmount;
         Marker3D bladeStart = currentWeapon.BladeStartMarker;
@@ -128,11 +128,11 @@ public partial class HumanoidCombat : Node3D
             if (result.Count > 0)
             {
                 // Return immediately on first hit
-                return Task.FromResult(CollectHitInformation(result, currentWeapon, origin, weaponVelocity));
+                return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
             }
         }
 
-        return Task.FromResult(new HitInfo());
+        return new HitInfo();
     }
 
     public HitInfo ScanForHitsStab()

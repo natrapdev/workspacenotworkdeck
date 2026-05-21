@@ -37,8 +37,6 @@ public sealed partial class HumanoidModel : Node3D
 		CurrentState = StateContainer.States["idle"];
 		HumanoidLegs.CurrentState = CurrentState;
 		HumanoidLegs.AcceptStates();
-		
-		DamageModel.OnReady();
 
 		if (Character != null && Character.Name.ToString().Contains("Player"))
 		{
@@ -48,21 +46,21 @@ public sealed partial class HumanoidModel : Node3D
 		{
 			LookAtReference = Resource.HeadBoneAttachment;
 		}
+		
+		// DamageModel.Initialize();
 	}
 
-	public async Task Update(InputPackage input, float delta)
+	public void Update(InputPackage input, float delta)
 	{
 		input = Combat.Contextualize(input);
-
+		
 		State relevance = CurrentState.ChangeState(input);
-
-		if (!relevance.Equals(CurrentState))
-		{
-			SwitchTo(relevance);
-		}
-
+		
+		if (!relevance.Equals(CurrentState)) SwitchTo(relevance);
+		
 		CurrentState.UpdateResource(delta);
-		await CurrentState.Update(input, delta);
+		CurrentState.Update(input, delta);
+		DamageModel.Update(delta);
 	}
 
 	public void SwitchTo(State state)

@@ -41,13 +41,16 @@ public partial class Limb : BoneAttachment3D
 	public float CurrentBloodVolume { get; set; }
 
 	private float _currentPhysicalVolume;
-	private float _currentBleedRate = 0f;
-	private bool _isBoneBroken = false;
+	private float _currentBleedRate;
+	private bool _isBoneBroken;
 
 	public void Initialize()
 	{
 		CurrentBloodVolume = MaxBloodVolume;
 		_currentPhysicalVolume = PhysicalVolume;
+		UseExternalSkeleton = true;
+		
+		GD.Print($"LIMB PATH: {ExternalSkeleton}");
 	}
 
 	public void Hit(HitInfo hitInfo)

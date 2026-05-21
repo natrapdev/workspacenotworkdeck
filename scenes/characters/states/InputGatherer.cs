@@ -10,7 +10,7 @@ public partial class InputGatherer : Node
 	[Export] public HumanoidModel Humanoid { get; set; }
 	private float _startTime, _endTime, _avgTime, _shortTime, _longTime;
 
-	private readonly Dictionary<string, int> _combatActionPriorities = new()
+	private readonly Dictionary<string, int> _combatActionPriorities = new(6)
 	{
 		{"unsheathe1", 1},
 		{"unsheathe2", 2},
@@ -25,13 +25,13 @@ public partial class InputGatherer : Node
 		base._Ready();
 	}
 
-	protected List<string> _actions = new(5);
-	protected List<string> _combatActions = new(5);
-	protected Vector2 _inputDirection;
+	protected readonly List<string> Actions = new(5);
+	private readonly List<string> _combatActions = new(5);
+	protected Vector2 InputDirection;
 
 	public virtual InputPackage GatherInput()
 	{
-		_actions.Clear();
+		Actions.Clear();
 		_combatActions.Clear();
 
 		GetInputs();
@@ -44,28 +44,28 @@ public partial class InputGatherer : Node
 		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
 		PriorityQueue<string, int> sortedCombatActions = new(new DescendingComparer());
 
-		SortActions(_actions, sortedActions);
+		SortActions(Actions, sortedActions);
 		SortCombatActions(_combatActions, sortedCombatActions);
 
-		return new InputPackage(sortedActions, sortedCombatActions, _inputDirection);
+		return new InputPackage(sortedActions, sortedCombatActions, InputDirection);
 	}
 
 	protected virtual void GetInputs()
 	{
-		_actions.Add("idle");
+		Actions.Add("idle");
 
-		_inputDirection = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
+		InputDirection = Input.GetVector("move_right", "move_left", "move_back", "move_forward");
 
-		if (_inputDirection != Vector2.Zero)
+		if (InputDirection != Vector2.Zero)
 		{
-			_actions.Add("walk");
+			Actions.Add("walk");
 		}
 
 		if (Input.IsActionJustPressed("jump"))
 		{
-			if (_actions.Contains("walk"))
+			if (Actions.Contains("walk"))
 			{
-				_actions.Add("jump");
+				Actions.Add("jump");
 			}
 		}
 
@@ -73,7 +73,7 @@ public partial class InputGatherer : Node
 		{
 			if (Humanoid.Resource.ItemFocus is not null)
 			{
-				_actions.Add("interact");
+				Actions.Add("interact");
 			}
 		}
 
@@ -85,13 +85,9 @@ public partial class InputGatherer : Node
 		if (Input.IsActionPressed("attack1"))
 		{
 			if (Humanoid.CurrentState.StateName.Contains("slash1"))
-			{
 				_combatActions.Add("attack1");
-			}
 			else
-			{
 				_combatActions.Add("slash_prepare");
-			}
 		}
 
 		if (Input.IsActionJustReleased("attack1"))
@@ -132,11 +128,15 @@ public partial class InputGatherer : Node
 	private State GetState(string name) => Humanoid.StateContainer.GetStateByName(name);
 }
 
-public struct InputPackage(PriorityQueue<State, int> actions, PriorityQueue<string, int> combatActionNames, Vector2 direction)
+public readonly struct InputPackage(
+	PriorityQueue<State, int> actions,
+	PriorityQueue<string, int> combatActionNames,
+	Vector2 direction
+	)
 {
-	public PriorityQueue<State, int> Actions { get; set; } = actions;
-	public PriorityQueue<string, int> CombatActionNames { get; set; } = combatActionNames;
-	public Vector2 Direction { get; set; } = direction;
+	public PriorityQueue<State, int> Actions { get; } = actions;
+	public PriorityQueue<string, int> CombatActionNames { get; } = combatActionNames;
+	public Vector2 Direction { get; } = direction;
 }
 
 public class DescendingComparer : IComparer<int>

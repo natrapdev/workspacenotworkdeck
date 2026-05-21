@@ -10,7 +10,7 @@ public partial class DamageModel : Node3D
 {
     [Export] public HumanoidModel Humanoid { get; set; }
     [Export] public CirculationSystem Circulation { get; set; }
-    [Export] public HumanoidLimbs Limbs { get; set; }
+    [Export] public HumanoidLimbs LimbCollection { get; set; }
     [Export] public float BodyMass { get; set; } = 68f;
 
     public readonly System.Collections.Generic.Dictionary<string, float> BodyPartMassCoefficients = new()
@@ -63,41 +63,19 @@ public partial class DamageModel : Node3D
     ];
 
     public List<DamageModule> DamageModules { get; } = new(16);
-    public System.Collections.Generic.Dictionary<string, float> BodyPartBleedMultiplier { get; } = new()
+    public System.Collections.Generic.Dictionary<string, float> BodyPartBleedMultiplier { get; } = new(11)
     {
-        {
-            "hand", 0.45f
-        },
-        {
-            "foot", 0.45f
-        },
-        {
-            "thorax", 1.1f
-        },
-        {
-            "abdomen", 1.1f
-        },
-        {
-            "pelvis", 1.1f
-        },
-        {
-            "upper arm", 1.025f
-        },
-        {
-            "forearm", 1.025f
-        },
-        {
-            "thigh", 1.05f
-        },
-        {
-            "shin", 1.05f
-        },
-        {
-            "head", 1.5f
-        },
-        {
-            "neck", 3f
-        }
+        {"hand", 0.45f},
+        {"foot", 0.45f},
+        {"thorax", 1.1f},
+        {"abdomen", 1.1f},
+        {"pelvis", 1.1f},
+        {"upper arm", 1.025f},
+        {"forearm", 1.025f}, 
+        {"thigh", 1.05f},
+        {"shin", 1.05f},
+        {"head", 1.5f},
+        {"neck", 3f}
     };
 
     private Node _materials;
@@ -105,14 +83,14 @@ public partial class DamageModel : Node3D
 
     private BoneAttachment3D _collider;
 
-    public void OnReady()
+    public override void _Ready()
     {
         Skeleton = Humanoid.Skeleton;
         Resource = Humanoid.Resource;
         _materials = GetNode<Node>("/root/Materials");
         _materialData = (Dictionary)_materials.Get("material_data");
 
-        Limbs.Initialize();
+        LimbCollection.Initialize();
     }
 
     public void Update(float delta)
@@ -246,7 +224,7 @@ public partial class DamageModel : Node3D
             );
 
         float effectiveEnergyAbsorption = GetEffectiveEnergyAbsorption(
-            GetEnergyAbsorption(hitLimb.Material),
+            GetMaterialEnergyAbsorption(hitLimb.Material),
             GetImpactDepth(hitInfo, hitLimb),
             GetThicknessInLineOfSight(impactAngle, hitLimb.Thickness)
         );
@@ -330,7 +308,7 @@ public partial class DamageModel : Node3D
         return workingLength * (workingDensity / targetDensity);
     }
 
-    private float GetEnergyAbsorption(string material)
+    private float GetMaterialEnergyAbsorption(string material)
     {
         return (float)((Dictionary)_materialData[material])["absorption"];
     }

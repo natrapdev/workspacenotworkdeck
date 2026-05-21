@@ -2,6 +2,7 @@ using Godot;
 using System;
 using MyFirst3DGame.scenes.characters.humanoid;
 using MyFirst3DGame.scenes.characters.states;
+using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.bot;
 
@@ -12,7 +13,6 @@ public partial class Bot : CharacterBody3D
 	[Export] public HumanoidModel Humanoid { get; set; }
 	[Export] public InputGatherer InputSource { get; set; }
 	[Export] public int AppearanceSet { get; set; } = 1; // wok alert
-	[Export] public DamageModel DamageModel { get; set; }
 	private Skeleton3D _skeleton;
 	private HumanoidStates _characterStateModel;
 	public BoneAttachment3D HeadBoneAttachment;
@@ -25,8 +25,6 @@ public partial class Bot : CharacterBody3D
 		_characterStateModel = Humanoid.StateContainer;
 		_skeleton = Humanoid.Skeleton;
 		HeadBoneAttachment = _skeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
-		
-		DamageModel.OnReady();
 	}
 
 	public override void _Process(double delta)
@@ -35,10 +33,4 @@ public partial class Bot : CharacterBody3D
 		Humanoid.Update(input, (float)delta);
 		MoveAndSlide();
 	}
-
-	public static explicit operator Bot(HumanoidModel v)
-	{
-		throw new NotImplementedException();
-	}
-
 }

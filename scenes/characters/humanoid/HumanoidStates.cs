@@ -21,7 +21,7 @@ public partial class HumanoidStates : Node
 
 	public void AcceptStates()
 	{
-		foreach (var child in GetChildren())
+		foreach (Node child in GetChildren())
 		{
 			if (child is State state)
 			{
@@ -59,7 +59,7 @@ public partial class HumanoidStates : Node
 		state.HumanoidLegs = HumanoidLegs;
 		state.CharacterModel = Humanoid.GetNode<Node3D>("CharacterModel");
 
-		foreach (var child in state.GetChildren())
+		foreach (Node child in state.GetChildren())
 		{
 			if (child is State parentedState)
 			{
@@ -96,7 +96,7 @@ public partial class HumanoidStates : Node
 		state.HumanoidLegs = HumanoidLegs;
 		state.CharacterModel = Humanoid.GetNode<Node3D>("CharacterModel");
 
-		foreach (var child in state.GetChildren())
+		foreach (Node child in state.GetChildren())
 		{
 			if (child is State parentedState)
 			{
@@ -111,7 +111,7 @@ public partial class HumanoidStates : Node
 
 		if (state.NextState is not null)
 		{
-			SetProperties(baseState, state.NextState, childCount++);
+			SetProperties(baseState, state.NextState, ++childCount);
 		}
 	}
 

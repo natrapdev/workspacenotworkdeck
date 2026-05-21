@@ -14,7 +14,6 @@ public partial class Player : CharacterBody3D
 	[Export] public CameraController CameraPivot { get; set; }
 	[Export] public ViewportModel Viewport { get; set; }
 	[Export] public int AppearanceSet { get; set; } = 1; // wok alert
-	[Export] public DamageModel DamageModel { get; set; }
 
 	private readonly Vector3 _cameraOffset = new(0, .1f, .2f);
 	private const float CameraTowardsOffset = 5f;
@@ -41,21 +40,16 @@ public partial class Player : CharacterBody3D
 			string path = Viewport.GetPathToRightHandWeaponSlot(Humanoid);
 			Humanoid.WeaponInventory.RightHandWeaponContainerPath = path;
 		}
-		
-		DamageModel.OnReady();
 
 		_cameraPanSpeed = CameraPivot.CameraPanSpeed;
 	}
 
-	public override async void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		FirstPersonCamera();
 		InputPackage input = InputSource.GatherInput();
-
-		await Humanoid.Update(input, (float)delta);
+		Humanoid.Update(input, (float)delta);
 		Viewport.Update(input, (float)delta);
-		DamageModel.Update((float)delta);
-		
 		MoveAndSlide();
 
 		if (Humanoid.CurrentState.StateName.Contains("slash") || Humanoid.CurrentState.StateName.Contains("thrust"))

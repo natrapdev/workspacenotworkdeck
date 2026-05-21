@@ -10,10 +10,10 @@ public partial class LegState : Node, ILegState
     public HumanoidLegStates Parent { get; set; }
     public State CurrentState { get; set; }
 
-    public virtual async Task Update(InputPackage input, float delta)
+    public virtual void Update(InputPackage input, float delta)
     {
         UpdateLegsState(input, delta);
-        await CurrentState.Update(input, delta);
+        CurrentState.Update(input, delta);
     }
 
     public virtual void UpdateLegsState(InputPackage input, float delta) { }

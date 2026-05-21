@@ -8,5 +8,5 @@ public interface IPartialBodyState
     [Export] LegState LegBehaviour { get; set; }
 
     void LegsTrackLookDirection(InputPackage input, float delta);
-    Task LegsUpdate(InputPackage input, float delta);
+    void LegsUpdate(InputPackage input, float delta);
 }

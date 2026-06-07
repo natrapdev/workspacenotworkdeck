@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -9,6 +10,7 @@ public partial class InputGatherer : Node
 {
 	[Export] public HumanoidModel Humanoid { get; set; }
 	private float _startTime, _endTime, _avgTime, _shortTime, _longTime;
+	private static readonly DescendingComparer DescendingComparer = new();
 
 	private readonly Dictionary<string, int> _combatActionPriorities = new(6)
 	{
@@ -28,6 +30,9 @@ public partial class InputGatherer : Node
 	protected readonly List<string> Actions = new(5);
 	private readonly List<string> _combatActions = new(5);
 	protected Vector2 InputDirection;
+	
+	private readonly PriorityQueue<State, int> _actionsQueue = new(DescendingComparer);
+	private readonly PriorityQueue<string, int> _combatActionsQueue = new(DescendingComparer);
 
 	public virtual InputPackage GatherInput()
 	{
@@ -41,13 +46,12 @@ public partial class InputGatherer : Node
 
 	private InputPackage OnInputGathered()
 	{
-		PriorityQueue<State, int> sortedActions = new(new DescendingComparer());
-		PriorityQueue<string, int> sortedCombatActions = new(new DescendingComparer());
+		_actionsQueue.Clear();
+		_combatActionsQueue.Clear();
+		SortActions(Actions, _actionsQueue);
+		SortCombatActions(_combatActions, _combatActionsQueue);
 
-		SortActions(Actions, sortedActions);
-		SortCombatActions(_combatActions, sortedCombatActions);
-
-		return new InputPackage(sortedActions, sortedCombatActions, InputDirection);
+		return new InputPackage(_actionsQueue, _combatActionsQueue, InputDirection);
 	}
 
 	protected virtual void GetInputs()
@@ -69,12 +73,9 @@ public partial class InputGatherer : Node
 			}
 		}
 
-		if (Input.IsActionJustPressed("interact"))
+		if (Input.IsActionJustPressed("interact") && Humanoid.Resource.ItemFocus is not null)
 		{
-			if (Humanoid.Resource.ItemFocus is not null)
-			{
-				Actions.Add("interact");
-			}
+			Actions.Add("interact");
 		}
 
 		if (Input.IsActionJustPressed("unsheathe1"))
@@ -86,7 +87,7 @@ public partial class InputGatherer : Node
 		{
 			if (Humanoid.CurrentState.StateName.Contains("slash1"))
 				_combatActions.Add("attack1");
-			else
+			else if (!Humanoid.CurrentState.StateName.Contains("slash2"))
 				_combatActions.Add("slash_prepare");
 		}
 
@@ -95,7 +96,7 @@ public partial class InputGatherer : Node
 			_combatActions.Add("attack1");
 		}
 
-		if (Input.IsActionJustPressed("attack2"))
+		if (Input.IsActionPressed("attack2"))
 		{
 			if (Humanoid.CurrentState.StateName.Contains("prepare") || _combatActions.Contains("slash_prepare"))
 			{
@@ -110,9 +111,8 @@ public partial class InputGatherer : Node
 
 	private void SortActions(List<string> actionNames, PriorityQueue<State, int> sorted)
 	{
-		foreach (string action in actionNames)
+		foreach (State state in actionNames.Select(GetState))
 		{
-			State state = GetState(action);
 			sorted.Enqueue(state, state.Priority);
 		}
 	}

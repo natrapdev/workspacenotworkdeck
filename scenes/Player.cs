@@ -1,10 +1,9 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.humanoid;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
-using Viewport;
-namespace MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.player;
+using MyFirst3DGame.scenes.characters.states;
+
+namespace MyFirst3DGame.scenes;
 
 public partial class Player : CharacterBody3D
 {
@@ -51,15 +50,6 @@ public partial class Player : CharacterBody3D
 		Humanoid.Update(input, (float)delta);
 		Viewport.Update(input, (float)delta);
 		MoveAndSlide();
-
-		if (Humanoid.CurrentState.StateName.Contains("slash") || Humanoid.CurrentState.StateName.Contains("thrust"))
-		{
-			CameraPivot.CameraPanSpeed = Mathf.Lerp(CameraPivot.CameraPanSpeed, _cameraPanSpeed * AttackSensitivityMultiplier, 0.1f * (float)delta); ;
-		}
-		else
-		{
-			CameraPivot.CameraPanSpeed = Mathf.Lerp(CameraPivot.CameraPanSpeed, _cameraPanSpeed, 0.1f * (float)delta);
-		}
 	}
 
 	private void FirstPersonCamera()

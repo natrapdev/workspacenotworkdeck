@@ -1,8 +1,8 @@
-using Godot;
-using System;
+using Godot; 
+using MyFirst3DGame.scenes.characters.states;
 using System.Collections.Generic;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class HumanoidStates : Node
 {

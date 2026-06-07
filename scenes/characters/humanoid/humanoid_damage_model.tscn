@@ -88,7 +88,6 @@ transform = Transform3D(1, 3.996803e-15, 2.3841848e-07, -2.9105868e-08, 0.992520
 bone_name = "spine.003"
 bone_idx = 3
 script = ExtResource("5_07ds0")
-LimbName = "thorax"
 
 [node name="Area3D" type="Area3D" parent="Limbs/Thorax" unique_id=1915013782]
 collision_layer = 2
@@ -104,7 +103,6 @@ transform = Transform3D(1, -3.5527137e-15, 2.3841844e-07, -2.2465626e-08, 0.9955
 bone_name = "spine.002"
 bone_idx = 2
 script = ExtResource("5_07ds0")
-LimbName = "abdomen"
 
 [node name="Area3D" type="Area3D" parent="Limbs/Abdomen" unique_id=474962093]
 collision_layer = 2
@@ -120,7 +118,6 @@ transform = Transform3D(1, -1.2434498e-14, 2.3841822e-07, 5.515595e-08, 0.972872
 bone_name = "spine"
 bone_idx = 0
 script = ExtResource("5_07ds0")
-LimbName = "pelvis"
 
 [node name="Area3D" type="Area3D" parent="Limbs/Pelvis" unique_id=671233423]
 collision_layer = 2
@@ -136,13 +133,12 @@ transform = Transform3D(0.9965233, 0.05759428, -0.06020082, 0.035248253, -0.9461
 bone_name = "thigh.L"
 bone_idx = 57
 script = ExtResource("5_07ds0")
-LimbName = "thigh"
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftThigh" unique_id=387852654]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Limbs/LeftThigh/Area3D" unique_id=1457828173]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limbs/LeftThigh/Area3D" unique_id=1457828173]
 transform = Transform3D(0.99885184, -0.047104657, 0.008726535, 0.047106452, 0.99888986, 0, -0.008716848, 0.00041107612, 0.9999619, -3.3132732e-05, 0.2500427, -0.005460387)
 shape = SubResource("CapsuleShape3D_huaai")
 debug_color = Color(1, 0, 0, 1)
@@ -152,13 +148,12 @@ transform = Transform3D(0.9988317, -0.039258853, -0.02817637, -0.0072016963, -0.
 bone_name = "shin.L"
 bone_idx = 58
 script = ExtResource("5_07ds0")
-LimbName = "shin"
 
 [node name="Area3D" type="Area3D" parent="Limbs/LeftShin" unique_id=1475805049]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Limbs/LeftShin/Area3D" unique_id=1902414393]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Limbs/LeftShin/Area3D" unique_id=1902414393]
 transform = Transform3D(1, -0.0001391508, 6.4091204e-05, 0.00014137194, 0.9993493, -0.036068957, -5.903048e-05, 0.036068965, 0.9993493, -3.5479665e-05, 0.19848108, 0.0006350428)
 shape = SubResource("CapsuleShape3D_l7yma")
 debug_color = Color(1, 0, 0, 1)

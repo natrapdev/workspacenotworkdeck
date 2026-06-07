@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class IkController : Node
 {

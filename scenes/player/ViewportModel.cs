@@ -1,8 +1,9 @@
 using Godot;
 using System.Collections.Generic;
 using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.characters.humanoid;
 
-namespace Viewport;
+namespace MyFirst3DGame.scenes.player;
 
 public partial class ViewportModel : Node3D
 {
@@ -29,8 +30,8 @@ public partial class ViewportModel : Node3D
 		_weaponInventory = Humanoid.WeaponInventory;
 
 		MeshInstance3D armModel = new();
-		armModel.SetLayerMaskValue(1, false);
-		armModel.SetLayerMaskValue(2, true);
+		armModel.SetLayerMaskValue(1, true);
+		armModel.SetLayerMaskValue(2, false);
 
 		if (((Player)Player).AppearanceSet == 1) // wok alert (1 = male, 0 = female)
 		{
@@ -51,7 +52,8 @@ public partial class ViewportModel : Node3D
 		State currentState = Humanoid.CurrentState;
 
 		string animation = currentState.Animation;
-		Animator.PlaySpeed = Humanoid.Animator.BodyAnimationSpeed;
+		// Animator.PlaySpeed = Humanoid.Animator.BodyAnimationSpeed;
+		Animator.PlaySpeed = Humanoid.Animator.BodyAnimator.SpeedScale;
 		Animator.SetAnimation(animation);
 
 		// ViewportCamera.Update();

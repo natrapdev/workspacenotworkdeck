@@ -1,4 +1,5 @@
 using Godot;
+using MyFirst3DGame.scenes.characters.humanoid;
 using System.Threading.Tasks;
 
 namespace MyFirst3DGame.scenes.characters.states;

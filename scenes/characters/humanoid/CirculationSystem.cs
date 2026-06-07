@@ -1,4 +1,6 @@
 using Godot;
+using System;
+using System.Linq;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
@@ -17,10 +19,10 @@ public partial class CirculationSystem : Node
 
     private void LoseBloodIfPossible(float delta)
     {
-        foreach (Limb limb in Model.LimbCollection.Limbs.Values)
+        foreach (Limb limb in Model.LimbCollection.Limbs.Values.Where(limb => limb.CurrentBloodVolume > 0))
         {
             LoseBloodInLimb(limb, limb.CurrentBleedRate * delta);
-
+        
             // Neighbouring limbs will lose blood as well
             foreach (Limb neighbourLimb in limb.Neighbours)
             {
@@ -31,7 +33,14 @@ public partial class CirculationSystem : Node
 
     private void LoseBloodInLimb(Limb limb, float bloodLost)
     {
-        limb.CurrentBloodVolume -= bloodLost;
-        CurrentBloodVolume -= bloodLost;
+        limb.CurrentBloodVolume = Mathf.Clamp(limb.CurrentBloodVolume - bloodLost, 0, limb.MaxBloodVolume);
+        CurrentBloodVolume -= Mathf.Clamp(CurrentBloodVolume - bloodLost, 0, TotalBloodVolume);
+        
+        var label = limb.GetNodeOrNull<Label3D>("Label");
+    
+        if (label is not null)
+        {
+            label.Text = $"{limb.RemainingBloodRatio * 100:F2}%";
+        }
     }
 }

@@ -1,8 +1,7 @@
 using Godot;
 using System;
-using Viewport;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.player;
 
 public partial class ViewportTiltTracker : Node3D
 {

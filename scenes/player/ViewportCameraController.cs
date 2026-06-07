@@ -1,4 +1,4 @@
-namespace Viewport;
+namespace MyFirst3DGame.scenes.player;
 
 using Godot;
 

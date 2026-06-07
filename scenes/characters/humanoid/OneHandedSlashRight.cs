@@ -15,20 +15,4 @@ public partial class OneHandedSlashRight : State, IChildState, IPartialBodyState
     {
         LegsUpdate(input, delta);
     }
-
-    protected override void OnEnter()
-    {
-        if (!FollowUpStates.Contains(Parent.GetStateByName("slash3_one_handed")))
-        {
-            FollowUpStates.Add(Parent.GetStateByName("slash3_one_handed"));
-        }
-        if (!FollowUpStates.Contains(Parent.GetStateByName("thrust_one_handed")))
-        {
-            FollowUpStates.Add(Parent.GetStateByName("thrust_one_handed"));
-        }
-        if (!FollowUpStates.Contains(Parent.GetStateByName("idle")))
-        {
-            FollowUpStates.Add(Parent.GetStateByName("idle"));
-        }
-    }
 }

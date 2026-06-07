@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using MyFirst3DGame.scenes.characters.humanoid;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes;
 
 public partial class CharacterAppearance : Node3D
 {
@@ -15,11 +16,9 @@ public partial class CharacterAppearance : Node3D
 		Body.Skeleton = humanoid.Skeleton.GetPath();
 		Arms.Skeleton = humanoid.Skeleton.GetPath();
 
-		if (Humanoid.GetParent<CharacterBody3D>().Name.ToString().Contains("Player"))
-		{
-			Body.CastShadow = GeometryInstance3D.ShadowCastingSetting.ShadowsOnly;
-			Arms.CastShadow = GeometryInstance3D.ShadowCastingSetting.ShadowsOnly;
-		}
+		if (!Humanoid.GetParent<CharacterBody3D>().Name.ToString().Contains("Player")) return;
+		Body.CastShadow = GeometryInstance3D.ShadowCastingSetting.ShadowsOnly;
+		Arms.CastShadow = GeometryInstance3D.ShadowCastingSetting.ShadowsOnly;
 	}
 
 	private void UpdateWeaponVisuals()

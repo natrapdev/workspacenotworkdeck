@@ -2,9 +2,9 @@ using Godot;
 using MyFirst3DGame.Items;
 using System;
 using System.Threading.Tasks;
-using MyFirst3DGame.scenes.characters.humanoid;
+using MyFirst3DGame.scenes.characters.states;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public sealed partial class HumanoidModel : Node3D
 {

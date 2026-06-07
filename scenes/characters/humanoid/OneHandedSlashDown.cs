@@ -14,12 +14,4 @@ public partial class OneHandedSlashDown : State, IPartialBodyState
     {
         LegsUpdate(input, delta);
     }
-
-    protected override void OnEnter()
-    {
-        if (!FollowUpStates.Contains(Parent.GetStateByName("thrust_one_handed")))
-        {
-            FollowUpStates.Add(Parent.GetStateByName("thrust_one_handed"));
-        }
-    }
 }

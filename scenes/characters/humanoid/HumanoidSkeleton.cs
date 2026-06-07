@@ -1,6 +1,4 @@
 using Godot;
-using MyFirst3DGame.scenes.characters.states;
-using System;
 
 namespace MyFirst3DGame.scenes.characters.humanoid;
 
@@ -8,7 +6,7 @@ public partial class HumanoidSkeleton : Skeleton3D
 {
 	[Export] public HumanoidModel Humanoid { get; set; }
 	[Export] public PhysicalBoneSimulator3D PhysicalSkeleton { get; set; }
-	[Export] public Ccdik3D SpineIK { get; set; }
+	[Export] public Ccdik3D SpineIk { get; set; }
 
 	private bool _ragdolled = false;
 
@@ -27,7 +25,7 @@ public partial class HumanoidSkeleton : Skeleton3D
 	{
 		if (!PhysicalSkeleton.IsSimulatingPhysics())
 		{
-			SpineIK.Active = false;
+			SpineIk.Active = false;
 			Humanoid.GetNode<CollisionShape3D>("../Collision").Disabled = true;
 			Humanoid.Animator.BodyAnimator.Active = false;
 			Humanoid.Animator.LegsAnimator.Active = false;

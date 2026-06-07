@@ -1,7 +1,7 @@
 using Godot;
 using System;
-
 using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.Items;
 

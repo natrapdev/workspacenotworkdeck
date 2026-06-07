@@ -2,7 +2,7 @@ using Godot;
 using MyFirst3DGame.Items;
 using System;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class WeaponInventory : Node
 {
@@ -90,7 +90,7 @@ public partial class WeaponInventory : Node
 
         weapon.Position = Vector3.Zero;
         weapon.RotationDegrees = Vector3.Zero;
-        weapon.ActualMesh.SetLayerMaskValue(2, path.Contains("Viewport"));
+        // weapon.ActualMesh.SetLayerMaskValue(2, path.Contains("Viewport"));
     }
 
     private Node3D GetItemContainer(string path) => Humanoid.GetNode<Node3D>(path);

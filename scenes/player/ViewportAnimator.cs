@@ -2,7 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Viewport;
+namespace MyFirst3DGame.scenes.player;
 
 public partial class ViewportAnimator : Node
 {

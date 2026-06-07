@@ -26,22 +26,67 @@ public partial class HumanoidCombat : Node3D
         _exclusionList = [];
 
         // Exclude the parent CharacterBody3D
-        CollisionObject3D parentBody = Humanoid.GetParent<CollisionObject3D>();
+        var parentBody = Humanoid.GetParent<CollisionObject3D>();
 
-        if (parentBody is not null)
+        if (parentBody?.Owner is null)
         {
-            _exclusionList.Add(parentBody.GetRid());
+            GD.PrintErr("Could not find parent CharacterBody3D");
+            return;
+        }
+        
+        var damageModel = parentBody.GetNodeOrNull<DamageModel>("DamageModel");
+        
+        if (damageModel is null)
+        {
+            GD.PrintErr($"Could not find DamageModel in {parentBody.Name}");
+            return;
+        }
+        
+        _exclusionList.Add(parentBody.GetRid());
+        
+        // Find and exclude all Area3D nodes in the DamageModel
+        CollectArea3DRids(damageModel, _exclusionList);
+    }
+    
+    private static void CollectArea3DRids(Node node, Array<Rid> exclusionList)
+    {
+        if (node is Area3D area)
+        { 
+            exclusionList.Add(area.GetRid());
         }
 
-        // Find and exclude all Area3D nodes in the DamageModel
-        DamageModel damageModel = Humanoid.GetNodeOrNull<DamageModel>("DamageModel");
-        if (damageModel != null)
-        {
-            CollectArea3DRids(damageModel, _exclusionList);
+        foreach (Node child in node.GetChildren())
+        { 
+            CollectArea3DRids(child, exclusionList);
         }
     }
+    
+    private Array<Rid> BuildExclusionListButAllowOneNode(Node toCollideWith, HitInfo hitInfo)
+    {
+        var rids = new Array<Rid>();
+        
+        var parentBody = ((Limb)hitInfo.HitNode.GetParent()).Model.Humanoid.GetParent<CollisionObject3D>();
+        
+        if (parentBody?.Owner is null)
+        {
+            GD.PrintErr("Could not find parent CharacterBody3D");
+            return rids;
+        }
+        
+        var damageModel = parentBody.GetNodeOrNull<DamageModel>("DamageModel");
+        
+        if (damageModel is null)
+        {
+            GD.PrintErr($"Could not find DamageModel in {parentBody.Name}");
+            return rids;
+        }
 
-    private static void CollectArea3DRids(Node node, Array<Rid> exclusionList)
+        CollectArea3DRidsWithExceptions(damageModel, rids, toCollideWith);
+
+        return rids;
+    }
+    
+    private static void CollectArea3DRidsWithExceptions(Node node, Array<Rid> exclusionList, Node toCollideWith)
     {
         if (node is Area3D area)
         {
@@ -50,7 +95,11 @@ public partial class HumanoidCombat : Node3D
 
         foreach (Node child in node.GetChildren())
         {
-            CollectArea3DRids(child, exclusionList);
+            if (child == toCollideWith)
+            {
+                continue;
+            }
+            CollectArea3DRidsWithExceptions(child, exclusionList, toCollideWith);
         }
     }
 
@@ -60,7 +109,7 @@ public partial class HumanoidCombat : Node3D
         return input;
     }
 
-    public void TranslateInputs(InputPackage input)
+    private void TranslateInputs(InputPackage input)
     {
         if (input.CombatActionNames.Count <= 0) return;
 
@@ -99,21 +148,22 @@ public partial class HumanoidCombat : Node3D
 
         // Pre-calculate values outside the loop
         float increment = (bladeEnd.Position.Y - bladeStart.Position.Y) / rayAmount;
-        float rayLength = currentWeapon.BladeWidth;
-        Basis bladeBasis = bladeStart.GlobalTransform.Basis;
-        Vector3 bladeOrigin = bladeStart.GlobalTransform.Origin;
+        float rayLength = currentWeapon.BladeWidth * 2;
+        Basis bladeBasis = bladeEnd.GlobalTransform.Basis;
+        Vector3 bladeOrigin = bladeEnd.GlobalTransform.Origin;
         Vector3 forwardVector = bladeBasis.Z.Normalized();
         Vector3 weaponVelocity = 25f * forwardVector;
 
         // Reuse query parameters where possible
         var queryParams = PhysicsRayQueryParameters3D.Create(Vector3.Zero, Vector3.Zero);
         queryParams.CollideWithAreas = true;
+        queryParams.HitBackFaces = true;
         queryParams.CollisionMask = 2;
         queryParams.Exclude = _exclusionList;
 
         for (int i = 0; i < rayAmount; i++)
         {
-            float yOffset = increment * i;
+            float yOffset = -increment * i;
 
             // Calculate origin and target using pre-calculated basis and origin
             Vector3 origin = bladeBasis * new Vector3(rayLength, yOffset, 0) + bladeOrigin;
@@ -127,7 +177,6 @@ public partial class HumanoidCombat : Node3D
 
             if (result.Count > 0)
             {
-                // Return immediately on first hit
                 return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
             }
         }
@@ -159,7 +208,7 @@ public partial class HumanoidCombat : Node3D
     }
 
     private static HitInfo CollectHitInformation(
-        Godot.Collections.Dictionary result,
+        Dictionary result,
         Weapon currentWeapon,
         Vector3 weaponHitSource,
         Vector3 weaponVelocity)
@@ -171,7 +220,8 @@ public partial class HumanoidCombat : Node3D
         var hitNormal = (Vector3)result["normal"];
         //TODO: include velocity of hit targets.
         Vector3 hitVelocity = hitNode is RigidBody3D rb ? rb.LinearVelocity : Vector3.Zero;
-
+        Vector3 weaponNormal = currentWeapon.GlobalTransform.Basis.X.Normalized();
+        
         // MeshInstance3D hit = new();
         // hitNode.AddChild(hit);
         // hit.Mesh = new BoxMesh();
@@ -180,6 +230,7 @@ public partial class HumanoidCombat : Node3D
 
         return new HitInfo(
             currentWeapon,
+            weaponNormal,
             weaponVelocity,
             weaponHitSource,
             hitNode,
@@ -187,5 +238,59 @@ public partial class HumanoidCombat : Node3D
             hitNormal,
             hitVelocity
         );
+    }
+
+    public float GetEffectiveThicknessOfHit(HitInfo hitInfo)
+    {
+        int maxAttempts = 8;
+
+        Vector3 rayDirection = -hitInfo.WeaponNormal;
+        Vector3 rayOrigin = hitInfo.HitPosition + rayDirection * 0.001f;
+
+        CreateDebugSphere(rayOrigin, hitInfo.HitNode);
+
+        var query = PhysicsRayQueryParameters3D.Create(rayOrigin + rayDirection * 5f, rayOrigin);
+        query.CollisionMask = 2;
+        query.Exclude = BuildExclusionListButAllowOneNode(hitInfo.HitNode, hitInfo);
+        query.CollideWithBodies = false;
+        query.HitBackFaces = true;
+        query.HitFromInside = true;
+        query.CollideWithAreas = true;
+        
+        CreateDebugBlock(rayOrigin + rayDirection * 5f, hitInfo.HitNode);
+        
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            Dictionary result = _physicsSpaceState.IntersectRay(query);
+
+            if (result.Count <= 0) return 999;
+            if ((Node3D)result["collider"] != hitInfo.HitNode)
+            {
+                GD.Print(((Node3D)result["collider"]).GetParent().Name);
+                query.Exclude = query.GetExclude() + [((Area3D)result["collider"]).GetRid()]; 
+                continue;
+            }
+            
+            var exitPoint = (Vector3)result["position"];
+            CreateDebugBlock(exitPoint, hitInfo.HitNode); 
+            return (exitPoint - hitInfo.HitPosition).Length();
+        }
+
+        return 999;
+    }
+    
+    private static void CreateDebugBlock(Vector3 pos, Node parent) {
+        MeshInstance3D hit = new();
+        parent.AddChild(hit);
+        hit.Mesh = new BoxMesh();
+        hit.Scale = new Vector3(.05f, .05f, .05f);
+        hit.GlobalPosition = pos;
+    }
+    private static void CreateDebugSphere(Vector3 pos, Node parent) {
+        MeshInstance3D hit = new();
+        parent.AddChild(hit);
+        hit.Mesh = new SphereMesh();
+        hit.Scale = new Vector3(.05f, .05f, .05f);
+        hit.GlobalPosition = pos;
     }
 }

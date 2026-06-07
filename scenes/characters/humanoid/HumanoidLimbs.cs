@@ -71,7 +71,7 @@ public partial class HumanoidLimbs : Node
     {  
         limb.Model = Model;
         limb.ExternalSkeleton = limb.GetPathTo(limb.Model.Skeleton);
-        limb.LimbName ??= TranslateName(limb.Name);
+        limb.LimbName = TranslateName(limb.Name);
         limb.DetectionArea = limb.GetChild<Area3D>(0);
         limb.PhysicalVolume = GetNodeVolume(limb.DetectionArea.GetChild(0) as Node3D);
         limb.Mass = Model.BodyMass * Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
@@ -79,8 +79,10 @@ public partial class HumanoidLimbs : Node
         limb.BleedMultiplier = Model.BodyPartBleedMultiplier.GetValueOrDefault(limb.LimbName, 1f);
         limb.Thickness = GetCollisionShapeThickness(limb.DetectionArea.GetChild(0) as CollisionShape3D);
         limb.CirculationSystem = Model.Circulation;
+        Model.Circulation.CurrentBloodVolume += limb.MaxBloodVolume;
         
         limb.Initialize();
+        Limbs.Add(TranslateNameKeepSidePrefix(limb.Name), limb);
     }
 
     /// <summary>
@@ -178,7 +180,8 @@ public partial class HumanoidLimbs : Node
                 float radius = capsule.Radius;
                 float height = capsule.Height;
 
-                float cylinderVolume = Mathf.Pi * Mathf.Pow(radius, 2) * height;
+                float cylinderHeight = Mathf.Max(0, height - 2f * radius);
+                float cylinderVolume = Mathf.Pi * Mathf.Pow(radius, 2) * cylinderHeight;
                 float sphereVolume = 1.333f * Mathf.Pi * Mathf.Pow(radius, 3);
 
                 return cylinderVolume + sphereVolume;
@@ -197,6 +200,7 @@ public partial class HumanoidLimbs : Node
             _ => 0f
         };
     }
+
 
     [GeneratedRegex("(?<!^)(?=[A-Z])", RegexOptions.Compiled)]
     private static partial Regex PascalCaseSplitRegex();

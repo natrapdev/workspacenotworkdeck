@@ -1,12 +1,9 @@
 using Godot;
-using MyFirst3DGame.Items;
-using System;
+using MyFirst3DGame.scenes.characters.states;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace MyFirst3DGame.scenes.characters.states;
+namespace MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class Animator : Node
 {

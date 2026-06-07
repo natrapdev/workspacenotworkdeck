@@ -1,5 +1,6 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.characters.humanoid;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ public partial class Weapon : PickableItem
 {
 	[Export] public string ConfigFilePath { get; set; } = "res://configs/weapons.json";
 	[Export] public string EnemyGroupName { get; set; } = "enemy";
-	[Export] public int RaycastAmount { get; set; } = 7;
+	[Export] public int RaycastAmount { get; set; } = 10;
 	[Export] public float BladeWidth { get; set; } = 0.043f;
 	[Export] public float BladeLength { get; set; } = 0.728f;
 	[Export] public Marker3D BladeStartMarker { get; set; }

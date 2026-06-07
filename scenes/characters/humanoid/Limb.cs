@@ -36,8 +36,7 @@ public partial class Limb : BoneAttachment3D
 	public float CurrentBleedRate { get { return _currentBleedRate * BleedMultiplier; } }
 	public float Thickness { get; set; }
 	public string Material { get; private set; } = "flesh";
-	public float RemainingBloodRatio { get { return _currentBleedRate / MaxBloodVolume; } }
-
+	public float RemainingBloodRatio { get { return CurrentBloodVolume / MaxBloodVolume; } }
 	public float CurrentBloodVolume { get; set; }
 
 	private float _currentPhysicalVolume;
@@ -49,8 +48,20 @@ public partial class Limb : BoneAttachment3D
 		CurrentBloodVolume = MaxBloodVolume;
 		_currentPhysicalVolume = PhysicalVolume;
 		UseExternalSkeleton = true;
-		
-		GD.Print($"LIMB PATH: {ExternalSkeleton}");
+
+		if (Model.Humanoid.GetParent().Name == "Player") return;
+
+		Label3D bloodLabel = new()
+		{
+			Text = "100%",
+			Billboard = BaseMaterial3D.BillboardModeEnum.Enabled,
+			PixelSize = 0.002f,
+			NoDepthTest = true,
+			Name = "Label"
+		};
+		AddChild(bloodLabel);
+
+		bloodLabel.Position = ((CollisionShape3D)GetChild(0).GetChild(0)).Position;
 	}
 
 	public void Hit(HitInfo hitInfo)
@@ -58,21 +69,29 @@ public partial class Limb : BoneAttachment3D
 		(float impactDepth, float impactEnergy) = Model.GetHitEffects(hitInfo, this);
 
 		float cutTime = impactDepth / hitInfo.WeaponVelocity.Length();
-		float cutArea = cutTime * hitInfo.WeaponVelocity.Length() * impactDepth;
+		float cutArea = cutTime * hitInfo.WeaponVelocity.Length();
 		float cutVolume = cutArea * cutTime * impactDepth;
-		float bloodLossFactor = cutVolume / PhysicalVolume;
-
-		GD.Print($"\nCut area: {cutArea} m^2\nCut volume: {cutVolume} m^3\nBlood loss factor: {bloodLossFactor * 100}%");
-
-		float immediateBloodLoss = MaxBloodVolume * (bloodLossFactor + Model.GetImpactDepthRatio(hitInfo, this));
-
-		CurrentBloodVolume -= immediateBloodLoss;
+		
+		_currentPhysicalVolume -= cutVolume;
+		
+		float bloodLossFactor = 1 - _currentPhysicalVolume / PhysicalVolume;
+		float immediateBloodLoss = MaxBloodVolume * bloodLossFactor * cutArea;
+		
+		CurrentBloodVolume = Mathf.Clamp(CurrentBloodVolume - immediateBloodLoss, 0, MaxBloodVolume);
 		CirculationSystem.CurrentBloodVolume -= immediateBloodLoss;
 		_currentBleedRate += MaxBloodVolume * bloodLossFactor;
 		
-		GD.Print(($"\nHit {LimbName} ({BoneStrength}) with energy of {impactEnergy}."));
+		GD.Print($"\nHit {LimbName} ({BoneStrength}) \nimpact energy of {impactEnergy} joules \nat an angle of {Mathf.RadToDeg(hitInfo.HitAngle)} degrees.\n");
+		GD.Print($"Cut area: {cutArea} m^2\nCut volume: {cutVolume} m^3\n\nDepth ratio: {Model.GetImpactDepthRatio(hitInfo, this)}\nImmediate blood loss: {immediateBloodLoss} mL\nbloodLossFactor: {bloodLossFactor * 100}%\n");
 		
 		if (impactEnergy > BoneStrength) BreakBone();
+		
+		var label = GetNodeOrNull<Label3D>("Label");
+        
+		if (label is not null)
+		{
+			label.Text = $"{RemainingBloodRatio * 100:F2}%";
+		}
 	}
 
 	private void BreakBone()

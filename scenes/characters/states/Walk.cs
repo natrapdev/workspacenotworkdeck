@@ -1,5 +1,5 @@
 using Godot;
-using System.Text;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -32,7 +32,7 @@ public partial class Walk : State
 
 		float stamina = Resource.CurrentStamina;
 		float targetSpeed = (float)(
-			stamina >= 0.4 ? WalkSpeed : WalkSpeed - (70 * Mathf.Pow(stamina - 0.45, 4))
+			stamina >= 0.4 ? WalkSpeed : WalkSpeed - 70 * Mathf.Pow(stamina - 0.45, 4)
 		);
 
 		velocity.X = Mathf.MoveToward(Character.Velocity.X, direction.X * targetSpeed, AccelerationSpeed);
@@ -47,6 +47,7 @@ public partial class Walk : State
 		}
 		else
 		{
+			Animator.SetBodySpeedScale(1);
 			Animator.SetLegsSpeedScale(_animSpeed * speedModifier);
 		}
 

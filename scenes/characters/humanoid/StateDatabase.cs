@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -18,6 +18,8 @@ public partial class StateDatabase : AnimationPlayer
     [Export] public bool TracksLookDirection { get; set; }
     [Export] public bool CanMoveHeldItem { get; set; }
     [Export] public bool IsMovementLocked { get; set; }
+    [Export] public int MaxStatePriority { get; set; }
+    [Export] public int MinStatePriority { get; set; }
 
     public bool GetBoolValue(string anim, string trackName, float timeCode)
     {

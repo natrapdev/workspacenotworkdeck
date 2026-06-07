@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
-using MyFirst3DGame.scenes.characters.states;
+using MyFirst3DGame.scenes.characters.humanoid;
 
 public partial class CameraController : Node3D
 {

@@ -8,11 +8,9 @@ public partial class OneHandedSlashRight : State, IChildState, IPartialBodyState
     [Export] public LegState LegBehaviour { get; set; }
     [Export] public State BaseState { get; set; }
 
-    public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
-    public void LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
 
     protected override void OnUpdate(InputPackage input, float delta)
     {
-        LegsUpdate(input, delta);
+        
     }
 }

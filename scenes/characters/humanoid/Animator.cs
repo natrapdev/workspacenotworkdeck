@@ -123,6 +123,8 @@ public partial class Animator : Node
 
     public void SetBodySpeedScale(float speed) => BodyAnimator.SpeedScale = speed;
     public void SetLegsSpeedScale(float speed) => LegsAnimator.SpeedScale = speed;
+    public float GetBodySpeedScale() => BodyAnimator.SpeedScale;
+    public float GetLegsSpeedScale() => LegsAnimator.SpeedScale;
 
     private void MoveBodyAnimationToEnd() => BodyAnimator.Advance(BodyAnimator.CurrentAnimation.ToString().Length);
     private void MoveLegsAnimationToEnd() => LegsAnimator.Advance(LegsAnimator.CurrentAnimation.ToString().Length);

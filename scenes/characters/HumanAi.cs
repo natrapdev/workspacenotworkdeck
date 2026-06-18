@@ -14,19 +14,18 @@ public partial class HumanAi : InputGatherer
     {
         Actions.Add("idle");
 
-        if (CurrentTask == "idle")
+        if (CurrentTask == "idle" || Humanoid.Dead)
         {
             return;
         }
-        else if (CurrentTask == "patrol")
+        switch (CurrentTask)
         {
-            Actions.Add("walk");
-        }
-        else if (CurrentTask == "chase")
-        {
-            Humanoid.HeadLookAtTarget.GlobalPosition = ((Bot)Humanoid.Character).Player.CameraPivot.GlobalPosition;
-            InputDirection = new Vector2(0, -1);
-            Actions.Add("walk");
+            case "patrol": Actions.Add("walk"); break;
+            case "chase":
+                Humanoid.HeadLookAtTarget.GlobalPosition = ((Bot)Humanoid.Character).Player.CameraPivot.GlobalPosition;
+                InputDirection = new Vector2(0, 1);
+                Actions.Add("walk");
+                break;
         }
     }
 }

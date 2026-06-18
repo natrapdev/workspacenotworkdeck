@@ -34,6 +34,10 @@ size = Vector3(1, 1, 0.09262276)
 
 [node name="Main" type="Node" unique_id=646616523]
 
+[node name="Human2" parent="." unique_id=739696353 node_paths=PackedStringArray("Player") instance=ExtResource("4_jyhfs")]
+transform = Transform3D(0.7490485, 0, -0.6625155, 0, 1, 0, 0.6625155, 0, 0.7490485, 8.004809, 1.9847841, -1.3994846)
+Player = NodePath("../Player")
+
 [node name="ItemCollection" type="Node" parent="." unique_id=2049136584 groups=["pickable_items"]]
 
 [node name="ArmingSword" parent="ItemCollection" unique_id=1204517950 instance=ExtResource("1_sugp2")]
@@ -149,6 +153,6 @@ mesh = SubResource("BoxMesh_h2yge")
 [node name="Player" parent="." unique_id=1102152615 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4349694, 0)
 
-[node name="Human" parent="." unique_id=739696353 node_paths=PackedStringArray("Player") instance=ExtResource("4_jyhfs")]
+[node name="Human" parent="." unique_id=218503146 node_paths=PackedStringArray("Player") instance=ExtResource("4_jyhfs")]
 transform = Transform3D(-0.93516, 0, 0.35422572, 0, 1, 0, -0.35422572, 0, -0.93516, -4.105447, 1.0018371, 2.2535436)
 Player = NodePath("../Player")

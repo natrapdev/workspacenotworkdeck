@@ -7,9 +7,6 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
 {
     [Export] public LegState LegBehaviour { get; set; }
 
-    public void LegsTrackLookDirection(InputPackage input, float delta) => LegBehaviour.CurrentState.TrackLookDirection(input, delta);
-    public void LegsUpdate(InputPackage input, float delta) => LegBehaviour.Update(input, delta);
-
     public override State ChangeState(InputPackage input)
     {
         return !Character.IsOnFloor() ? Parent.GetStateByName("airborne") : base.ChangeState(input);
@@ -17,12 +14,12 @@ public partial class RaiseSwordOneHanded : State, IPartialBodyState
 
     protected override void OnUpdate(InputPackage input, float delta)
     {
-        // if (LegBehaviour.CurrentState.TracksLookDirection() && !TracksLookDirection()) LegsTrackLookDirection(input, delta);
-        LegsUpdate(input, delta);
+        
     }
 
     protected override void OnEnter()
     {
+        Humanoid.Animator.SetBodySpeedScale(1f);
         // NextState??=Parent.GetStateByName("slash1_one_handed");
         if (!FollowUpStates.Contains(Parent.GetStateByName("slash1_one_handed")))
         {

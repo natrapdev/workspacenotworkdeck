@@ -52,10 +52,10 @@ public partial class ViewportModel : Node3D
 		State currentState = Humanoid.CurrentState;
 
 		string animation = currentState.Animation;
-		// Animator.PlaySpeed = Humanoid.Animator.BodyAnimationSpeed;
-		Animator.PlaySpeed = Humanoid.Animator.BodyAnimator.SpeedScale;
+		Animator.PlaySpeed = Humanoid.Animator.BodyAnimationSpeed;
+		Animator.AnimationPlayer.SetSpeedScale(Humanoid.Animator.GetBodySpeedScale());
 		Animator.SetAnimation(animation);
-
+		
 		// ViewportCamera.Update();
 		SetArmsPosition();
 

@@ -26,6 +26,7 @@ Humanoid = NodePath("../HumanoidModel")
 
 [node name="HumanoidModel" parent="." unique_id=728337583 node_paths=PackedStringArray("DamageModel") instance=ExtResource("2_fjrip")]
 DamageModel = NodePath("../DamageModel")
+Debug = true
 
 [node name="CharacterModel" parent="HumanoidModel" unique_id=1564308067 node_paths=PackedStringArray("Humanoid") instance=ExtResource("11_d2wvv")]
 Humanoid = NodePath("..")

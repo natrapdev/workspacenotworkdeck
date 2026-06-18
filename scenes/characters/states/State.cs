@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MyFirst3DGame.scenes.characters.humanoid;
 using System.Text;
+using TraceReloggerLib;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
@@ -23,7 +24,7 @@ public partial class State : Node
     public CharacterBody3D Character { get; set; }
     public Node3D CharacterModel { get; set; }
     public Animator Animator { get; set; }
-    public Skeleton3D Skeleton { get; set; }
+    public HumanoidSkeleton Skeleton { get; set; }
     public HumanoidModel Humanoid { get; set; }
     public HumanoidResource Resource { get; set; }
     public HumanoidCombat Combat { get; set; }
@@ -49,6 +50,10 @@ public partial class State : Node
     public readonly List<State> FollowUpStates = new(3);
     protected static readonly float Gravity = ProjectSettings.GetSetting(
         "physics/3d/default_gravity").As<float>();
+
+    private const float HitStopMaxTime = 0.05f;
+    private float _hitStopTime;
+    private bool _isHitStop;
 
     public virtual State ChangeState(InputPackage input)
     {
@@ -78,12 +83,28 @@ public partial class State : Node
     {
         Animator.UpdateAnimations();
         if (TracksLookDirection()) TrackLookDirection(input, delta);
-        if (RightWeaponHurts()) ScanForHitsRightWeapon();
+        if (RightWeaponHurts() && !_isHitStop) ScanForHitsRightWeapon();
         OnUpdate(input, delta);
+
+        if (this is IPartialBodyState partialBodyState)
+        {
+            partialBodyState.LegsUpdate(input, delta);
+            
+            if (HumanoidLegs.CurrentState.TracksLookDirection()) 
+                partialBodyState.LegsTrackLookDirection(input, delta);
+        }
+
+        _hitStopTime -= delta;
+
+        if (_hitStopTime <= 0 && _isHitStop)
+        {
+            _isHitStop = false;
+            Animator.SetBodySpeedScale(1);
+        }
     }
     protected virtual void OnUpdate(InputPackage input, float delta) { }
 
-    public virtual void Enter()
+    public void Enter()
     {
         Resource.PayCosts(this);
         StartTimer();
@@ -92,7 +113,7 @@ public partial class State : Node
     }
     protected virtual void OnEnter() { }
 
-    public virtual void Exit()
+    public void Exit()
     {
         OnExit();
     }
@@ -112,7 +133,7 @@ public partial class State : Node
         Humanoid.GlobalRotation = new Vector3(x, newAngle, z);
     }
 
-    protected virtual State FindFirstValidState(InputPackage input)
+    protected State FindFirstValidState(InputPackage input)
     {
         while (input.Actions.Count > 0)
         {
@@ -135,7 +156,7 @@ public partial class State : Node
         _canForceState = true;
     }
 
-    public virtual void UpdateResource(float delta) => Resource.Update(delta);
+    public void UpdateResource(float delta) => Resource.Update(delta);
 
     protected virtual State DefaultLifecycle(InputPackage input)
     {
@@ -182,10 +203,19 @@ public partial class State : Node
         
         if (hitInfo.HitNode.GetParent() is Limb hitLimb)
         {
+            _isHitStop = true;
+            Animator.SetBodySpeedScale(0f);
+            _hitStopTime = HitStopMaxTime;
+            
             hitLimb.Hit(hitInfo);
         }
         
         return hitInfo;
+    }
+
+    private void ReverseAnimationToIdle()
+    {
+        
     }
 
     private bool ExceedsTimeLength(float time) => ElapsedTimeSeconds > time;

@@ -10,7 +10,6 @@ namespace MyFirst3DGame.scenes.characters.states;
 
 public partial class HumanoidResource : Node
 {
-    [Export] public bool GodMode { get; set; } = false;
     [Export] public float BodyMass { get; set; } = 68f; // kg
     [Export] public float MaxStamina { get; set; } = 100f;
     [Export] public float StaminaGain { get; set; } = 3f;
@@ -30,10 +29,6 @@ public partial class HumanoidResource : Node
     private float _cardiacOutput;
     private float _currentStamina = 1f;
     private float _currentFatigue = 0;
-
-    // These weights will determine the best nearby interactable item that will be selected.
-    private const float DistanceWeight = 1f;
-    private const float AngleWeight = 0.01f;
 
     // How body mass should be distributed across the body
     public readonly Dictionary<string, float> BodyPartMassCoefficients = new()
@@ -61,58 +56,37 @@ public partial class HumanoidResource : Node
             return globalTransform;
         }
     }
-
-    public float TotalBloodVolume { get { return BodyMass * 75f; } } // blood in mL/kg
+    
     public float CurrentStamina { get { return _currentStamina / MaxStamina; } }
-
     private Node _worldItemsContainer;
-    private Dictionary<string, float> _bodyPartBloodVolume;
-
-    public InteractableItem ItemFocus { get; set; }
+    public InteractableItem ItemFocus { get; private set; }
 
     private float _lastStamina;
-
-    // public Node3D CameraPivot;
 
     public override void _Ready()
     {
         _worldItemsContainer = FindWorldItemContainer();
-        _bodyPartBloodVolume = BodyPartMassCoefficients;
         _currentStamina = MaxStamina;
-
-        foreach (string bodyPart in BodyPartMassCoefficients.Keys)
-        {
-            _bodyPartBloodVolume[bodyPart] = CalculateBodyPartBloodVolume(bodyPart);
-        }
-
         _lastStamina = _currentStamina;
 
-        Humanoid = GetParent() as HumanoidModel;
+        Humanoid = GetParentOrNull<HumanoidModel>();
 
         _characterSkeleton = Humanoid.Skeleton;
         HeadLookAtModifier = _characterSkeleton.GetNode<LookAtModifier3D>("HeadLookAt");
         HeadBoneAttachment = _characterSkeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
         _characterSkeletonHeadIndex = _characterSkeleton.FindBone("spine.006");
-
-        // CameraPivot = Humanoid.GetParent().GetNode<Node3D>("CameraPivot");
     }
 
     public void Update(float delta)
     {
-        if (_currentStamina != _lastStamina)
-        {
-            GD.Print($"Stamina: {_currentStamina}");
-        }
+        if (Math.Abs(_currentStamina - _lastStamina) > 0.1f) GD.Print($"Stamina: {_currentStamina}");
 
         UpdateStamina(StaminaGain * delta);
-
+        
         List<Node3D> nearbyPickableItems = SearchForNearbyWorldItems();
-
-        UpdateNearbyItems(
-            FindBestPickableItem(nearbyPickableItems)
-        );
-
-
+        
+        UpdateNearbyItems(FindBestPickableItem(nearbyPickableItems));
+        
         _lastStamina = _currentStamina;
     }
 
@@ -143,36 +117,30 @@ public partial class HumanoidResource : Node
 
     private Node FindWorldItemContainer()
     {
-        Node mainSceneNode = null;
-
-        foreach (Node node in GetTree().Root.GetChildren())
-        {
-            if (String.Equals(node.Name, "main", StringComparison.OrdinalIgnoreCase))
-            {
-                mainSceneNode = node;
-                break;
-            }
-        }
+        Node mainSceneNode = GetTree().Root.GetChildren().FirstOrDefault(
+            node => string.Equals(
+                node.Name, "main", StringComparison.OrdinalIgnoreCase
+                )
+            );
 
         if (mainSceneNode == null)
         {
             GD.PrintErr("Could not find a main scene.");
+            return null;
         }
 
         var itemContainer = mainSceneNode.GetNodeOrNull<Node>("ItemCollection");
 
-        if (itemContainer == null)
-        {
-            GD.PushWarning("Could not find node \"ItemCollection\".");
+        if (itemContainer != null) return itemContainer;
+        
+        GD.PushWarning("Could not find node \"ItemCollection\".");
 
-            foreach (var child in mainSceneNode.GetChildren())
-            {
-                if (child.IsInGroup("pickable_items"))
-                {
-                    GD.PushWarning($"World items are currently being stored in node \"{child.Name}\". Consider renaming this node to \"ItemCollection\".");
-                    itemContainer = child;
-                }
-            }
+        foreach (Node child in mainSceneNode.GetChildren())
+        {
+            if (!child.IsInGroup("pickable_items")) continue;
+            
+            GD.PushWarning($"World items are currently being stored in node \"{child.Name}\". Consider renaming this node to \"ItemCollection\".");
+            itemContainer = child;
         }
 
         return itemContainer;
@@ -188,7 +156,7 @@ public partial class HumanoidResource : Node
             {
                 continue;
             }
-            else if (pickableItem.CanInteract(Humanoid.Character, Humanoid.LookAtReference))
+            if (pickableItem.CanInteract(Humanoid.Character, Humanoid.LookAtReference))
             {
                 pickableItems.Add(item);
             }
@@ -206,13 +174,10 @@ public partial class HumanoidResource : Node
         {
             var pickableItem = item as PickableItem;
             float angle = pickableItem!.LookDifference(Humanoid.Character, Humanoid.LookAtReference);
-            float distance = pickableItem.DistanceBetween(Humanoid.Character);
-
-            if (angle < bestScore)
-            {
-                selectedPickableItem = pickableItem;
-                bestScore = angle;
-            }
+            
+            if (!(angle < bestScore)) continue;
+            selectedPickableItem = pickableItem;
+            bestScore = angle;
         }
 
         return selectedPickableItem;
@@ -230,6 +195,5 @@ public partial class HumanoidResource : Node
     public bool HasEnoughStamina(State state) => state.StaminaCost <= _currentStamina && _currentStamina > 0;
     public void UpdateStamina(float changeValue) => _currentStamina = Mathf.Clamp(_currentStamina + changeValue, -MaxStamina, MaxStamina);
     public void UpdateFatigue(float changeValue) => _currentFatigue += changeValue;
-    public float CalculateBodyPartBloodVolume(string bodyPart) => TotalBloodVolume * BodyPartMassCoefficients[bodyPart];
     public float CalculateBodyPartMass(string bodyPart) => BodyMass * BodyPartMassCoefficients[bodyPart];
 }

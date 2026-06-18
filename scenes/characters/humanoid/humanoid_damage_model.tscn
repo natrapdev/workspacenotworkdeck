@@ -72,9 +72,10 @@ script = ExtResource("1_gq613")
 Circulation = NodePath("CirculationSystem")
 LimbCollection = NodePath("Limbs")
 
-[node name="CirculationSystem" type="Node" parent="." unique_id=1064459812 node_paths=PackedStringArray("Model")]
+[node name="CirculationSystem" type="Node" parent="." unique_id=1064459812 node_paths=PackedStringArray("Model", "DamageHandler")]
 script = ExtResource("2_5c2kn")
 Model = NodePath("..")
+DamageHandler = NodePath("../DamageHandler")
 
 [node name="DamageHandler" type="Node" parent="." unique_id=840410448]
 script = ExtResource("3_apudr")

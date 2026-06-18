@@ -23,14 +23,13 @@ public partial class HumanoidSkeleton : Skeleton3D
 
 	public void Ragdoll()
 	{
-		if (!PhysicalSkeleton.IsSimulatingPhysics())
-		{
-			SpineIk.Active = false;
-			Humanoid.GetNode<CollisionShape3D>("../Collision").Disabled = true;
-			Humanoid.Animator.BodyAnimator.Active = false;
-			Humanoid.Animator.LegsAnimator.Active = false;
-			PhysicalSkeleton.Active = true;
-			PhysicalSkeleton.PhysicalBonesStartSimulation();
-		}
+		if (PhysicalSkeleton.IsSimulatingPhysics()) return;
+		
+		SpineIk.Active = false;
+		Humanoid.GetNode<CollisionShape3D>("../Collision").Disabled = true;
+		Humanoid.Animator.BodyAnimator.Active = false;
+		Humanoid.Animator.LegsAnimator.Active = false;
+		PhysicalSkeleton.Active = true;
+		PhysicalSkeleton.PhysicalBonesStartSimulation();
 	}
 }

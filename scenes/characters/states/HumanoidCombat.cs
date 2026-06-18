@@ -61,7 +61,7 @@ public partial class HumanoidCombat : Node3D
         }
     }
     
-    private Array<Rid> BuildExclusionListButAllowOneNode(Node toCollideWith, HitInfo hitInfo)
+    private static Array<Rid> BuildExclusionListButAllowOneNode(Node toCollideWith, HitInfo hitInfo)
     {
         var rids = new Array<Rid>();
         
@@ -177,7 +177,9 @@ public partial class HumanoidCombat : Node3D
 
             if (result.Count > 0)
             {
-                return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                HandleHit(hi);
+                return hi;
             }
         }
 
@@ -242,12 +244,12 @@ public partial class HumanoidCombat : Node3D
 
     public float GetEffectiveThicknessOfHit(HitInfo hitInfo)
     {
-        int maxAttempts = 8;
+        const int maxAttempts = 8;
 
         Vector3 rayDirection = -hitInfo.WeaponNormal;
         Vector3 rayOrigin = hitInfo.HitPosition + rayDirection * 0.001f;
 
-        CreateDebugSphere(rayOrigin, hitInfo.HitNode);
+        // CreateDebugSphere(rayOrigin, hitInfo.HitNode);
 
         var query = PhysicsRayQueryParameters3D.Create(rayOrigin + rayDirection * 5f, rayOrigin);
         query.CollisionMask = 2;
@@ -257,26 +259,41 @@ public partial class HumanoidCombat : Node3D
         query.HitFromInside = true;
         query.CollideWithAreas = true;
         
-        CreateDebugBlock(rayOrigin + rayDirection * 5f, hitInfo.HitNode);
+        // CreateDebugBlock(rayOrigin + rayDirection * 5f, hitInfo.HitNode);
         
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
             Dictionary result = _physicsSpaceState.IntersectRay(query);
-
+            
             if (result.Count <= 0) return 999;
             if ((Node3D)result["collider"] != hitInfo.HitNode)
             {
-                GD.Print(((Node3D)result["collider"]).GetParent().Name);
-                query.Exclude = query.GetExclude() + [((Area3D)result["collider"]).GetRid()]; 
+                var collider = (Area3D)result["collider"];
+                query.Exclude = query.GetExclude() + [collider.GetRid()];
                 continue;
             }
             
             var exitPoint = (Vector3)result["position"];
-            CreateDebugBlock(exitPoint, hitInfo.HitNode); 
+            // CreateDebugBlock(exitPoint, hitInfo.HitNode); 
             return (exitPoint - hitInfo.HitPosition).Length();
         }
 
         return 999;
+    }
+
+    private static void HandleHit(HitInfo hitInfo)
+    {
+        Node hit = hitInfo.HitNode.GetParent();
+        
+        switch (hit)
+        {
+            case Limb limb:
+            {
+                limb.Hit(hitInfo);
+                break;
+            }
+            default: return;
+        }
     }
     
     private static void CreateDebugBlock(Vector3 pos, Node parent) {

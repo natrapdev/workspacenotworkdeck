@@ -25,6 +25,11 @@ public partial class Bot : CharacterBody3D
 		_characterStateModel = Humanoid.StateContainer;
 		_skeleton = Humanoid.Skeleton;
 		HeadBoneAttachment = _skeleton.GetNode<BoneAttachment3D>("HeadBoneAttachment");
+
+		var bot = GetNodeOrNull("../Human2") as Bot;
+		if (bot == null) return;
+		var mode = bot.InputSource as HumanAi;
+		mode.CurrentTask = "chase";
 	}
 
 	public override void _Process(double delta)

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Array = Godot.Collections.Array;
@@ -111,11 +112,8 @@ public partial class HumanoidLimbs : Node
         {
             (Limb currentLimb, int distance) = queue.Dequeue();
 
-            foreach (Limb neighbour in currentLimb.Neighbours)
+            foreach (Limb neighbour in currentLimb.Neighbours.Where(neighbour => neighbour != null))
             {
-                if (neighbour == null)
-                    continue;
-
                 if (neighbour == end)
                     return distance + 1;
 

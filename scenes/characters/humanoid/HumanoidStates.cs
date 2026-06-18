@@ -8,7 +8,7 @@ public partial class HumanoidStates : Node
 {
 	public CharacterBody3D Character { get; set; }
 	[Export] public HumanoidModel Humanoid { get; set; }
-	[Export] public Skeleton3D Skeleton { get; set; }
+	[Export] public HumanoidSkeleton Skeleton { get; set; }
 	[Export] public Animator Animator { get; set; }
 	[Export] public HumanoidCombat Combat { get; set; }
 	[Export] public HumanoidResource Resource { get; set; }

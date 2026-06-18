@@ -19,7 +19,6 @@ viewport_path = NodePath("Fake/Sprite3D/SubViewport")
 
 [node name="ArmingSword" unique_id=867781399 node_paths=PackedStringArray("BladeStartMarker", "BladeEndMarker", "PhysicalBody", "ActualMesh", "PhysicalMesh", "TooltipSprite") instance=ExtResource("1_0mgtg")]
 script = ExtResource("2_5sd3t")
-RaycastAmount = 8
 BladeStartMarker = NodePath("BladeStart")
 BladeEndMarker = NodePath("BladeEnd")
 PhysicalBody = NodePath("Fake")

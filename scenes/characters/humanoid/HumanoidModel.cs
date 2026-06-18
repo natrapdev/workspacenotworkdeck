@@ -18,6 +18,7 @@ public sealed partial class HumanoidModel : Node3D
 	[Export] public HumanoidLegStates HumanoidLegs { get; set; }
 	[Export] public DamageModel DamageModel { get; set; }
 	[Export] public bool Debug { get; set; } = false;
+	[Export] public bool Dead { get; set; }
 
 	public Weapon CurrentWeapon { get; set; }
 

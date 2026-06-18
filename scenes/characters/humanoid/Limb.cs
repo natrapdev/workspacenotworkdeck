@@ -55,7 +55,7 @@ public partial class Limb : BoneAttachment3D
 		{
 			Text = "100%",
 			Billboard = BaseMaterial3D.BillboardModeEnum.Enabled,
-			PixelSize = 0.002f,
+			PixelSize = 0.00125f,
 			NoDepthTest = true,
 			Name = "Label"
 		};
@@ -78,7 +78,7 @@ public partial class Limb : BoneAttachment3D
 		float immediateBloodLoss = MaxBloodVolume * bloodLossFactor * cutArea;
 		
 		CurrentBloodVolume = Mathf.Clamp(CurrentBloodVolume - immediateBloodLoss, 0, MaxBloodVolume);
-		CirculationSystem.CurrentBloodVolume -= immediateBloodLoss;
+		CirculationSystem.CurrentBloodVolume -= Mathf.Min(immediateBloodLoss, MaxBloodVolume);
 		_currentBleedRate += MaxBloodVolume * bloodLossFactor;
 		
 		GD.Print($"\nHit {LimbName} ({BoneStrength}) \nimpact energy of {impactEnergy} joules \nat an angle of {Mathf.RadToDeg(hitInfo.HitAngle)} degrees.\n");
@@ -88,10 +88,9 @@ public partial class Limb : BoneAttachment3D
 		
 		var label = GetNodeOrNull<Label3D>("Label");
         
-		if (label is not null)
-		{
-			label.Text = $"{RemainingBloodRatio * 100:F2}%";
-		}
+		
+		if (label is not null) label.Text = $"{RemainingBloodRatio * 100:F2}%";
+		
 	}
 
 	private void BreakBone()

@@ -12,11 +12,7 @@ public partial class Walk : State
 
 	public override State ChangeState(InputPackage input)
 	{
-		if (!Character.IsOnFloor())
-		{
-			return Parent.GetStateByName("airborne");
-		}
-		return FindFirstValidState(input);
+		return !Character.IsOnFloor() ? Parent.GetStateByName("airborne") : FindFirstValidState(input);
 	}
 
 	protected override void OnUpdate(InputPackage input, float delta)
@@ -28,7 +24,7 @@ public partial class Walk : State
 		Animation = StringBuilder.Append(animation).Append(animationDirection).Append(animationWeapon).ToString();
 
 		Vector3 velocity = Character.Velocity;
-		Vector3 direction = (Humanoid.Transform.Basis * new Vector3(input.Direction.X, 0, input.Direction.Y)).Normalized();
+		Vector3 direction = (Humanoid.GlobalTransform.Basis * new Vector3(input.Direction.X, 0, input.Direction.Y)).Normalized();
 
 		float stamina = Resource.CurrentStamina;
 		float targetSpeed = (float)(
@@ -40,29 +36,11 @@ public partial class Walk : State
 
 		_animSpeed = input.Direction.Y < 0 ? -1 : 1;
 		float speedModifier = velocity.Length() / AnimationBaseSpeed;
-
-		if (HumanoidLegs.CurrentState == Humanoid.CurrentState)
-		{
-			Animator.SetSpeedScale(_animSpeed * speedModifier);
-		}
-		else
-		{
-			Animator.SetBodySpeedScale(1);
-			Animator.SetLegsSpeedScale(_animSpeed * speedModifier);
-		}
+		
+		Animator.SetLegsSpeedScale(_animSpeed * speedModifier);
 
 		Character.Velocity = velocity;
 
 		StringBuilder.Clear();
-	}
-
-	protected override void OnEnter()
-	{
-		Animator.SetSpeedScale(_animSpeed);
-	}
-
-	protected override void OnExit()
-	{
-		Animator.ResetSpeedScale();
 	}
 }

@@ -177,7 +177,8 @@ public partial class HumanoidCombat : Node3D
 
             if (result.Count > 0)
             {
-                HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+                Vector3 weaponNormal = -origin.DirectionTo(target);
+                HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity, weaponNormal);
                 HandleHit(hi);
                 return hi;
             }
@@ -196,7 +197,7 @@ public partial class HumanoidCombat : Node3D
 
         Vector3 origin = bladeStart.GlobalPosition;
         Vector3 target = bladeEnd.GlobalPosition;
-        Vector3 forwardVector = bladeStart.GlobalTransform.Basis.Z.Normalized();
+        Vector3 forwardVector = -origin.DirectionTo(target);
         Vector3 weaponVelocity = 25f * forwardVector;
 
         var queryParams = PhysicsRayQueryParameters3D.Create(origin, target);
@@ -206,14 +207,22 @@ public partial class HumanoidCombat : Node3D
 
         Dictionary result = _physicsSpaceState.IntersectRay(queryParams);
 
-        return CollectHitInformation(result, currentWeapon, origin, weaponVelocity);
+        if (result.Count > 0)
+        {
+            HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity, forwardVector);
+            HandleHit(hi);
+            return hi;
+        }
+
+        return new HitInfo();
     }
 
     private static HitInfo CollectHitInformation(
         Dictionary result,
         Weapon currentWeapon,
         Vector3 weaponHitSource,
-        Vector3 weaponVelocity)
+        Vector3 weaponVelocity,
+        Vector3 attackNormal)
     {
         if (result.Count <= 0) return new HitInfo();
 
@@ -222,7 +231,6 @@ public partial class HumanoidCombat : Node3D
         var hitNormal = (Vector3)result["normal"];
         //TODO: include velocity of hit targets.
         Vector3 hitVelocity = hitNode is RigidBody3D rb ? rb.LinearVelocity : Vector3.Zero;
-        Vector3 weaponNormal = currentWeapon.GlobalTransform.Basis.X.Normalized();
         
         // MeshInstance3D hit = new();
         // hitNode.AddChild(hit);
@@ -232,7 +240,7 @@ public partial class HumanoidCombat : Node3D
 
         return new HitInfo(
             currentWeapon,
-            weaponNormal,
+            attackNormal,
             weaponVelocity,
             weaponHitSource,
             hitNode,

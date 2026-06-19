@@ -25,6 +25,8 @@ public partial class ViewportAnimator : Node
         {"strafe_left", 0.45f},
         {"strafe_right", 0.45f}
     };
+    
+    private const float DifferenceTolerance = .01f;
 
     private string _currentAnimation;
     public float PlaySpeed = 1;
@@ -40,8 +42,8 @@ public partial class ViewportAnimator : Node
             
             return;
         }
-
-        if (animation == _currentAnimation) return;
+        
+        if (animation == _currentAnimation && Viewport.Humanoid.CurrentState.CanBeLongerThanAnimation) return;
         
         AnimationPlayer.Play(
             name: _stringBuilder.Append("viewport_animation_library/").Append(animation).ToString(),
@@ -49,9 +51,24 @@ public partial class ViewportAnimator : Node
             customSpeed: PlaySpeed,
             fromEnd: PlaySpeed < 0
         );
+        // AnimationPlayer.Advance(0);
 
         _stringBuilder.Clear();
 
         _currentAnimation = animation;
+        
+        // SynchronizeAnimations();
+    }
+
+    private void SynchronizeAnimations()
+    {
+        double refPos = Viewport.Humanoid.Animator.BodyAnimator.CurrentAnimationPosition;
+        double thisPos = AnimationPlayer.CurrentAnimationPosition;
+        double difference = Mathf.Abs(thisPos - refPos);
+
+        if (difference > DifferenceTolerance)
+        {
+            AnimationPlayer.Seek(refPos);
+        }
     }
 }

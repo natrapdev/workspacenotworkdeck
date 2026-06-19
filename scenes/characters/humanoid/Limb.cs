@@ -33,10 +33,10 @@ public partial class Limb : BoneAttachment3D
 	public float PhysicalVolume { get; set; }
 	public float MaxBloodVolume { get; set; }
 	public float Mass { get; set; }
-	public float CurrentBleedRate { get { return _currentBleedRate * BleedMultiplier; } }
+	public float CurrentBleedRate { get => _currentBleedRate * BleedMultiplier; set => _currentBleedRate = value; }
 	public float Thickness { get; set; }
 	public string Material { get; private set; } = "flesh";
-	public float RemainingBloodRatio { get { return CurrentBloodVolume / MaxBloodVolume; } }
+	public float RemainingBloodRatio { get => CurrentBloodVolume / MaxBloodVolume; }
 	public float CurrentBloodVolume { get; set; }
 
 	private float _currentPhysicalVolume;
@@ -87,10 +87,8 @@ public partial class Limb : BoneAttachment3D
 		if (impactEnergy > BoneStrength) BreakBone();
 		
 		var label = GetNodeOrNull<Label3D>("Label");
-        
 		
 		if (label is not null) label.Text = $"{RemainingBloodRatio * 100:F2}%";
-		
 	}
 
 	private void BreakBone()

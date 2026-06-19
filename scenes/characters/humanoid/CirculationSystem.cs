@@ -51,6 +51,12 @@ public partial class CirculationSystem : Node
         CurrentBloodVolume = Mathf.Clamp(CurrentBloodVolume - bloodLost, 0, TotalBloodVolume);
         
         _bloodLossRate += bloodLost;
+
+        if (limb.CurrentBloodVolume <= 0)
+        {
+            var area3D = limb.GetNodeOrNull<Area3D>("Area3D");
+            area3D?.QueueFree();
+        }
         
         var label = limb.GetNodeOrNull<Label3D>("Label");
         if (label is not null) label.Text = $"{limb.RemainingBloodRatio * 100:F2}%";

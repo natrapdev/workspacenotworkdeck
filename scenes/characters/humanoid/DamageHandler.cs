@@ -15,7 +15,7 @@ public partial class DamageHandler : Node
         _humanoid = _damageModel.Humanoid;
     }
 
-    public readonly List<InjurySeverity> Severities =
+    private readonly List<InjurySeverity> Severities =
     [
         new("negligible", 1),
         new("minimal", 0.8f),

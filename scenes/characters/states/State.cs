@@ -51,7 +51,7 @@ public partial class State : Node
     protected static readonly float Gravity = ProjectSettings.GetSetting(
         "physics/3d/default_gravity").As<float>();
 
-    private const float HitStopMaxTime = 0.05f;
+    [Export] public float HitStopMaxTime { get; set; } = 0.03f;
     private float _hitStopTime;
     private bool _isHitStop;
 
@@ -195,13 +195,13 @@ public partial class State : Node
         }
     }
 
-    protected virtual HitInfo ScanForHitsRightWeapon()
+    protected virtual HitInfo ScanForHit() => Combat.ScanForHitsSlash();
+
+    private void ScanForHitsRightWeapon() => HandleHit(hitInfo: ScanForHit());
+
+    private void HandleHit(HitInfo hitInfo)
     {
-        HitInfo hitInfo = Combat.ScanForHitsSlash();
-        
-        if (hitInfo.HitNode is null) return hitInfo;
-        
-        if (hitInfo.HitNode.GetParent() is Limb hitLimb)
+        if (hitInfo.HitNode?.GetParent() is Limb hitLimb)
         {
             _isHitStop = true;
             Animator.SetBodySpeedScale(0f);
@@ -209,8 +209,6 @@ public partial class State : Node
             
             hitLimb.Hit(hitInfo);
         }
-        
-        return hitInfo;
     }
 
     private void ReverseAnimationToIdle()

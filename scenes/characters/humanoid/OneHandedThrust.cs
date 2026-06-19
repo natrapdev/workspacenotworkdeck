@@ -13,19 +13,15 @@ public partial class OneHandedThrust : State, IPartialBodyState
         
     }
 
-    protected override HitInfo ScanForHitsRightWeapon()
-    {
-        return Combat.ScanForHitsStab();
-    }
-
+    protected override HitInfo ScanForHit() => Humanoid.Combat.ScanForHitsStab();
 
     protected override State DefaultLifecycle(InputPackage input)
     {
-        if (Mathf.Abs(Animator.BodyAnimator.CurrentAnimationPosition - Duration) < .35)
+        if (Mathf.Abs(Animator.BodyAnimator.CurrentAnimationPosition - Duration) < .2)
         {
             return FindFirstValidState(input);
         }
-
+    
         return this;
     }
 }

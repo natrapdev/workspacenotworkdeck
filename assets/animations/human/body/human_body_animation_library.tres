@@ -2,6 +2,7 @@
 
 [ext_resource type="Animation" uid="uid://bpw5blnfv36mo" path="res://assets/animations/human/body/idle.res" id="1_kmiot"]
 [ext_resource type="Animation" uid="uid://cwdruiai3e5cq" path="res://assets/animations/human/body/idle_one_handed.res" id="2_nhbgs"]
+[ext_resource type="Animation" uid="uid://ct71h4h4up8ti" path="res://assets/animations/human/body/punch.res" id="3_ely4x"]
 [ext_resource type="Animation" uid="uid://dw6k00y3l4otg" path="res://assets/animations/human/body/slash1_one_handed.res" id="3_x1g2m"]
 [ext_resource type="Animation" uid="uid://wbixru2axahq" path="res://assets/animations/human/body/slash3_one_handed.res" id="4_ely4x"]
 [ext_resource type="Animation" uid="uid://cd62638u2l2xx" path="res://assets/animations/human/body/slash_prepare_one_handed.res" id="5_0atnx"]
@@ -21,6 +22,7 @@
 _data = {
 &"idle": ExtResource("1_kmiot"),
 &"idle_one_handed": ExtResource("2_nhbgs"),
+&"punch": ExtResource("3_ely4x"),
 &"slash1_one_handed": ExtResource("3_x1g2m"),
 &"slash2_one_handed": ExtResource("16_nhbgs"),
 &"slash3_one_handed": ExtResource("4_ely4x"),

@@ -25,7 +25,6 @@
 [ext_resource type="Script" uid="uid://dd57eha75ms0f" path="res://scenes/characters/humanoid/OneHandedSlashRight.cs" id="22_5i03e"]
 [ext_resource type="Script" uid="uid://bubyl6xh00f46" path="res://scenes/characters/humanoid/OneHandedSlashDown.cs" id="23_xufbo"]
 [ext_resource type="Script" uid="uid://b04tcsscypt47" path="res://scenes/characters/humanoid/OneHandedThrust.cs" id="24_r4xbn"]
-[ext_resource type="Script" uid="uid://co1yb5xsoemv" path="res://scenes/characters/states/Punch.cs" id="26_s6yqu"]
 [ext_resource type="Script" uid="uid://b8p0dn5qsw4gc" path="res://scenes/characters/states/Dead.cs" id="27_s6yqu"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a6b7o"]
@@ -750,7 +749,7 @@ tracks/2/path = NodePath("StateDatabase:IsParryable")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.45, 0.7),
+"times": PackedFloat32Array(0.6, 0.75),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -786,7 +785,7 @@ tracks/5/path = NodePath("StateDatabase:RightHandWeaponHurts")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.45, 0.7),
+"times": PackedFloat32Array(0.7, 0.9),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -1154,7 +1153,6 @@ BodyRotationSpeed = 2.0
 
 [node name="Walk" type="Node" parent="States" unique_id=2034418787]
 script = ExtResource("9_fsq30")
-AccelerationSpeed = 0.4
 Priority = 2
 Animation = "walk_front"
 BackendAnimation = "walk_params"
@@ -1205,6 +1203,7 @@ Animation = "slash1_one_handed"
 BackendAnimation = "slash1_one_handed_params"
 StateName = "slash1_one_handed"
 BodyRotationSpeed = 10.0
+StaminaCost = 2.0
 
 [node name="OneHandedSlashRight" type="Node" parent="States/OneHandedSlashLeft" unique_id=1804846095 node_paths=PackedStringArray("LegBehaviour", "BaseState")]
 script = ExtResource("22_5i03e")
@@ -1216,6 +1215,7 @@ Animation = "slash2_one_handed"
 BackendAnimation = "slash2_one_handed_params"
 StateName = "slash2_one_handed"
 BodyRotationSpeed = 10.0
+StaminaCost = 2.0
 
 [node name="OneHandedSlashDown" type="Node" parent="States" unique_id=92033248 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("23_xufbo")
@@ -1226,6 +1226,7 @@ Animation = "slash3_one_handed"
 BackendAnimation = "slash3_one_handed_params"
 StateName = "slash3_one_handed"
 BodyRotationSpeed = 10.0
+StaminaCost = 2.0
 
 [node name="OneHandedThrust" type="Node" parent="States" unique_id=1696307601 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("24_r4xbn")
@@ -1236,9 +1237,8 @@ Animation = "thrust_one_handed"
 BackendAnimation = "thrust_one_handed_params"
 StateName = "thrust_one_handed"
 BodyRotationSpeed = 10.0
-
-[node name="Punch" type="Node" parent="States" unique_id=1508615105]
-script = ExtResource("26_s6yqu")
+StaminaCost = 2.0
+HitStopMaxTime = 0.2
 
 [node name="Dead" type="Node" parent="States" unique_id=1056900791]
 script = ExtResource("27_s6yqu")

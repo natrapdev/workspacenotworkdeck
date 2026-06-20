@@ -8,11 +8,6 @@ public partial class OneHandedThrust : State, IPartialBodyState
 {
     [Export] public LegState LegBehaviour { get; set; }
 
-    protected override void OnUpdate(InputPackage input, float delta)
-    {
-        
-    }
-
     protected override HitInfo ScanForHit() => Humanoid.Combat.ScanForHitsStab();
 
     protected override State DefaultLifecycle(InputPackage input)

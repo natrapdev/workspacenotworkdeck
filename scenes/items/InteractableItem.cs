@@ -10,15 +10,13 @@ public partial class InteractableItem : Node3D
 {
 	[Export] public float InteractDistance { get; set; } = 2.5f;
 	[Export] public Sprite3D TooltipSprite { get; set; }
-	[Export] public Vector3 HandleOffset { get; set; } = Vector3.Zero; // Where the player interacts with the item
-
+	[Export] public Vector3 HandleOffsetPosition { get; set; } = Vector3.Zero; // Where the player interacts with the item
+	[Export] public Vector3 HandleOffsetRotation { get; set; } =  Vector3.Zero;
+	
 	public bool BeingUsed { get; set; } = false;
-	private const float _MaxLookOffset = 25f;
+	private const float MaxLookOffset = 25f;
 
-	public void ToggleTooltip(bool show)
-	{
-		TooltipSprite.Visible = show && !BeingUsed;
-	}
+	public void ToggleTooltip(bool show) => TooltipSprite.Visible = show && !BeingUsed;
 
 	/// <summary>
 	/// Checks if a character is close to an item and looking close enough to the item. 
@@ -29,21 +27,21 @@ public partial class InteractableItem : Node3D
 	public virtual bool CanInteract(CharacterBody3D character, BoneAttachment3D headBoneAttachment)
 	{
 		bool isCloseEnough = DistanceBetween(character) <= InteractDistance;
-		bool isBeingLookedAt = LookDifference(character, headBoneAttachment) <= _MaxLookOffset;
+		bool isBeingLookedAt = LookDifference(character, headBoneAttachment) <= MaxLookOffset;
 
 		return isCloseEnough && isBeingLookedAt;
 	}
 	public virtual bool CanInteract(CharacterBody3D character, Node3D lookNode)
 	{
 		bool isCloseEnough = DistanceBetween(character) <= InteractDistance;
-		bool isBeingLookedAt = LookDifference(character, lookNode) <= _MaxLookOffset;
+		bool isBeingLookedAt = LookDifference(character, lookNode) <= MaxLookOffset;
 
 		return isCloseEnough && isBeingLookedAt;
 	}
 
 	public virtual float DistanceBetween(CharacterBody3D character)
 	{
-		Vector3 position = GlobalPosition + HandleOffset;
+		Vector3 position = GlobalPosition + HandleOffsetPosition;
 		return (character.GlobalPosition - position).Length();
 	}
 
@@ -57,7 +55,7 @@ public partial class InteractableItem : Node3D
 	{
 		Vector3 headPosition = headBoneAttachment.GlobalPosition;
 		Vector3 headForward = headBoneAttachment.GlobalBasis.Z;
-		Vector3 targetPosition = GlobalPosition + HandleOffset;
+		Vector3 targetPosition = GlobalPosition + HandleOffsetPosition;
 
 		Vector3 direction = (targetPosition - headPosition).Normalized();
 		float angle = headForward.AngleTo(direction);
@@ -69,7 +67,7 @@ public partial class InteractableItem : Node3D
 	{
 		Vector3 headPosition = lookNode.GlobalPosition;
 		Vector3 headForward = lookNode.GlobalBasis.Z;
-		Vector3 targetPosition = GlobalPosition + HandleOffset;
+		Vector3 targetPosition = GlobalPosition + HandleOffsetPosition;
 
 		Vector3 direction = (targetPosition - headPosition).Normalized();
 		// direction = headPosition.DirectionTo(targetPosition);

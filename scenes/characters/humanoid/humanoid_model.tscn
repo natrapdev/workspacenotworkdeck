@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://dd57eha75ms0f" path="res://scenes/characters/humanoid/OneHandedSlashRight.cs" id="22_5i03e"]
 [ext_resource type="Script" uid="uid://bubyl6xh00f46" path="res://scenes/characters/humanoid/OneHandedSlashDown.cs" id="23_xufbo"]
 [ext_resource type="Script" uid="uid://b04tcsscypt47" path="res://scenes/characters/humanoid/OneHandedThrust.cs" id="24_r4xbn"]
+[ext_resource type="Script" uid="uid://co1yb5xsoemv" path="res://scenes/characters/states/Punch.cs" id="27_oiyrg"]
 [ext_resource type="Script" uid="uid://b8p0dn5qsw4gc" path="res://scenes/characters/states/Dead.cs" id="27_s6yqu"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a6b7o"]
@@ -253,6 +254,118 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ocaux"]
+resource_name = "punch_params"
+length = 0.8333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StateDatabase:TransitionsToQueued")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.43333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StateDatabase:AcceptsQueueing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.43333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateDatabase:IsParryable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.21000001, 0.28),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateDatabase:IsVulnerable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateDatabase:IsInterruptable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.105000004),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StateDatabase:LeftHandWeaponHurts")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.21933335, 0.315),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StateDatabase:TracksLookDirection")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StateDatabase:CanMoveHeldItem")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StateDatabase:RightHandWeaponHurts")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_xufbo"]
@@ -1042,6 +1155,7 @@ tracks/7/keys = {
 _data = {
 &"RESET": SubResource("Animation_7oclm"),
 &"idle_params": SubResource("Animation_xv1dk"),
+&"punch_params": SubResource("Animation_ocaux"),
 &"slash1_one_handed_params": SubResource("Animation_xufbo"),
 &"slash2_one_handed_params": SubResource("Animation_r4xbn"),
 &"slash3_one_handed_params": SubResource("Animation_aahd8"),
@@ -1186,7 +1300,7 @@ StateName = "unsheathe_one_handed"
 [node name="RaiseSwordOneHanded" type="Node" parent="States" unique_id=1573301427 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("20_7oclm")
 LegBehaviour = NodePath("../../LegStates/Walkable")
-Priority = 3
+Priority = 4
 AnimateFullBody = false
 Animation = "slash_prepare_one_handed"
 BackendAnimation = "slash_prepare_one_handed_params"
@@ -1197,7 +1311,7 @@ CanBeLongerThanAnimation = true
 [node name="OneHandedSlashLeft" type="Node" parent="States" unique_id=1884399518 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("21_mwisw")
 LegBehaviour = NodePath("../../LegStates/Walkable")
-Priority = 3
+Priority = 4
 AnimateFullBody = false
 Animation = "slash1_one_handed"
 BackendAnimation = "slash1_one_handed_params"
@@ -1209,7 +1323,7 @@ StaminaCost = 2.0
 script = ExtResource("22_5i03e")
 LegBehaviour = NodePath("../../../LegStates/Walkable")
 BaseState = NodePath("..")
-Priority = 4
+Priority = 5
 AnimateFullBody = false
 Animation = "slash2_one_handed"
 BackendAnimation = "slash2_one_handed_params"
@@ -1220,7 +1334,7 @@ StaminaCost = 2.0
 [node name="OneHandedSlashDown" type="Node" parent="States" unique_id=92033248 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("23_xufbo")
 LegBehaviour = NodePath("../../LegStates/Walkable")
-Priority = 5
+Priority = 6
 AnimateFullBody = false
 Animation = "slash3_one_handed"
 BackendAnimation = "slash3_one_handed_params"
@@ -1231,7 +1345,7 @@ StaminaCost = 2.0
 [node name="OneHandedThrust" type="Node" parent="States" unique_id=1696307601 node_paths=PackedStringArray("LegBehaviour")]
 script = ExtResource("24_r4xbn")
 LegBehaviour = NodePath("../../LegStates/Walkable")
-Priority = 4
+Priority = 5
 AnimateFullBody = false
 Animation = "thrust_one_handed"
 BackendAnimation = "thrust_one_handed_params"
@@ -1239,6 +1353,18 @@ StateName = "thrust_one_handed"
 BodyRotationSpeed = 10.0
 StaminaCost = 2.0
 HitStopMaxTime = 0.2
+
+[node name="Punch" type="Node" parent="States" unique_id=1685815840 node_paths=PackedStringArray("LegBehaviour")]
+script = ExtResource("27_oiyrg")
+LegBehaviour = NodePath("../../LegStates/Walkable")
+Priority = 4
+AnimateFullBody = false
+Animation = "punch"
+BackendAnimation = "punch_params"
+StateName = "punch"
+BodyRotationSpeed = 10.0
+StaminaCost = 2.5
+HitStopMaxTime = 0.3
 
 [node name="Dead" type="Node" parent="States" unique_id=1056900791]
 script = ExtResource("27_s6yqu")

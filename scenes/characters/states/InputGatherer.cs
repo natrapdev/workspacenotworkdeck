@@ -107,6 +107,11 @@ public partial class InputGatherer : Node
 				_combatActions.Add("attack2");
 			}
 		}
+
+		if (Input.IsActionJustPressed("bash"))
+		{
+			Actions.Add("punch");
+		}
 	}
 
 	private void SortActions(List<string> actionNames, PriorityQueue<State, int> sorted)

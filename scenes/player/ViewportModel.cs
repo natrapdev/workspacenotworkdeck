@@ -30,8 +30,8 @@ public partial class ViewportModel : Node3D
 		_weaponInventory = Humanoid.WeaponInventory;
 
 		MeshInstance3D armModel = new();
-		armModel.SetLayerMaskValue(1, true);
-		armModel.SetLayerMaskValue(2, false);
+		armModel.SetLayerMaskValue(1, false);
+		armModel.SetLayerMaskValue(2, true);
 
 		if (((Player)Player).AppearanceSet == 1) // wok alert (1 = male, 0 = female)
 		{

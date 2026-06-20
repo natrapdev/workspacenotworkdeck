@@ -16,7 +16,7 @@ public partial class PickableItem : InteractableItem
 	public bool IsPickedUp = false;
 	public override void _PhysicsProcess(double delta)
 	{
-		PhysicalBody.Freeze = Anchored || IsPickedUp;
+		if (PhysicalBody is not null) PhysicalBody.Freeze = Anchored || IsPickedUp;
 		// ActualMesh.Visible = IsPickedUp;
 		// PhysicalBody.Visible = !IsPickedUp;
 
@@ -43,10 +43,5 @@ public partial class PickableItem : InteractableItem
 		PhysicalBody.CollisionMask = 2;
 		PhysicalBody.Position = Vector3.Zero;
 		ActualMesh.Position = Vector3.Zero;
-	}
-
-	public virtual void PutInRightHand()
-	{
-
 	}
 }

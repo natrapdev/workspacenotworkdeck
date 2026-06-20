@@ -15,7 +15,7 @@ var material_data: Dictionary = {
 		"absorption": 0.15
 	},
 	"iron": {
-		"density": 7.874,
+		"density": 6.8,
 		"absorption": 0
 	},
 	"steel": {

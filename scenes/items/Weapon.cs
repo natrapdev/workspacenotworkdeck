@@ -2,6 +2,7 @@ using Godot;
 using MyFirst3DGame.scenes.characters.states;
 using MyFirst3DGame.scenes.characters.humanoid;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 
 namespace MyFirst3DGame.Items;
@@ -29,8 +30,8 @@ public partial class Weapon : PickableItem
 	public float Mass { get; private set; } = 2.5f;
 
 	private readonly char[] _trailingChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-	public readonly Dictionary<string, string> Moves = [];
+	
+	public FrozenDictionary<string, string> Moves;
 
 	/// <summary>
 	/// Where the <c>Weapon</c> is on the sharpness spectrum within the range 0-1.
@@ -43,9 +44,9 @@ public partial class Weapon : PickableItem
 	public float Sharpness { get; private set; }
 	public string Material { get; private set; }
 	
+	#nullable enable
 	public override void _Ready()
 	{
-
 		// Getting config info from JSON file
 		if (!FileAccess.FileExists(ConfigFilePath))
 		{
@@ -53,7 +54,7 @@ public partial class Weapon : PickableItem
 			return;
 		}
 
-		using var file = FileAccess.Open(ConfigFilePath, FileAccess.ModeFlags.Read);
+		using FileAccess file = FileAccess.Open(ConfigFilePath, FileAccess.ModeFlags.Read);
 
 		string jsonString = file.GetAsText();
 		file.Close();
@@ -61,9 +62,7 @@ public partial class Weapon : PickableItem
 		var json = new Json();
 		Error error = json.Parse(jsonString);
 
-		string nameString = Name.ToString();
-		string weaponName = (char.ToLower(nameString[0]) + nameString[1..]).TrimEnd(_trailingChars);
-		GD.Print(weaponName);
+		string weaponName = FormatWeaponName(Name.ToString());
 
 		if (error == Error.Ok)
 		{
@@ -74,15 +73,9 @@ public partial class Weapon : PickableItem
 			_baseDamage = (double)weaponData["damage"];
 			Mass = (float)weaponData["mass"];
 			Sharpness = (float)weaponData["sharpness"];
-			WeaponType = (bool)weaponData["oneHanded"] ? "one_handed" : "two_handed";
+			WeaponType = (string)weaponData["type"];
 
-			GD.Print($"{weaponName} - Base Damage: {_baseDamage} | Weight: {Mass} kg | Type {WeaponType}");
-
-			Moves.Add("slash_prepare", "slash_prepare_" + WeaponType);
-			Moves.Add("unsheathe1", "unsheathe_" + WeaponType);
-			Moves.Add("attack1", "slash1_" + WeaponType);
-			Moves.Add("attack2", "thrust_" + WeaponType);
-			Moves.Add("attack3", "slash3_" + WeaponType);
+			if (!WeaponType.Equals("fist")) AddWeaponMoveSet();
 		}
 		else
 		{
@@ -91,13 +84,31 @@ public partial class Weapon : PickableItem
 
 		Material = "steel";
 	}
+	
+	private string FormatWeaponName(string weaponName)
+	{
+		string result = (
+			char.ToLower(weaponName[0]) + weaponName[1..]
+			).TrimEnd(_trailingChars);
+		return result;
+	}
+
+	private void AddWeaponMoveSet()
+	{
+		Moves = new Dictionary<string, string>()
+		{
+			{ "slash_prepare", "slash_prepare_" + WeaponType },
+			{ "unsheathe1", "unsheathe_" + WeaponType },
+			{ "attack1", "slash1_" + WeaponType },
+			{ "attack2", "thrust_" + WeaponType },
+			{ "attack3", "slash3_" + WeaponType }
+		}
+		.ToFrozenDictionary();
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!IsPickedUp)
-		{
-			HandleOffset = PhysicalBody.Position;
-		}
+		if (!IsPickedUp && PhysicalBody is not null) HandleOffsetPosition = PhysicalBody.Position;
 	}
 
 	public override void PickedUp(HumanoidModel humanoid)
@@ -105,12 +116,18 @@ public partial class Weapon : PickableItem
 		IsPickedUp = true;
 		WeaponInventory weaponInventory = humanoid.WeaponInventory;
 		ParentWeaponInventory = humanoid.WeaponInventory;
-		PhysicalBody.AddCollisionExceptionWith(humanoid.Character);
-		PhysicalBody.Visible = false;
-		ActualMesh.Visible = true;
-		// PhysicalBody.CollisionMask = 2;
-		PhysicalBody.Position = Vector3.Zero;
-		ActualMesh.Position = Vector3.Zero;
+		if (PhysicalBody is not null)
+		{
+			PhysicalBody.AddCollisionExceptionWith(humanoid.Character);
+			PhysicalBody.Visible = false;
+			PhysicalBody.Position = Vector3.Zero;
+		}
+		if (ActualMesh is not null)
+		{
+			ActualMesh.Visible = true;
+			// PhysicalBody.CollisionMask = 2;
+			ActualMesh.Position = Vector3.Zero;
+		}
 		weaponInventory.AddWeaponToInventory(this);
 	}
 }

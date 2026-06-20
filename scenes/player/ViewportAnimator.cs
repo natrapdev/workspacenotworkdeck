@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Collections.Frozen;
 using System.Text;
 
 namespace MyFirst3DGame.scenes.player;
@@ -11,7 +12,7 @@ public partial class ViewportAnimator : Node
     
     private readonly StringBuilder _stringBuilder = new();
 
-    private readonly Dictionary<string, float> _animationBlendTimes = new()
+    private readonly FrozenDictionary<string, float> _animationBlendTimes = new Dictionary<string, float>()
     {
         {"slash_prepare_one_handed", 0.2f},
         {"slash1_one_handed", 0.3f},
@@ -23,8 +24,9 @@ public partial class ViewportAnimator : Node
         {"walk_front", 0.5f},
         {"walk_back", 0.5f},
         {"strafe_left", 0.45f},
-        {"strafe_right", 0.45f}
-    };
+        {"strafe_right", 0.45f},
+        {"punch", 0f}
+    }.ToFrozenDictionary();
     
     private const float DifferenceTolerance = .01f;
 
@@ -57,7 +59,7 @@ public partial class ViewportAnimator : Node
 
         _currentAnimation = animation;
         
-        // SynchronizeAnimations();
+        SynchronizeAnimations();
     }
 
     private void SynchronizeAnimations()

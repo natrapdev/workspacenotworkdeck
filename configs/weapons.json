@@ -2,12 +2,21 @@
 	"weapons": {
 		"armingSword": {
 			"name": "Arming Sword",
-			"oneHanded": true,
+			"type": "one_handed",
 			"sharpness": 1,
 			"mass": 1.2,
 			"damage": 100,
 			"price": 240,
 			"rarity": 0.8
+		},
+		"fist": {
+			"name": "Fist",
+			"type": "fist",
+			"sharpness": 0,
+			"mass": 0.4,
+			"damage": 5,
+			"price": 0,
+			"rarity": 0
 		}
 	},
 	"materialRarity": {

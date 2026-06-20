@@ -39,17 +39,15 @@ public partial class Idle : State
 		if (Humanoid.CurrentState is not IPartialBodyState)
 		{
 
-			Vector3 characterRotation = Humanoid.GlobalRotation;
+			(float x, float currentAngle, float z) = Humanoid.GlobalRotation;
 			float targetAngle = Humanoid.LookAtReference.GlobalRotation.Y;
-			float currentAngle = characterRotation.Y;
 			float angleDifference = Mathf.AngleDifference(currentAngle, targetAngle);
 
-			if (Mathf.Abs(angleDifference) >= Mathf.DegToRad(HeadRotationLimitDegrees))
-			{
-				float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta * Mathf.Abs(angleDifference));
+			if (!(Mathf.Abs(angleDifference) >= Mathf.DegToRad(HeadRotationLimitDegrees))) return;
+			
+			float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, BodyRotationSpeed * delta * Mathf.Abs(angleDifference));
 
-				Humanoid.GlobalRotation = new Vector3(characterRotation.X, newAngle, characterRotation.Z);
-			}
+			Humanoid.GlobalRotation = new Vector3(x, newAngle, z);
 		}
 		else
 		{

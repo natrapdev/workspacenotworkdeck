@@ -39,11 +39,11 @@ public partial class State : Node
     public float Duration { get; set; } = 0f;
     private readonly Stopwatch _stopwatch = new();
 
-    private bool _canForceState = false;
-    private State _forcedState;
+    protected bool CanForceState = false;
+    protected State ForcedState;
 
-    private bool _canQueue = false;
-    private State _queuedState;
+    protected bool CanQueue = false;
+    protected State QueuedState;
     
     protected readonly StringBuilder StringBuilder = new();
 
@@ -62,18 +62,18 @@ public partial class State : Node
             CheckFollowUps(input);
         }
 
-        if (_canQueue && TransitionsToQueued())
+        if (CanQueue && TransitionsToQueued())
         {
-            ForceState(_queuedState);
-            _canQueue = false;
-            _queuedState = null;
+            ForceState(QueuedState);
+            CanQueue = false;
+            QueuedState = null;
         }
 
-        if (_canForceState && _forcedState is not null)
+        if (CanForceState && ForcedState is not null)
         {
-            _canForceState = false;
-            Humanoid.SwitchTo(_forcedState);
-            return _forcedState;
+            CanForceState = false;
+            Humanoid.SwitchTo(ForcedState);
+            return ForcedState;
         }
 
         return DefaultLifecycle(input);
@@ -152,8 +152,8 @@ public partial class State : Node
 
     private void ForceState(State forcedState)
     {
-        _forcedState = forcedState;
-        _canForceState = true;
+        ForcedState = forcedState;
+        CanForceState = true;
     }
 
     public void UpdateResource(float delta) => Resource.Update(delta);
@@ -168,20 +168,20 @@ public partial class State : Node
         return this;
     }
 
-    private void CheckFollowUps(InputPackage input)
+    protected virtual void CheckFollowUps(InputPackage input)
     {
         State followUp = input.Actions.Peek();
 
-        if (FollowUpStates.Contains(followUp) && (_queuedState is null || followUp.Priority > _queuedState?.Priority))
+        if (FollowUpStates.Contains(followUp) && (QueuedState is null || followUp.Priority > QueuedState?.Priority))
         {
-            _canQueue = true;
-            _queuedState = followUp;
+            CanQueue = true;
+            QueuedState = followUp;
         }
         else if (followUp == this && NextState is not null && Resource.HasEnoughStamina(NextState) 
                  || followUp == this && NextState is null && Resource.HasEnoughStamina(this))
         {
-            _canQueue = true;
-            _queuedState = NextState;
+            CanQueue = true;
+            QueuedState = NextState;
         }
         else if (Humanoid.CurrentState is IChildState childState) // Find the base state
         {
@@ -189,8 +189,8 @@ public partial class State : Node
                 && ((State)childState).NextState is not null
                 && ((State)childState).NextState.Priority >= Humanoid.CurrentState.Priority)
             {
-                _canQueue = true;
-                _queuedState = ((State)childState).NextState;
+                CanQueue = true;
+                QueuedState = ((State)childState).NextState;
             }
         }
     }

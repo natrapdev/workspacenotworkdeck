@@ -1,5 +1,6 @@
 using Godot;
 using MyFirst3DGame.scenes.characters.states;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,7 +27,7 @@ public partial class Animator : Node
     
     private readonly StringBuilder _stringBuilder = new();
 
-    private readonly Dictionary<string, float> _animationBlendTimes = new()
+    private readonly FrozenDictionary<string, float> _animationBlendTimes = new Dictionary<string, float>()
     {
         {"slash_prepare_one_handed", 0.2f},
         {"slash1_one_handed", 0.3f},
@@ -38,8 +39,9 @@ public partial class Animator : Node
         {"walk_front", 0.5f},
         {"walk_back", 0.5f},
         {"strafe_left", 0.45f},
-        {"strafe_right", 0.45f}
-    };
+        {"strafe_right", 0.45f},
+        {"punch", 0f}
+    }.ToFrozenDictionary();
 
     public void UpdateAnimations()
     {
@@ -55,7 +57,7 @@ public partial class Animator : Node
 
     private void SetBodyAnimation(string animation)
     {
-        if (animation.Equals(_currentBodyAnimation)) return;
+        if (animation.Equals(_currentBodyAnimation) && Humanoid.CurrentState.AnimateFullBody) return;
         
         _currentBodyAnimation = animation;
         BodyAnimator.Play(

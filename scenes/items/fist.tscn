@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b5cdvmv1opthm"]
+
+[ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/items/Weapon.cs" id="1_g6v3c"]
+
+[node name="Fist" type="Node3D" unique_id=2129150201 node_paths=PackedStringArray("BladeStartMarker", "BladeEndMarker")]
+script = ExtResource("1_g6v3c")
+RaycastAmount = 1
+BladeLength = 0.08
+BladeStartMarker = NodePath("Start")
+BladeEndMarker = NodePath("End")
+HandleOffsetRotation = Vector3(0, 0, 90)
+
+[node name="Start" type="Marker3D" parent="." unique_id=1839432040]
+
+[node name="End" type="Marker3D" parent="." unique_id=859093774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 0)

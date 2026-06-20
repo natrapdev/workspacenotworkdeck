@@ -39,6 +39,7 @@ public partial class UnsheathePrimary : State
 
 	protected override void OnEnter()
 	{
+		Animator.SetSpeedScale(1);
 		Character.Velocity = Vector3.Zero;
 		// animPlayback = Animator?.PlayUnsheatheAnimation(CharacterHumanoid.WeaponInventory.PrimaryWeapon);
 		// await animPlayback;

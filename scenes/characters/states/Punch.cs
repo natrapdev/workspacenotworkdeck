@@ -1,14 +1,18 @@
 using Godot;
-using System;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MyFirst3DGame.scenes.characters.states;
 
-public partial class OneHandedThrust : State, IPartialBodyState
+public partial class Punch : State, IPartialBodyState
 {
     [Export] public LegState LegBehaviour { get; set; }
 
-    protected override HitInfo ScanForHit() => Humanoid.Combat.ScanForHitsStab();
+    public override void _Ready() => FollowUpStates.Add(this);
+
+    protected override void OnEnter()
+    {
+        Animator.BodyAnimator.Seek(0);
+    }
 
     protected override State DefaultLifecycle(InputPackage input)
     {
@@ -19,4 +23,6 @@ public partial class OneHandedThrust : State, IPartialBodyState
     
         return this;
     }
+
+    // protected override HitInfo ScanForHit() => Humanoid.Combat.ScanForHitsStab();
 }

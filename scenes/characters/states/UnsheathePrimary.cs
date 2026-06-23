@@ -32,7 +32,7 @@ public partial class UnsheathePrimary : State
 				&& Humanoid.WeaponInventory.GetEquippedWeapon() is not null
 				&& Humanoid.CurrentWeapon is not null)
 		{
-			Humanoid.WeaponInventory.UnEquipWeapon();
+			Humanoid.WeaponInventory.UnEquipWeapon(1);
 		}
 	}
 

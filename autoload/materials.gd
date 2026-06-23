@@ -8,7 +8,7 @@ var material_data: Dictionary = {
 	},
 	"gambeson": {
 		"density": 1.3, # Per layer - total should be calculated density * numberOfLayers
-		"absorption": 0.7
+		"absorption": 0.5
 	},
 	"chainmail": {
 		"density": 4,

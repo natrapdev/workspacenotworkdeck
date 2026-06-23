@@ -137,18 +137,17 @@ public partial class HumanoidCombat : Node3D
         );
     }
 
-    public HitInfo ScanForHitsSlash()
+    public HitInfo ScanForHitsSlash(Weapon weapon)
     {
-        Weapon currentWeapon = Humanoid.CurrentWeapon;
-        if (currentWeapon == null) return new HitInfo();
+        if (weapon == null) return new HitInfo();
 
-        int rayAmount = currentWeapon.RaycastAmount;
-        Marker3D bladeStart = currentWeapon.BladeStartMarker;
-        Marker3D bladeEnd = currentWeapon.BladeEndMarker;
+        int rayAmount = weapon.RaycastAmount;
+        Marker3D bladeStart = weapon.BladeStartMarker;
+        Marker3D bladeEnd = weapon.BladeEndMarker;
 
         // Pre-calculate values outside the loop
         float increment = (bladeEnd.Position.Y - bladeStart.Position.Y) / rayAmount;
-        float rayLength = currentWeapon.BladeWidth * 2;
+        float rayLength = weapon.BladeWidth / 2;
         Basis bladeBasis = bladeEnd.GlobalTransform.Basis;
         Vector3 bladeOrigin = bladeEnd.GlobalTransform.Origin;
         Vector3 forwardVector = bladeBasis.Z.Normalized();
@@ -157,7 +156,6 @@ public partial class HumanoidCombat : Node3D
         // Reuse query parameters where possible
         var queryParams = PhysicsRayQueryParameters3D.Create(Vector3.Zero, Vector3.Zero);
         queryParams.CollideWithAreas = true;
-        queryParams.HitBackFaces = true;
         queryParams.CollisionMask = 2;
         queryParams.Exclude = _exclusionList;
 
@@ -177,9 +175,9 @@ public partial class HumanoidCombat : Node3D
 
             if (result.Count > 0)
             {
-                Vector3 weaponNormal = -origin.DirectionTo(target);
-                HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity, weaponNormal);
-                HandleHit(hi);
+                float workingLength = Mathf.Max(Mathf.Abs(yOffset), .02f);
+                HitInfo hi = CollectHitInformation(result, weapon, weaponVelocity, forwardVector, weapon.BladeWidth, workingLength);
+                // HandleHit(hi);
                 return hi;
             }
         }
@@ -187,13 +185,12 @@ public partial class HumanoidCombat : Node3D
         return new HitInfo();
     }
 
-    public HitInfo ScanForHitsStab()
+    public HitInfo ScanForHitsStab(Weapon weapon)
     {
-        Weapon currentWeapon = Humanoid.CurrentWeapon;
-        if (currentWeapon == null) return new HitInfo();
+        if (weapon == null) return new HitInfo();
 
-        Marker3D bladeStart = currentWeapon.BladeStartMarker;
-        Marker3D bladeEnd = currentWeapon.BladeEndMarker;
+        Marker3D bladeStart = weapon.BladeStartMarker;
+        Marker3D bladeEnd = weapon.BladeEndMarker;
 
         Vector3 origin = bladeStart.GlobalPosition;
         Vector3 target = bladeEnd.GlobalPosition;
@@ -209,8 +206,8 @@ public partial class HumanoidCombat : Node3D
 
         if (result.Count > 0)
         {
-            HitInfo hi = CollectHitInformation(result, currentWeapon, origin, weaponVelocity, forwardVector);
-            HandleHit(hi);
+            HitInfo hi = CollectHitInformation(result, weapon, weaponVelocity, forwardVector, weapon.BladeLength, weapon.BladeWidth);
+            // HandleHit(hi);
             return hi;
         }
 
@@ -220,9 +217,10 @@ public partial class HumanoidCombat : Node3D
     private static HitInfo CollectHitInformation(
         Dictionary result,
         Weapon currentWeapon,
-        Vector3 weaponHitSource,
         Vector3 weaponVelocity,
-        Vector3 attackNormal)
+        Vector3 weaponNormal,
+        float workingLength,
+        float workingWidth)
     {
         if (result.Count <= 0) return new HitInfo();
 
@@ -240,9 +238,10 @@ public partial class HumanoidCombat : Node3D
 
         return new HitInfo(
             currentWeapon,
-            attackNormal,
+            weaponNormal,
             weaponVelocity,
-            weaponHitSource,
+            workingLength,
+            workingWidth,
             hitNode,
             hitPosition,
             hitNormal,

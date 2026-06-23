@@ -2,15 +2,34 @@
 
 [ext_resource type="Script" uid="uid://bmqy4j2rwcl0q" path="res://scenes/items/Weapon.cs" id="1_g6v3c"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_g6v3c"]
+size = Vector3(0.05, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vewix"]
+size = Vector3(0.025, 0.025, 0.025)
+
 [node name="Fist" type="Node3D" unique_id=2129150201 node_paths=PackedStringArray("BladeStartMarker", "BladeEndMarker")]
 script = ExtResource("1_g6v3c")
 RaycastAmount = 1
+BladeWidth = 0.15
 BladeLength = 0.08
 BladeStartMarker = NodePath("Start")
 BladeEndMarker = NodePath("End")
-HandleOffsetRotation = Vector3(0, 0, 90)
+WeaponSlot = 2
+Material = "flesh"
+HandleOffsetPosition = Vector3(-0.04763369, 0.028400943, 0.062593214)
+HandleOffsetRotation = Vector3(90, 0, 0)
 
 [node name="Start" type="Marker3D" parent="." unique_id=1839432040]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Start" unique_id=1907310371]
+visible = false
+mesh = SubResource("BoxMesh_g6v3c")
 
 [node name="End" type="Marker3D" parent="." unique_id=859093774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="End" unique_id=168458657]
+visible = false
+mesh = SubResource("BoxMesh_vewix")

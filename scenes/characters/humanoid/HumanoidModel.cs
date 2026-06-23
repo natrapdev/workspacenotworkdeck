@@ -21,6 +21,7 @@ public sealed partial class HumanoidModel : Node3D
 	[Export] public bool Dead { get; set; }
 
 	public Weapon CurrentWeapon { get; set; }
+	public Weapon CurrentSecondaryWeapon { get; set; }
 
 	[Export] public HumanoidStates StateContainer { get; set; }
 	public State CurrentState { get; private set; }

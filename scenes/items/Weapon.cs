@@ -42,7 +42,7 @@ public partial class Weapon : PickableItem
 	/// <br />1 = Completely sharp (swords, knives, axes)
 	/// </example>
 	public float Sharpness { get; private set; }
-	public string Material { get; private set; }
+	[Export] public string Material { get; set; } = "steel";
 	
 	#nullable enable
 	public override void _Ready()
@@ -81,8 +81,6 @@ public partial class Weapon : PickableItem
 		{
 			GD.PushWarning("Could not find config file");
 		}
-
-		Material = "steel";
 	}
 	
 	private string FormatWeaponName(string weaponName)

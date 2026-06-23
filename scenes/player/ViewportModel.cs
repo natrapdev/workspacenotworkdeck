@@ -88,9 +88,9 @@ public partial class ViewportModel : Node3D
 	{
 		return origin.GetPathTo(Skeleton.GetNode<Node3D>("RightHandAttachment/Container"));
 	}
-
-	public string GetPathToPrimaryWeaponSlot(Node3D origin)
+	
+	public string GetPathToLeftHandWeaponSlot(Node origin)
 	{
-		return origin.GetPathTo(Skeleton.GetNode<BoneAttachment3D>("RightHandAttachment"));
+		return origin.GetPathTo(Skeleton.GetNode<Node3D>("LeftHandAttachment/Container"));
 	}
 }

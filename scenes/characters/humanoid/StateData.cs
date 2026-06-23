@@ -31,6 +31,7 @@ public partial class StateData : Node
     public bool GetParryable(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:IsParryable", timeCode);
     public float GetDuration(string anim) => StateDatabase.GetAnimation(anim).Length;
     public bool GetRightWeaponHurts(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:RightHandWeaponHurts", timeCode);
+    public bool GetLeftWeaponHurts(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:LeftHandWeaponHurts", timeCode);
     public bool GetTracksLookDirection(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:TracksLookDirection", timeCode);
     public bool GetCanMoveHeldItem(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:CanMoveHeldItem", timeCode);
     public bool GetIsMovementLocked(string anim, float timeCode) => StateDatabase.GetBoolValue(anim, "StateDatabase:IsMovementLocked", timeCode);

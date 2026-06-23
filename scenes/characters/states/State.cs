@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MyFirst3DGame.scenes.characters.humanoid;
+using MyFirst3DGame.Items;
 using System.Text;
 using TraceReloggerLib;
 
@@ -33,8 +34,8 @@ public partial class State : Node
     public State NextState { get; set; }
     public HumanoidLegStates HumanoidLegs { get; set; }
 
-    private float ElapsedTimeMilliseconds { get { return _stopwatch.ElapsedMilliseconds; } }
-    protected float ElapsedTimeSeconds { get { return ElapsedTimeMilliseconds / 1000; } }
+    private float ElapsedTimeMilliseconds { get => _stopwatch.ElapsedMilliseconds; }
+    protected float ElapsedTimeSeconds { get => ElapsedTimeMilliseconds / 1000; }
 
     public float Duration { get; set; } = 0f;
     private readonly Stopwatch _stopwatch = new();
@@ -84,6 +85,7 @@ public partial class State : Node
         Animator.UpdateAnimations();
         if (TracksLookDirection()) TrackLookDirection(input, delta);
         if (RightWeaponHurts() && !_isHitStop) ScanForHitsRightWeapon();
+        if (LeftWeaponHurts() && !_isHitStop) ScanForHitsLeftWeapon();
         OnUpdate(input, delta);
 
         if (this is IPartialBodyState partialBodyState)
@@ -195,10 +197,12 @@ public partial class State : Node
         }
     }
 
-    protected virtual HitInfo ScanForHit() => Combat.ScanForHitsSlash();
+    protected virtual HitInfo ScanForHit(Weapon weapon) => Combat.ScanForHitsSlash(weapon);
 
-    private void ScanForHitsRightWeapon() => HandleHit(hitInfo: ScanForHit());
-
+    private void ScanForHitsRightWeapon() => HandleHit(ScanForHit(Humanoid.CurrentWeapon));
+    
+    private void ScanForHitsLeftWeapon() => HandleHit(ScanForHit(Humanoid.CurrentSecondaryWeapon));
+    
     private void HandleHit(HitInfo hitInfo)
     {
         if (hitInfo.HitNode?.GetParent() is Limb hitLimb)
@@ -228,6 +232,7 @@ public partial class State : Node
     private bool CanBeInterrupted() => StateData.GetInterruptable(BackendAnimation, ElapsedTimeSeconds);
     private bool CanBeParried() => StateData.GetParryable(BackendAnimation, ElapsedTimeSeconds);
     public bool RightWeaponHurts() => StateData.GetRightWeaponHurts(BackendAnimation, ElapsedTimeSeconds);
+    public bool LeftWeaponHurts() => StateData.GetLeftWeaponHurts(BackendAnimation, ElapsedTimeSeconds);
     protected bool CanMoveHeldItem() => StateData.GetCanMoveHeldItem(BackendAnimation, ElapsedTimeSeconds);
     private bool IsMovementLocked() => StateData.GetIsMovementLocked(BackendAnimation, ElapsedTimeSeconds);
 }

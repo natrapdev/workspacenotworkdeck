@@ -36,8 +36,8 @@ public partial class Player : CharacterBody3D
 
 		if (Viewport is not null)
 		{
-			string path = Viewport.GetPathToRightHandWeaponSlot(Humanoid);
-			Humanoid.WeaponInventory.RightHandWeaponContainerPath = path;
+			Humanoid.WeaponInventory.RightHandWeaponContainerPath = Viewport.GetPathToRightHandWeaponSlot(Humanoid);
+			Humanoid.WeaponInventory.LeftHandWeaponContainerPath = Viewport.GetPathToLeftHandWeaponSlot(Humanoid);
 		}
 
 		_cameraPanSpeed = CameraPivot.CameraPanSpeed;

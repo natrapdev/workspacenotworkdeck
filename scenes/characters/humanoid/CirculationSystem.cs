@@ -13,9 +13,9 @@ public partial class CirculationSystem : Node
     [Export] public float FatalBloodLevel { get; set; } = 0.5f;
 
     private const float BloodPerBodyMassKilogram = 75f;
-    public float TotalBloodVolume { get { return Model.BodyMass * BloodPerBodyMassKilogram; } }
+    public float TotalBloodVolume { get => Model.BodyMass * BloodPerBodyMassKilogram; }
     public float CurrentBloodVolume { get; set; }
-    public float RemainingBloodRatio { get { return CurrentBloodVolume / TotalBloodVolume; } }
+    public float RemainingBloodRatio { get => CurrentBloodVolume / TotalBloodVolume; }
 
     private float _bloodLossRate;
 

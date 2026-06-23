@@ -1,4 +1,5 @@
 using Godot;
+using MyFirst3DGame.Items;
 using System;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ public partial class OneHandedThrust : State, IPartialBodyState
 {
     [Export] public LegState LegBehaviour { get; set; }
 
-    protected override HitInfo ScanForHit() => Humanoid.Combat.ScanForHitsStab();
+    protected override HitInfo ScanForHit(Weapon weapon) => Humanoid.Combat.ScanForHitsStab(weapon);
 
     protected override State DefaultLifecycle(InputPackage input)
     {

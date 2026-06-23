@@ -35,7 +35,7 @@ public partial class DamageModel : Node3D
         }, // We usually have two of these so multiply by 2 for total
         {
             "forearm", 0.0187f - 0.0006f
-        }, // All body parts add up to 1.0006 so this is to make it consitent
+        }, // All body parts add up to 1.0006 so this is to make it consistent
         {
             "hand", 0.0065f
         },
@@ -111,20 +111,6 @@ public partial class DamageModel : Node3D
         return -1;
     }
 
-    public override void _Process(double delta)
-    {
-        // for (int i = 0; i < DamageModules.Count; i++)
-        // {
-        //     DamageModule limb = DamageModules[i];
-        //     float bleedMultiplier = BodyPartBleedMultiplier.GetValueOrDefault(limb.Name, 1);
-        //     float lostBlood = limb.BleedRate * bleedMultiplier * (float)delta;
-        //     limb.BloodVolume = Mathf.Clamp(limb.BloodVolume - lostBlood, 0, limb.MaxBloodVolume);
-        //     DamageModules[i] = limb;
-        //
-        //     if (!limb.Name.Equals("Neck")) CheckForEffect(DamageModules[i]);
-        // }
-    }
-
     private int GetSeverityIndex(DamageModule damageModule)
     {
         float remainingBloodFactor = damageModule.BloodVolume / damageModule.MaxBloodVolume;
@@ -146,16 +132,23 @@ public partial class DamageModel : Node3D
 
     public (float, float) GetHitEffects(HitInfo hitInfo, Limb hitLimb)
     {
-        return (
+        (float impact, float energy) = (
             GetImpactDepth(hitInfo, hitLimb),
             GetKineticEnergyTransfer(hitInfo, hitLimb)
         );
+        return (impact, energy);
     }
 
     private float GetKineticEnergyTransfer(HitInfo hitInfo, Limb hitLimb)
     {
+        float energyAbsorption = GetEnergyAbsorption(
+            GetMaterialEnergyAbsorption(hitLimb.Material),
+            GetImpactDepth(hitInfo, hitLimb),
+            Humanoid.Combat.GetEffectiveThicknessOfHit(hitInfo)
+        );
+        
         Weapon weapon = hitInfo.WeaponNode;
-        float weaponSharpnessDivisor = weapon.Sharpness * 1.25f + 1;
+        float weaponSharpnessDivisor = GetWeaponSharpnessDivisor(hitInfo.WeaponNode);
         
         float impactEnergy = GetKineticEnergy(
             weapon.Mass,
@@ -168,47 +161,31 @@ public partial class DamageModel : Node3D
             hitLimb
             );
         
-        float workDone = GetWorkDone(
-            hitLimb.CutResistance,
-            Mathf.Min(impactDepth, Humanoid.Combat.GetEffectiveThicknessOfHit(hitInfo))
-            );
         float finalWeaponVelocity = GetFinalVelocity(
-            impactEnergy,
             weapon.Mass,
-            workDone
-            );
-
-        float effectiveEnergyAbsorption = GetEffectiveEnergyAbsorption(
-            GetMaterialEnergyAbsorption(hitLimb.Material),
-            GetImpactDepth(hitInfo, hitLimb),
-            Humanoid.Combat.GetEffectiveThicknessOfHit(hitInfo)
+            hitInfo.WeaponVelocity.Length()
         );
-
-        float inflictedKineticEnergy = GetKineticEnergy(
+        
+        float finalEnergy = GetKineticEnergy(
             weapon.Mass,
-            hitInfo.WeaponVelocity.Length(), 
             finalWeaponVelocity,
             weaponSharpnessDivisor
-            );
+        );
 
-        return ApplyEnergyAbsorption(inflictedKineticEnergy, effectiveEnergyAbsorption);
+        float transferredKineticEnergy = impactEnergy - finalEnergy;
+
+        return ApplyEnergyAbsorption(transferredKineticEnergy, energyAbsorption);
     }
 
     private float GetImpactDepth(HitInfo hitInfo, Limb hitLimb)
     {
-        float impactEnergy = GetKineticEnergy(
-            hitInfo.WeaponNode.Mass,
-            hitInfo.WeaponVelocity.Length(),
-            GetWeaponSharpnessDivisor(hitInfo.WeaponNode)
-        );
-        
         float impactDepth = GetPerforation(
             hitInfo.EffectiveWeaponLength,
             GetDensity(hitInfo.WeaponNode.Material),
             GetDensity(hitLimb.Material, hitLimb.Thickness)
         );
 
-        return impactDepth - impactDepth * (impactEnergy / hitLimb.CutResistance);
+        return impactDepth;
     }
 
     public float GetImpactDepthRatio(HitInfo hitInfo, Limb hitLimb)
@@ -219,7 +196,7 @@ public partial class DamageModel : Node3D
         return depth / thickness;
     }
 
-    private static float GetEffectiveEnergyAbsorption(float absorption, float impactDepth, float hitThicknessLos)
+    private static float GetEnergyAbsorption(float absorption, float impactDepth, float hitThicknessLos)
     {
         return absorption - impactDepth / hitThicknessLos;
     }
@@ -234,25 +211,17 @@ public partial class DamageModel : Node3D
         return baseEnergy / (1 - energyAbsorption);
     }
 
-    private static float GetKineticEnergy(float weaponMass, float impactVelocity, float sharpnessFactor)
+    private static float GetKineticEnergy(float mass, float velocity, float sharpnessFactor)
     {
-        return .5f * weaponMass * Mathf.Pow(impactVelocity / sharpnessFactor, 2);
+        return mass / 2 * Mathf.Pow(velocity / sharpnessFactor, 2);
     }
 
-    private static float GetKineticEnergy(float weaponMass, float initialVelocity, float finalVelocity, float sharpnessFactor)
+    private static float GetFinalVelocity(float weaponMass, float impactVelocity)
     {
-        float baseEnergy = .5f * weaponMass * (Mathf.Pow(initialVelocity, 2) - Mathf.Pow(finalVelocity, 2));
-        return baseEnergy / sharpnessFactor;
-    }
-
-    private static float GetWorkDone(float targetResistanceNewtons, float cutDepthMetres)
-    {
-        return targetResistanceNewtons * cutDepthMetres;
-    }
-
-    private static float GetFinalVelocity(float impactEnergy, float weaponMass, float workDone)
-    {
-        return Mathf.Sqrt(2 * (impactEnergy - workDone) / weaponMass);
+        // targetMass and targetVelocity are PLACEHOLDERS
+        float targetMass = 68;
+        float targetVelocity = 0;
+        return (weaponMass * impactVelocity + targetMass * targetVelocity) / (weaponMass + targetMass);
     }
 
     private static float GetVelocityAtImpactAngle(float impactVelocity, float impactAngle)
@@ -278,18 +247,12 @@ public partial class DamageModel : Node3D
         return colliderDensity;
     }
 
-    private float GetDensity(string material)
-    {
-        return (float)((Dictionary)_materialData[material])["density"];
-    }
+    private float GetDensity(string material) => (float)((Dictionary)_materialData[material])["density"];
 
     private static float GetThicknessInLineOfSight(float impactAngle, float thickness)
     {
         return Mathf.Abs(thickness / Mathf.Cos(impactAngle));
     }
 
-    private static float GetWeaponSharpnessDivisor(Weapon weapon)
-    {
-        return weapon.Sharpness * 1.25f + 1;
-    }
+    private static float GetWeaponSharpnessDivisor(Weapon weapon) => Mathf.Pow(weapon.Sharpness, 1.15f) + 0.912f;
 }

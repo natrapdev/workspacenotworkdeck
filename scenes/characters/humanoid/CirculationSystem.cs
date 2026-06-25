@@ -36,12 +36,6 @@ public partial class CirculationSystem : Node
         foreach (Limb limb in Model.LimbCollection.Limbs.Values.Where(limb => limb.CurrentBloodVolume > 0))
         {
             LoseBloodInLimb(limb, limb.CurrentBleedRate * delta);
-        
-            // Neighbouring limbs will lose blood as well
-            foreach (Limb neighbourLimb in limb.Neighbours)
-            {
-                LoseBloodInLimb(neighbourLimb, limb.CurrentBleedRate / 2 * delta);
-            }
         }
     }
 
@@ -52,12 +46,12 @@ public partial class CirculationSystem : Node
         
         _bloodLossRate += bloodLost;
 
-        if (limb.CurrentBloodVolume <= 0)
-        {
-            var area3D = limb.GetNodeOrNull<Area3D>("Area3D");
-            area3D?.QueueFree();
-        }
-        
+        // if (limb.CurrentBloodVolume <= 0)
+        // {
+        //     var area3D = limb.GetNodeOrNull<Area3D>("Area3D");
+        //     area3D?.QueueFree();
+        // }
+        //
         var label = limb.GetNodeOrNull<Label3D>("Label");
         if (label is not null) label.Text = $"{limb.RemainingBloodRatio * 100:F2}%";
     }

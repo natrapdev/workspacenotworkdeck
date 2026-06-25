@@ -166,6 +166,9 @@ public partial class HumanoidCombat : Node3D
             // Calculate origin and target using pre-calculated basis and origin
             Vector3 origin = bladeBasis * new Vector3(rayLength, yOffset, 0) + bladeOrigin;
             Vector3 target = bladeBasis * new Vector3(-rayLength, yOffset, 0) + bladeOrigin;
+            
+            // CreateDebugBlock(origin, weapon);
+            // CreateDebugSphere(target, weapon);
 
             // Update query parameters
             queryParams.From = origin;

@@ -10,24 +10,36 @@ public partial class ViewportModel : Node3D
 	[Export] public HumanoidModel Humanoid { get; set; }
 	[Export] public CharacterBody3D Player { get; set; }
 	[Export] public Skeleton3D Skeleton { get; set; }
+	[Export] public Node3D Arms { get; set; }
 	[Export] public Camera3D MainCamera { get; set; }
 	[Export] public ViewportAnimator Animator { get; set; }
 	[Export] public ViewportCameraController ViewportCamera { get; set; }
 	[Export] public ViewportTiltTracker TiltTracker { get; set; }
+	[Export] public float ArmsMargin { get; set; } = .5f;
 
 	private WeaponInventory _weaponInventory;
+	private Vector3 _offsetPosition = Vector3.Zero;
+	private Vector3 _armsPosition;
 
 	public readonly Dictionary<string, Vector2> AttackVectors = new()
 	{
 		{"slash1", new Vector2(-1, 0)},
 		{"slash2", new Vector2(1, 0)},
 		{"slash3", new Vector2(0, -1)},
-		{"thrust", new Vector2(0, 0)}
+		{"thrust", new Vector2(1, 1)}
 	};
 
 	public override void _Ready()
 	{
 		_weaponInventory = Humanoid.WeaponInventory;
+		_armsPosition = Arms.Position;
+		
+		if (GetParent() is not null and SpringArm3D springArm)
+		{
+			springArm.AddExcludedObject(Humanoid.Character.GetRid());
+			Arms.Position += new Vector3(0, 0, springArm.SpringLength);
+			// springArm.GlobalTransform = targetTransform;
+		}
 
 		MeshInstance3D armModel = new();
 		armModel.SetLayerMaskValue(1, false);
@@ -55,9 +67,9 @@ public partial class ViewportModel : Node3D
 		Animator.PlaySpeed = Humanoid.Animator.BodyAnimationSpeed;
 		Animator.AnimationPlayer.SetSpeedScale(Humanoid.Animator.GetBodySpeedScale());
 		Animator.SetAnimation(animation);
-		
+
 		// ViewportCamera.Update();
-		SetArmsPosition();
+		UpdatePositions();
 
 		if (currentState.RightWeaponHurts())
 		{
@@ -70,7 +82,7 @@ public partial class ViewportModel : Node3D
 
 		int index = currentState.StateName.IndexOf('_');
 		string baseStateName =
-			index != -1 ? currentState.StateName[..index] : currentState.StateName;
+		index != -1 ? currentState.StateName[..index] : currentState.StateName;
 
 		TiltTracker.UpdateTilt(
 			delta,
@@ -78,10 +90,17 @@ public partial class ViewportModel : Node3D
 		);
 	}
 
-	private void SetArmsPosition()
+
+private void UpdatePositions()
 	{
 		Transform3D targetTransform = MainCamera.GlobalTransform;
-		GlobalTransform = targetTransform;
+
+		if (GetParent() is not null and SpringArm3D springArm)
+		{
+			// springArm.GlobalTransform = targetTransform;
+		}
+		else 
+			GlobalTransform = targetTransform;
 	}
 
 	public string GetPathToRightHandWeaponSlot(Node origin)

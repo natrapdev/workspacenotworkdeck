@@ -103,27 +103,6 @@ public partial class Weapon : PickableItem
 		}
 		.ToFrozenDictionary();
 	}
-	
-	private string FormatWeaponName(string weaponName)
-	{
-		string result = (
-			char.ToLower(weaponName[0]) + weaponName[1..]
-			).TrimEnd(_trailingChars);
-		return result;
-	}
-
-	private void AddWeaponMoveSet()
-	{
-		Moves = new Dictionary<string, string>()
-		{
-			{ "slash_prepare", "slash_prepare_" + WeaponType },
-			{ "unsheathe1", "unsheathe_" + WeaponType },
-			{ "attack1", "slash1_" + WeaponType },
-			{ "attack2", "thrust_" + WeaponType },
-			{ "attack3", "slash3_" + WeaponType }
-		}
-		.ToFrozenDictionary();
-	}
 
 	public override void _PhysicsProcess(double delta)
 	{

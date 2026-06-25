@@ -14,13 +14,16 @@
 radius = 0.17333984
 height = 1.8180542
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_ur7pv"]
+radius = 0.15
+
 [node name="Player" type="CharacterBody3D" unique_id=1966417201 node_paths=PackedStringArray("CharacterModel", "Humanoid", "InputSource", "CameraPivot", "Viewport") groups=["player"]]
 script = ExtResource("1_d2wvv")
 CharacterModel = NodePath("HumanoidModel/CharacterModel")
 Humanoid = NodePath("HumanoidModel")
 InputSource = NodePath("PlayerInput")
 CameraPivot = NodePath("CameraPivot")
-Viewport = NodePath("ViewportModel")
+Viewport = NodePath("CameraPivot/SpringArm3D/ViewportModel")
 
 [node name="DamageModel" parent="." unique_id=1876319864 node_paths=PackedStringArray("Humanoid") instance=ExtResource("2_smehm")]
 Humanoid = NodePath("../HumanoidModel")
@@ -63,7 +66,12 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0
 cull_mask = 1048573
 fov = 60.0
 
-[node name="ViewportModel" parent="." unique_id=1597764046 node_paths=PackedStringArray("Humanoid", "Player", "MainCamera") instance=ExtResource("8_smehm")]
-Humanoid = NodePath("../HumanoidModel")
-Player = NodePath("..")
-MainCamera = NodePath("../CameraPivot/Camera3D")
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=1848306259]
+shape = SubResource("SphereShape3D_ur7pv")
+spring_length = 0.4
+
+[node name="ViewportModel" parent="CameraPivot/SpringArm3D" unique_id=1597764046 node_paths=PackedStringArray("Humanoid", "Player", "MainCamera") instance=ExtResource("8_smehm")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+Humanoid = NodePath("../../../HumanoidModel")
+Player = NodePath("../../..")
+MainCamera = NodePath("../../Camera3D")

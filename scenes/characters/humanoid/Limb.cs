@@ -68,7 +68,7 @@ public partial class Limb : BoneAttachment3D
 	{
 		(float impactDepth, float impactEnergy) = Model.GetHitEffects(hitInfo, this);
 
-		float cutTime = impactDepth / hitInfo.ImpactWeaponVelocity;
+		float cutTime = impactDepth / hitInfo.WeaponVelocity.Length();
 		float cutArea = cutTime * hitInfo.EffectiveWeaponLength;
 		float cutVolume = cutArea * cutTime * hitInfo.EffectiveWeaponWidth;
 		
@@ -80,6 +80,11 @@ public partial class Limb : BoneAttachment3D
 		CurrentBloodVolume = Mathf.Clamp(CurrentBloodVolume - immediateBloodLoss, 0, MaxBloodVolume);
 		CirculationSystem.CurrentBloodVolume -= Mathf.Min(immediateBloodLoss, MaxBloodVolume);
 		_currentBleedRate += MaxBloodVolume * bloodLossFactor;
+		
+		foreach (Limb nextLimb in Neighbours)
+		{
+			nextLimb.CurrentBleedRate += nextLimb.MaxBloodVolume * bloodLossFactor / 2;
+		}
 		
 		GD.Print($"\nHit {LimbName} ({BoneStrength}) \n"
 		         + $"Kinetic energy: {impactEnergy} joules \n"
